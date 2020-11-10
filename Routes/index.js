@@ -172,7 +172,6 @@ router.post("/live-scrape", async (req, res) => {
         await browser.close();
         return res.status(200).json({ products: CollectProducts });
     } catch (e) {
-        console.log('here is your error ' + e);
         return res.status(400).json({ msg: e });
     }
 });
