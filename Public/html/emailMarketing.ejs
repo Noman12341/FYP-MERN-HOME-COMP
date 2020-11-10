@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mutli Brand</title>
+        <style>
+            .main-div {
+                background-color: #f4f4f4;
+                padding: 10px 0;
+                font-family: sans-serif;
+            }
+
+            .card {
+                width: 60%;
+                margin: 5% auto;
+                background-color: #ffffff;
+            }
+
+            .card-header {
+                text-align: center;
+                border-radius: 4px;
+            }
+
+            .big-image {
+                max-width: 300px;
+                max-height: 300px;
+                border-radius: 4px;
+            }
+
+            .card-body {
+                text-align: center;
+            }
+
+            .card-body ul {
+                list-style: none;
+                margin: 0;
+            }
+
+            .card-body span {
+                font-weight: bold;
+            }
+
+            .card-body li {
+                margin-bottom: 10px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                text-decoration: none;
+                font-size: 17px;
+                font-weight: 600;
+                border: 2px solid #ffd613;
+                color: #fff;
+                background-color: #ffd613;
+                transition: 500ms;
+                border-radius: 4px;
+            }
+
+            .btn:hover {
+                color: #ffd613;
+                background-color: white;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div class="main-div">
+            <div class="card">
+                <div class="card-header">
+                    <a href="https://my-fyp-mern.herokuapp.com/"><img style="border-radius: 4px;"
+                            src="https://my-fyp-mern.herokuapp.com/static/media/logo.a6310ceb.png" height="70"
+                            width="135"></a>
+                    <h2>Buy the best product Online</h2>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <img class="big-image" src="<%= imgSrc %>">
+                    </div>
+                    <ul>
+                        <li><span>Name : </span><%= pName %></li>
+                        <li><span>Brand : </span>Rs. <%= pBrand %></li>
+                        <li><span>Price : </span>Rs. <%= pPrice %></li>
+                        <li><span>Description : </span><%= pDescription %></li>
+                    </ul>
+                    <div style="margin-top:20px;padding: 20px 0;">
+                        <a class="btn" href="https://my-fyp-mern.herokuapp.com/">Go get yours now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+</html>
