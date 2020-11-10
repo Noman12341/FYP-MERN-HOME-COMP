@@ -111,7 +111,7 @@ router.post("/fetchFinishedAuction", async (req, res) => {
 
 router.post("/scrap-product-detail", async (req, res) => {
     try {
-        const browser = await puppeteer.launch({ headless: false });
+        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         const page = await browser.newPage();
         await page.goto(req.body.link);
         const data = await page.evaluate(async () => {
@@ -148,7 +148,7 @@ router.post("/live-scrape", async (req, res) => {
     // const word = "3pc";
     let CollectProducts = [];
     try {
-        const browser = await puppeteer.launch({ headless: false });
+        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         const page = await browser.newPage();
         // below is a search button
         await page.goto("https://www.almirah.com.pk");
