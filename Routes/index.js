@@ -197,6 +197,7 @@ async function autoScroll(page) {
 // live scrap Sanasafinaz
 router.get("/live-scrap-sana", async (req, res) => {
     try {
+
         const browser = await puppeteer.launch({ headless: false });
         const page = await browser.newPage();
         await page.goto("https://www.sanasafinaz.com");
