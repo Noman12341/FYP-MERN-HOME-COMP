@@ -175,7 +175,6 @@ router.post("/live-scrape", async (req, res) => {
         return res.status(400).json({ msg: e });
     }
 });
-
 // below function used to scroll down while webscraping
 async function autoScroll(page) {
     await page.evaluate(async () => {
@@ -195,5 +194,38 @@ async function autoScroll(page) {
         });
     });
 }
+// live scrap Sanasafinaz
+router.get("/live-scrap-sana", async (req, res) => {
+    try {
+        const browser = await puppeteer.launch({ headless: false });
+        const page = await browser.newPage();
+        await page.goto("https://www.sanasafinaz.com");
+        await page.waitForSelector('.search-open');
+        await page.click('.search-open');
+        await page.focus('#search');
+        await page.keyboard.type("unstitched");
+        await page.click(".actions > button");
+        await page.waitForSelector('.products-grid');
+        const lis = await page.$$('.product-items > li');
+        let data = [];
+        for (let li of lis) {
+            const detailPage = await li.$eval(".product-item-link", link => link.getAttribute('href'));
+            const name = await li.$eval('.product-item-link', name => name.innerText.trim());
+            const image = await li.$eval('.product-image-photo', image => image.getAttribute('src'));
+            const price = await li.$eval('.price-wrapper > span', itemPrice => Number(itemPrice.innerText.replace(/[PKR,.]/gi, "").trim().slice(0, 4)));
+            data.push({ detailPage, name, image, price });
+        }
+        console.log("Done");
+        console.log(data.length);
+        // await browser.close();
+        return res.status(200).json({ data });
+    } catch (e) {
+        console.log(e);
+        await browser.close();
+        return res.status(400).json({ msg: "An error have been occured" });
+    }
+
+
+})
 
 module.exports = router;
