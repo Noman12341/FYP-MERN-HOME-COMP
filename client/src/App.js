@@ -27,7 +27,7 @@ function App() {
       <Route path="/" exact component={Home} />
       <Route path="/product-details/:productID" exact component={ProductDetail} />
       <Route path="/searched-products" exact component={Search} />
-      <Route path="/scrap-prodroduct-detail" exact component={ScrapPDetail} />
+      <Route path="/scrap-product-detail" exact component={ScrapPDetail} />
       <Route path="/login" exact component={AuthPage} />
       <Route path="/register" exact component={AuthPage} />
       <Route path="/product-auction-detail/:auctionProductID" exact component={AuctionDetail} />

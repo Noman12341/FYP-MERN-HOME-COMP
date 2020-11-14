@@ -8,6 +8,7 @@ const FinishedAuction = require("../Modals/FinishedAuctions");
 const auth = require("../Middlewares/auth");
 const puppeteer = require('puppeteer');
 let { v4: uuidv4 } = require('uuid');
+const e = require('express');
 router.get("/fetchproducts", async (req, res) => {
     await Product.find({}, (err, items) => {
         if (!err) {
@@ -110,45 +111,125 @@ router.post("/fetchFinishedAuction", async (req, res) => {
 });
 
 router.post("/scrap-product-detail", async (req, res) => {
-    try {
-        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
-        const page = await browser.newPage();
-        await page.goto(req.body.link);
-        const data = await page.evaluate(async () => {
-            const title = document.querySelector('h1[class="h2 product-single__title"]').innerText;
-            const productPrice = document.querySelector('.money').innerText;
-            const productDiscription = document.querySelector('.product-single__description > p');
-            let discription = "";
-            if (!productDiscription) {
-                discription = "No Description is Provided";
-            } else {
-                discription = productDiscription.innerText;
-            }
-            // await document.querySelector('button[class="btn btn--body btn--circle js-photoswipe__zoom product__photo-zoom"]').click();
-            // const imgURL = document.querySelector('div[class="pswp__zoom-wrap"] > img').getAttribute('src');
-            const imgURL = document.querySelector('img.lazyloaded').getAttribute('srcset');
+    const { link } = req.body;
+    if (link.includes('almirah')) {
+        // excecute this
+        try {
+            const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
+            const page = await browser.newPage();
+            await page.goto(link);
+            const data = await page.evaluate(async () => {
+                const title = document.querySelector('h1[class="h2 product-single__title"]').innerText;
+                const productPrice = document.querySelector('.money').innerText;
+                const productDiscription = document.querySelector('.product-single__description > p');
+                let discription = "";
+                if (!productDiscription) {
+                    discription = "No Description is Provided";
+                } else {
+                    discription = productDiscription.innerText;
+                }
+                // await document.querySelector('button[class="btn btn--body btn--circle js-photoswipe__zoom product__photo-zoom"]').click();
+                // const imgURL = document.querySelector('div[class="pswp__zoom-wrap"] > img').getAttribute('src');
+                const imgURL = document.querySelector('img.lazyloaded').getAttribute('srcset');
 
-            // fixing price here
-            const editPrice = productPrice.replace(/[Rs,.]/gi, "");
-            const PriceNum = Number(editPrice);
-            const acttualPrice = parseInt(PriceNum.toString().slice(0, 4));
-            return { _id: 1, name: title, brand: "Almirah", price: acttualPrice, image: imgURL, description: discription, isMyProduct: false };
-        });
-        await browser.close();
-        return res.status(200).json({ productDetail: data });
-
-    } catch (e) {
-        console.log(e);
+                // fixing price here
+                const editPrice = productPrice.replace(/[Rs,.]/gi, "");
+                const PriceNum = Number(editPrice);
+                const acttualPrice = parseInt(PriceNum.toString().slice(0, 4));
+                return { _id: 1, name: title, brand: "Almirah", price: acttualPrice, image: imgURL, description: discription, isMyProduct: false };
+            });
+            await browser.close();
+            return res.status(200).json({ productDetail: data });
+        } catch (e) {
+            console.log(e);
+            return res.status(400).json({ msg: "Error!!" });
+        }
+    } else if (link.includes('gulahmed')) {
+        try {
+            const browser = await puppeteer.launch({ headless: false });
+            const page = await browser.newPage();
+            await page.goto(link);
+            await page.waitForSelector('#maincontent');
+            const data = await page.evaluate(() => {
+                const img = document.querySelector('.no-sirv-lazy-load').getAttribute('src');
+                const itemName = document.querySelector('.page-title > span').innerText;
+                const price = document.querySelector('.price-container').innerText;
+                let description = "";
+                if (document.querySelector('.description')) {
+                    description = document.querySelector('.description > div').innerText.trim();
+                } else { description = "No Description Provided."; }
+                const editPrice = price.replace(/[PKR,]/gi, "");
+                const priceFixed = Number(editPrice);
+                return { _id: 1, name: itemName, brand: "Gul Ahmed", price: priceFixed, image: img, description, isMyProduct: false };
+            });
+            await browser.close();
+            return res.status(200).json({ productDetail: data });
+        } catch (e) {
+            console.log(e);
+            return res.status(400).json({ msg: "Error!!" });
+        }
+    } else if (link.includes('alkaram')) {
+        try {
+            const browser = await puppeteer.launch({ headless: false });
+            const page = await browser.newPage();
+            await page.goto(link);
+            await page.waitForSelector('.main');
+            const scrapedObj = await page.evaluate(() => {
+                const pName = document.querySelector('.product-name > h1').innerText;
+                const price = document.querySelector('.price-box .price').innerText;
+                const image = document.querySelector('.product-img-box a').getAttribute('href');
+                const description = document.querySelector('.std').innerText;
+                // below code is used to remove PKR from price string
+                const editPrice = price.replace(/[PKR,Rs]/gi, "").trim();
+                const PriceNum = Number(editPrice);
+                const fixedPrice = parseInt(PriceNum.toString().slice(0, 4));
+                return { _id: 1, name: pName, brand: "Alkaram", price: fixedPrice, image, description, isMyProduct: false };
+            });
+            await browser.close();
+            return res.status(200).json({ productDetail: scrapedObj });
+        } catch (e) {
+            console.log(e);
+            return res.status(400).json({ msg: e });
+        }
+    } else if (link.includes('diners')) {
+        try {
+            const browser = await puppeteer.launch({ headless: false });
+            const page = await browser.newPage();
+            await page.goto(link);
+            await page.waitForSelector('.product-default');
+            const scrapedObj = await page.evaluate(() => {
+                const pName = document.querySelector('.product-title > span').innerText;
+                const price = document.querySelector('.price > span').innerText;
+                const image = document.querySelector('.fancybox > img').getAttribute('src');
+                let description = null;
+                if (document.querySelector('.tab-content').innerText === "") {
+                    description = "no description provided";
+                } else { description = document.querySelector('.tab-content').innerText.trim(); }
+                // below code is used to remove PKR from price string
+                const editPrice = price.replace(/[PKR,.Rs]/gi, "");
+                const PriceNum = Number(editPrice);
+                const fixedPrice = parseInt(PriceNum.toString().slice(0, 4));
+                return { _id: 1, name: pName, brand: "Diners", price: fixedPrice, image, description, isMyProduct: false };
+            });
+            await browser.close();
+            return res.status(200).json({ productDetail: scrapedObj });
+        } catch (e) {
+            console.log(e);
+            return res.status(400).json({ msg: "Error!!" });
+        }
+    } else {
+        // no match found
+        return res.status(400).json({ msg: "No match found" });
     }
 });
 
 router.post("/live-scrape", async (req, res) => {
     const { word } = req.body;
-    // below array stores all the products
-    // const word = "3pc";
     let CollectProducts = [];
+    let loopLimit = 0;
+    let lis = null;
     try {
-        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
+        const browser = await puppeteer.launch({ headless: false });
         const page = await browser.newPage();
         // below is a search button
         await page.goto("https://www.almirah.com.pk");
@@ -161,13 +242,70 @@ router.post("/live-scrape", async (req, res) => {
 
         await autoScroll(page);
 
-        const cards = await page.$$('.grid-product__content');
-        for (let i = 0; i < cards.length; i++) {
-            const detailPage = await cards[i].$eval('a', link => "https://www.almirah.com.pk" + link.getAttribute('href'));
-            const name = await cards[i].$eval('.grid-product__title', name => name.innerText);
-            const image = await cards[i].$eval('.grid-product__image-mask > div', el => el.getAttribute('data-bgset').trim() === "" ? "" : window.getComputedStyle(el).backgroundImage.match(/url\("(.*)"/)[1]);
-            const price = await cards[i].$eval('span.money', pric => Number(pric.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
-            CollectProducts.push({ _id: uuidv4(), name, image, price, detailPage, isMyProduct: false });
+        lis = await page.$$('.grid-product__content');
+        lis.length > 12 ? loopLimit = 12 : loopLimit > lis.length;
+        for (let i = 0; i < lis.length; i++) {
+            const detailPage = await lis[i].$eval('a', link => "https://www.almirah.com.pk" + link.getAttribute('href'));
+            const name = await lis[i].$eval('.grid-product__title', name => name.innerText);
+            const image = await lis[i].$eval('.grid-product__image-mask > div', el => el.getAttribute('data-bgset').trim() === "" ? "" : window.getComputedStyle(el).backgroundImage.match(/url\("(.*)"/)[1]);
+            const price = await lis[i].$eval('span.money', pric => Number(pric.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
+            CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Almirah", detailPage, isMyProduct: false });
+        }
+        // Scraping Gul ahmed products
+        await page.goto("https://www.gulahmedshop.com");
+        await page.waitForSelector('.minisearch');
+        await page.click('#search');
+        await page.keyboard.type("men");
+        await page.waitForSelector('.actions > button')
+        await Promise.all([
+            page.click('.actions > button'),
+            page.waitForNavigation({ waitUntil: 'networkidle2' }),
+        ]);
+        lis = await page.$$('ol.products > li');
+        lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
+        for (let i = 0; i < loopLimit; i++) {
+            const detailPage = await lis[i].$eval(".cdz-product-top > a", link => link.getAttribute('href'));
+            const name = await lis[i].$eval('strong > a', name => name.innerText.trim());
+            const image = await lis[i].$eval('.product-image-photo', image => image.getAttribute('src'));
+            const price = await lis[i].$eval('.price-box .price', itemPrice => Number(itemPrice.innerText.replace(/[PKR,]/gi, "").trim()));
+            CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Gul Ahmed", detailPage, isMyProduct: false });
+        }
+        // below code is going to page alkarm and scrap it
+        await page.goto("https://www.alkaramstudio.com/");
+        await page.waitForSelector('#search_mini_form');
+        await page.focus('#search');
+        await page.keyboard.type(word);
+        await page.click('.button');
+        await page.waitForSelector('.products-grid');
+        lis = await page.$$('.products-grid > li');
+        lis.length > 12 ? loopLimit = 12 : loopLimit > lis.length;
+        for (let i = 0; i < loopLimit; i++) {
+            const name = await lis[i].$eval('.product-name', name => name.innerText);
+            const image = await lis[i].$eval('.product-image > img', img => img.getAttribute('src'));
+            const price = await lis[i].$eval('.price-box .price', price => Number(price.innerText.replace(/[PKR,]/gi, "").trim()));
+            const detailPage = await lis[i].$eval('.item-img > a', link => link.getAttribute('href'));
+            CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Alkaram", detailPage, isMyProduct: false });
+        }
+        // loop ends here
+        await page.goto('https://diners.com.pk/');
+        await page.waitForSelector('.search-form');
+        await page.click('.icon-search');
+        await page.waitForSelector('.header-search__input');
+        // fill the input
+        await page.focus('.header-search__input');
+        await page.keyboard.type('men');
+        await page.click('button.icon-search');
+        await page.waitForSelector('.products-grid');
+        lis = await page.$$('.products-grid > .grid-item');
+        lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
+        for (let i = 0; i < loopLimit; i++) {
+            const name = await lis[i].$eval('.product-title > span', name => name.innerText);
+            const image = await lis[i].$eval('a.product-grid-image > img', img => img.getAttribute('src'));
+            let price = null;
+            await lis[i].$('.price-sale') ? price = await lis[i].$eval('.special-price > span', p => Number(p.innerText.replace(/[Rs,.]/gi, "").slice(0, 4))) :
+                price = await lis[i].$eval('.money', p => Number(p.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
+            const detailPage = await lis[i].$eval('.product-image > a', l => "https://diners.com.pk/" + l.getAttribute('href'));
+            CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Diners", detailPage, isMyProduct: false });
         }
         await browser.close();
         return res.status(200).json({ products: CollectProducts });
@@ -194,39 +332,4 @@ async function autoScroll(page) {
         });
     });
 }
-// live scrap Sanasafinaz
-router.get("/live-scrap-sana", async (req, res) => {
-    try {
-
-        const browser = await puppeteer.launch({ headless: false });
-        const page = await browser.newPage();
-        await page.goto("https://www.sanasafinaz.com");
-        await page.waitForSelector('.search-open');
-        await page.click('.search-open');
-        await page.focus('#search');
-        await page.keyboard.type("unstitched");
-        await page.click(".actions > button");
-        await page.waitForSelector('.products-grid');
-        const lis = await page.$$('.product-items > li');
-        let data = [];
-        for (let li of lis) {
-            const detailPage = await li.$eval(".product-item-link", link => link.getAttribute('href'));
-            const name = await li.$eval('.product-item-link', name => name.innerText.trim());
-            const image = await li.$eval('.product-image-photo', image => image.getAttribute('src'));
-            const price = await li.$eval('.price-wrapper > span', itemPrice => Number(itemPrice.innerText.replace(/[PKR,.]/gi, "").trim().slice(0, 4)));
-            data.push({ detailPage, name, image, price });
-        }
-        console.log("Done");
-        console.log(data.length);
-        // await browser.close();
-        return res.status(200).json({ data });
-    } catch (e) {
-        console.log(e);
-        await browser.close();
-        return res.status(400).json({ msg: "An error have been occured" });
-    }
-
-
-})
-
 module.exports = router;

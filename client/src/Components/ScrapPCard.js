@@ -11,7 +11,7 @@ function ScrapPCard({ product }) {
     let handleClick = () => {
         dispatch(getScrapPLink(product.detailPage));
         dispatch(storeProductID(product._id));
-        history.push("/scrap-prodroduct-detail");
+        history.push("/scrap-product-detail");
     }
     return <Card>
         <Link to="#" onClick={handleClick}>
