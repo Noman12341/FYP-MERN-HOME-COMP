@@ -243,7 +243,7 @@ router.post("/live-scrape", async (req, res) => {
         await autoScroll(page);
 
         lis = await page.$$('.grid-product__content');
-        lis.length > 12 ? loopLimit = 12 : loopLimit > lis.length;
+        lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
         for (let i = 0; i < lis.length; i++) {
             const detailPage = await lis[i].$eval('a', link => "https://www.almirah.com.pk" + link.getAttribute('href'));
             const name = await lis[i].$eval('.grid-product__title', name => name.innerText);
@@ -255,7 +255,7 @@ router.post("/live-scrape", async (req, res) => {
         await page.goto("https://www.gulahmedshop.com");
         await page.waitForSelector('.minisearch');
         await page.click('#search');
-        await page.keyboard.type("men");
+        await page.keyboard.type(word);
         await page.waitForSelector('.actions > button')
         await Promise.all([
             page.click('.actions > button'),
@@ -278,7 +278,7 @@ router.post("/live-scrape", async (req, res) => {
         await page.click('.button');
         await page.waitForSelector('.products-grid');
         lis = await page.$$('.products-grid > li');
-        lis.length > 12 ? loopLimit = 12 : loopLimit > lis.length;
+        lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
         for (let i = 0; i < loopLimit; i++) {
             const name = await lis[i].$eval('.product-name', name => name.innerText);
             const image = await lis[i].$eval('.product-image > img', img => img.getAttribute('src'));
