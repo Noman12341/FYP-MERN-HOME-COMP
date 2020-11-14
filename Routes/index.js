@@ -114,8 +114,8 @@ router.post("/scrap-product-detail", async (req, res) => {
     const { link } = req.body;
     if (link.includes('almirah')) {
         // excecute this
+        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         try {
-            const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
             const page = await browser.newPage();
             await page.goto(link);
             const data = await page.evaluate(async () => {
@@ -141,12 +141,12 @@ router.post("/scrap-product-detail", async (req, res) => {
             await browser.close();
             return res.status(200).json({ productDetail: data });
         } catch (e) {
-            console.log(e);
+            await browser.close();
             return res.status(400).json({ msg: "Error!!" });
         }
     } else if (link.includes('gulahmed')) {
+        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         try {
-            const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
             const page = await browser.newPage();
             await page.goto(link);
             await page.waitForSelector('#maincontent');
@@ -165,12 +165,12 @@ router.post("/scrap-product-detail", async (req, res) => {
             await browser.close();
             return res.status(200).json({ productDetail: data });
         } catch (e) {
-            console.log(e);
+            await browser.close();
             return res.status(400).json({ msg: "Error!!" });
         }
     } else if (link.includes('alkaram')) {
+        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         try {
-            const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
             const page = await browser.newPage();
             await page.goto(link);
             await page.waitForSelector('.main');
@@ -188,12 +188,12 @@ router.post("/scrap-product-detail", async (req, res) => {
             await browser.close();
             return res.status(200).json({ productDetail: scrapedObj });
         } catch (e) {
-            console.log(e);
+            await browser.close();
             return res.status(400).json({ msg: e });
         }
     } else if (link.includes('diners')) {
+        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         try {
-            const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
             const page = await browser.newPage();
             await page.goto(link);
             await page.waitForSelector('.product-default');
@@ -214,7 +214,7 @@ router.post("/scrap-product-detail", async (req, res) => {
             await browser.close();
             return res.status(200).json({ productDetail: scrapedObj });
         } catch (e) {
-            console.log(e);
+            await browser.close();
             return res.status(400).json({ msg: "Error!!" });
         }
     } else {
@@ -228,8 +228,8 @@ router.post("/live-scrape", async (req, res) => {
     let CollectProducts = [];
     let loopLimit = 0;
     let lis = null;
+    const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
     try {
-        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         const page = await browser.newPage();
         // below is a search button
         await page.goto("https://www.almirah.com.pk");
@@ -310,6 +310,7 @@ router.post("/live-scrape", async (req, res) => {
         await browser.close();
         return res.status(200).json({ products: CollectProducts });
     } catch (e) {
+        await browser.close();
         return res.status(400).json({ msg: e });
     }
 });
