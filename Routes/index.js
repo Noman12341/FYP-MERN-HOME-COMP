@@ -146,7 +146,7 @@ router.post("/scrap-product-detail", async (req, res) => {
         }
     } else if (link.includes('gulahmed')) {
         try {
-            const browser = await puppeteer.launch({ headless: false });
+            const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
             const page = await browser.newPage();
             await page.goto(link);
             await page.waitForSelector('#maincontent');
@@ -170,7 +170,7 @@ router.post("/scrap-product-detail", async (req, res) => {
         }
     } else if (link.includes('alkaram')) {
         try {
-            const browser = await puppeteer.launch({ headless: false });
+            const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
             const page = await browser.newPage();
             await page.goto(link);
             await page.waitForSelector('.main');
@@ -193,7 +193,7 @@ router.post("/scrap-product-detail", async (req, res) => {
         }
     } else if (link.includes('diners')) {
         try {
-            const browser = await puppeteer.launch({ headless: false });
+            const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
             const page = await browser.newPage();
             await page.goto(link);
             await page.waitForSelector('.product-default');
@@ -229,7 +229,7 @@ router.post("/live-scrape", async (req, res) => {
     let loopLimit = 0;
     let lis = null;
     try {
-        const browser = await puppeteer.launch({ headless: false });
+        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
         const page = await browser.newPage();
         // below is a search button
         await page.goto("https://www.almirah.com.pk");
