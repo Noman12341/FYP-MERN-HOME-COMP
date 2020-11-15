@@ -269,22 +269,22 @@ router.post("/live-scrape", async (req, res) => {
             const price = await lis[i].$eval('.price-box .price', itemPrice => Number(itemPrice.innerText.replace(/[PKR,]/gi, "").trim()));
             CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Gul Ahmed", detailPage, isMyProduct: false });
         }
-        // below code is going to page alkarm and scrap it
-        await page.goto("https://www.alkaramstudio.com/");
-        await page.waitForSelector('#search_mini_form');
-        await page.focus('#search');
-        await page.keyboard.type(word);
-        await page.click('.button');
-        await page.waitForSelector('.products-grid');
-        lis = await page.$$('.products-grid > li');
-        lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
-        for (let i = 0; i < loopLimit; i++) {
-            const name = await lis[i].$eval('.product-name', name => name.innerText);
-            const image = await lis[i].$eval('.product-image > img', img => img.getAttribute('src'));
-            const price = await lis[i].$eval('.price-box .price', price => Number(price.innerText.replace(/[PKR,]/gi, "").trim()));
-            const detailPage = await lis[i].$eval('.item-img > a', link => link.getAttribute('href'));
-            CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Alkaram", detailPage, isMyProduct: false });
-        }
+        // // below code is going to page alkarm and scrap it
+        // await page.goto("https://www.alkaramstudio.com/");
+        // await page.waitForSelector('#search_mini_form');
+        // await page.focus('#search');
+        // await page.keyboard.type(word);
+        // await page.click('.button');
+        // await page.waitForSelector('.products-grid');
+        // lis = await page.$$('.products-grid > li');
+        // lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
+        // for (let i = 0; i < loopLimit; i++) {
+        //     const name = await lis[i].$eval('.product-name', name => name.innerText);
+        //     const image = await lis[i].$eval('.product-image > img', img => img.getAttribute('src'));
+        //     const price = await lis[i].$eval('.price-box .price', price => Number(price.innerText.replace(/[PKR,]/gi, "").trim()));
+        //     const detailPage = await lis[i].$eval('.item-img > a', link => link.getAttribute('href'));
+        //     CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Alkaram", detailPage, isMyProduct: false });
+        // }
         // // loop ends here diners below brand code
         // await page.goto('https://diners.com.pk/');
         // await page.waitForSelector('.search-form');
