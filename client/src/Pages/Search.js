@@ -24,9 +24,8 @@ function Search() {
                     setIsLoading(false);
                 })
         }
-        searchObj.search ? liveScrap() : setIsLoading(false);
-
-    }, [searchObj.searchedWord]);
+        searchObj.search && liveScrap();
+    }, [searchObj.searchedWord, searchObj.search]);
     return <section className="section-top-shadow padding-70">
         <Container>
             {isLoading ? <PageSpinner containerHeight="50vh" /> : <div>
@@ -54,23 +53,15 @@ function Search() {
                         </Col>
                     })}
                 </Row>
-                <h2 className="text-left my-5">Diners Products</h2>
+                {/* <h2 className="text-left my-5">Diners Products</h2>
                 <Row>
                     {searchObj.scrapedProducts.map((product, index) => {
                         return product.brand === "Diners" && <Col className="my-4" key={index} lg={3} md={4} sm={6}>
                             <ScrapPCard product={product} />
                         </Col>
                     })}
-                </Row>
+                </Row> */}
             </div>}
-            {/* <h2 className="text-left mb-5">Products</h2>
-            <Row>
-                {isLoading ? <PageSpinner containerHeight="50vh" /> : searchObj.scrapedProducts.map((product, index) => {
-                    return <Col className="my-4" key={index} lg={3} md={4} sm={6}>
-                        <ScrapPCard product={product} />
-                    </Col>
-                })}
-            </Row> */}
         </Container>
     </section>
 }

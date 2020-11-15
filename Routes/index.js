@@ -228,14 +228,13 @@ router.post("/live-scrape", async (req, res) => {
     let CollectProducts = [];
     let loopLimit = 0;
     let lis = null;
-    const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
+    const browser = await puppeteer.launch({ headless: false });
     try {
         const page = await browser.newPage();
         // below is a search button
         await page.goto("https://www.almirah.com.pk");
         await page.waitForSelector('.site-nav');
         await page.click('.site-nav');
-        // await page.focus('#search');
         await page.keyboard.type(word);
         await page.click(".text-link");
         await page.waitForSelector("#gf-products");
@@ -286,27 +285,27 @@ router.post("/live-scrape", async (req, res) => {
             const detailPage = await lis[i].$eval('.item-img > a', link => link.getAttribute('href'));
             CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Alkaram", detailPage, isMyProduct: false });
         }
-        // loop ends here
-        await page.goto('https://diners.com.pk/');
-        await page.waitForSelector('.search-form');
-        await page.click('.icon-search');
-        await page.waitForSelector('.header-search__input');
-        // fill the input
-        await page.focus('.header-search__input');
-        await page.keyboard.type('men');
-        await page.click('button.icon-search');
-        await page.waitForSelector('.products-grid');
-        lis = await page.$$('.products-grid > .grid-item');
-        lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
-        for (let i = 0; i < loopLimit; i++) {
-            const name = await lis[i].$eval('.product-title > span', name => name.innerText);
-            const image = await lis[i].$eval('a.product-grid-image > img', img => img.getAttribute('src'));
-            let price = null;
-            await lis[i].$('.price-sale') ? price = await lis[i].$eval('.special-price > span', p => Number(p.innerText.replace(/[Rs,.]/gi, "").slice(0, 4))) :
-                price = await lis[i].$eval('.money', p => Number(p.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
-            const detailPage = await lis[i].$eval('.product-image > a', l => "https://diners.com.pk/" + l.getAttribute('href'));
-            CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Diners", detailPage, isMyProduct: false });
-        }
+        // // loop ends here diners below brand code
+        // await page.goto('https://diners.com.pk/');
+        // await page.waitForSelector('.search-form');
+        // await page.click('.icon-search');
+        // await page.waitForSelector('.header-search__input');
+        // // fill the input
+        // await page.focus('.header-search__input');
+        // await page.keyboard.type('men');
+        // await page.click('button.icon-search');
+        // await page.waitForSelector('.products-grid');
+        // lis = await page.$$('.products-grid > .grid-item');
+        // lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
+        // for (let i = 0; i < loopLimit; i++) {
+        //     const name = await lis[i].$eval('.product-title > span', name => name.innerText);
+        //     const image = await lis[i].$eval('a.product-grid-image > img', img => img.getAttribute('src'));
+        //     let price = null;
+        //     await lis[i].$('.price-sale') ? price = await lis[i].$eval('.special-price > span', p => Number(p.innerText.replace(/[Rs,.]/gi, "").slice(0, 4))) :
+        //         price = await lis[i].$eval('.money', p => Number(p.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
+        //     const detailPage = await lis[i].$eval('.product-image > a', l => "https://diners.com.pk/" + l.getAttribute('href'));
+        //     CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Diners", detailPage, isMyProduct: false });
+        // }
         await browser.close();
         return res.status(200).json({ products: CollectProducts });
     } catch (e) {
@@ -329,7 +328,7 @@ async function autoScroll(page) {
                     clearInterval(timer);
                     resolve();
                 }
-            }, 300);
+            }, 140);
         });
     });
 }
