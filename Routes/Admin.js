@@ -7,6 +7,7 @@ const upload = require("../Middlewares/multer");
 const fs = require('fs');
 const User = require('../Modals/User');
 const Order = require('../Modals/Order');
+const QRCode = require('../Modals/QRCode');
 const AdminAuth = require('../Middlewares/adminAuth');
 const { handleEmailMarketing, scrapAlmirah, scrapGulAhmed, scrapSanaSafinaz, scrapDiners } = require('../GlobalFuntions');
 
@@ -176,6 +177,25 @@ router.get("/fetchOrders", async (req, res) => {
     await Order.find({}, (err, orders) => {
         if (!err) { return res.status(200).json({ orders }) }
         else { return res.status(400).json({ msg: "Orders donot found." }) }
-    })
-})
+    });
+});
+// add discount Codes
+router.post("/add-discount-code", async (req, res) => {
+    const { code, disPrice } = req.body;
+    await QRCode.findOne({ disCode: code }, async (err, found) => {
+        if (!err) {
+            if (!found) {
+                const newQRCode = new QRCode({
+                    disCode: code,
+                    disPrice
+                });
+                await newQRCode.save(err => {
+                    if (!err) {
+                        return res.status(200).json({ msg: "QR code is added successfully" });
+                    } else { return res.status(400).json({ msg: "QR code is not added" }); }
+                });
+            } else { return res.status(400).json({ msg: "QR code already exists" }); }
+        } else { return res.status(400).json({ msg: "Error in finding the code!" }); }
+    });
+});
 module.exports = router;

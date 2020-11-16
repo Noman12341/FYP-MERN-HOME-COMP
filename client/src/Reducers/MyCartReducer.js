@@ -25,6 +25,8 @@ export const MyCartReducer = (state = initialState, action) => {
             return { ...state, cartItems: [...newCart], totalAmount: newCart.reduce((a, c) => a + c.price * c.units, 0), totalItems: newCart.reduce((a, c) => a + c.units, 0) }
         case "CLEAR_CART":
             return { ...state, cartItems: [], totalItems: 0, totalAmount: 0 }
+        case "APPLY_DISCOUNT":
+            return { ...state, totalAmount: state.totalAmount - action.payload }
         default:
             return state;
     }

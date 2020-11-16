@@ -1,7 +1,9 @@
+const e = require('express');
 const express = require('express');
 const router = express.Router();
 const Stripe = require('stripe');
 const Order = require("../Modals/Order");
+const QRCode = require('../Modals/QRCode');
 
 const stripe = new Stripe('sk_test_47o8MwrffpGMbg37bIhrfvQn00WuHuxISx');
 router.post("/checkout", async (req, res) => {
@@ -34,7 +36,21 @@ router.post("/checkout", async (req, res) => {
         return res.status(400).json({ msg: error.raw.message });
     }
 
+});
 
+router.post("/check-discount", async (req, res) => {
+    const { code } = req.body;
+    await QRCode.findOne({ $and: [{ disCode: code }, { isReserved: false }] }, async (err, found) => {
+        if (!err) {
+            if (found) {
+                await QRCode.findOneAndUpdate({ disCode: code }, { isReserved: true }, (err) => {
+                    if (!err) {
+                        return res.status(200).json({ obj: found });
+                    } else { return res.status(400).json({ msg: "No match found!" }); }
+                })
+            } else { return res.status(400).json({ msg: "No Code found!" }); }
+        } else { return res.status(400).json({ msg: "No match found!" }); }
+    });
 });
 
 module.exports = router;

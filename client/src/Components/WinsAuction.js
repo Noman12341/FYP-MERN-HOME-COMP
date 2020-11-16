@@ -34,7 +34,7 @@ function WinsAuction() {
         if (userID && Object.keys(auctionProduct).length === 0) {
             FetchWin();
         }
-    });
+    }, []);
     return Object.keys(auctionProduct).length === 0 ? null : <Alert variant="success" className="mb-0">U wins the auction Now pay the price.</Alert>
 }
 export default WinsAuction;

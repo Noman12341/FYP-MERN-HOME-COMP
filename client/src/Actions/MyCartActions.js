@@ -15,3 +15,10 @@ export const ClearCart = () => {
         type: "CLEAR_CART"
     }
 }
+export const applyDiscount = amount => {
+    console.log(amount);
+    return {
+        type: "APPLY_DISCOUNT",
+        payload: amount
+    }
+}
