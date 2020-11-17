@@ -4,6 +4,7 @@ import { Navbar, Nav, Button } from 'react-bootstrap';
 import AdminProducts from '../SubPages/AdminProducts';
 import AdminUsers from '../SubPages/AdminUsers';
 import AdminOrders from '../SubPages/AdminOrder';
+import AdminQRCodes from '../SubPages/AdminQRCodes';
 
 function Admin() {
     const history = useHistory();
@@ -21,6 +22,7 @@ function Admin() {
                 <li><NavLink to="/admin" exact activeClassName="selected"><i className="fas fa-user fa-2x mr-3"></i><p>Dash Board</p></NavLink></li>
                 <li><NavLink to="/admin/users" exact activeClassName="selected"><i className="fas fa-users fa-2x mr-3"></i><p>Users</p></NavLink></li>
                 <li><NavLink to="/admin/products" exact activeClassName="selected"><i className="fab fa-product-hunt fa-2x mr-2"></i><p>Products</p></NavLink></li>
+                <li><NavLink to="/admin/qrcodes" exact activeClassName="selected"><i className="fab fa-first-order-alt fa-2x mr-2"></i><p>QR Codes</p></NavLink></li>
                 <li><NavLink to="/admin/orders" exact activeClassName="selected"><i className="fab fa-first-order-alt fa-2x mr-2"></i><p>Orders</p></NavLink></li>
             </ul>
         </div>
@@ -37,9 +39,9 @@ function Admin() {
                     <Route path="/admin/users" component={AdminUsers} />
                     <Route path="/admin/products" component={AdminProducts} />
                     <Route path="/admin/orders" component={AdminOrders} />
+                    <Route path="/admin/qrcodes" component={AdminQRCodes} />
                 </Switch>
             </div>
-
         </div>
     </div>;
 }

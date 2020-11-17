@@ -9,6 +9,8 @@ const User = require('../Modals/User');
 const Order = require('../Modals/Order');
 const QRCode = require('../Modals/QRCode');
 const AdminAuth = require('../Middlewares/adminAuth');
+const { nanoid } = require("nanoid");
+const QR = require('qrcode');
 const { handleEmailMarketing, scrapAlmirah, scrapGulAhmed, scrapSanaSafinaz, scrapDiners } = require('../GlobalFuntions');
 
 
@@ -179,23 +181,32 @@ router.get("/fetchOrders", async (req, res) => {
         else { return res.status(400).json({ msg: "Orders donot found." }) }
     });
 });
-// add discount Codes
-router.post("/add-discount-code", async (req, res) => {
-    const { code, disPrice } = req.body;
-    await QRCode.findOne({ disCode: code }, async (err, found) => {
+
+// fetch all the qrcodes
+router.get("/fetchqrcodes", async (req, res) => {
+    await QRCode.find({}, (err, codes) => {
         if (!err) {
-            if (!found) {
-                const newQRCode = new QRCode({
-                    disCode: code,
-                    disPrice
-                });
-                await newQRCode.save(err => {
-                    if (!err) {
-                        return res.status(200).json({ msg: "QR code is added successfully" });
-                    } else { return res.status(400).json({ msg: "QR code is not added" }); }
-                });
-            } else { return res.status(400).json({ msg: "QR code already exists" }); }
-        } else { return res.status(400).json({ msg: "Error in finding the code!" }); }
-    });
+            return res.status(200).json({ codes });
+        } else { return res.status(400).json({ codes }); }
+    })
+});
+// generate qrcode 
+router.post("/gen-qrcodes", async (req, res) => {
+    const { disPrice, numOfCodes } = req.body;
+    try {
+        for (let i = 0; i < numOfCodes; i++) {
+            const disCode = nanoid(11);
+            await QR.toFile("Public/QRCodes/" + disCode + ".png", disCode, { width: 400 });
+            const newQRCode = new QRCode({
+                disCode,
+                disPrice,
+                qrCodeImg: disCode + ".png",
+            });
+            await newQRCode.save();
+        }
+    } catch (e) {
+        return res.status(400).json({ msg: "Error! : " + e });
+    }
+    return res.status(200).json({ msg: "QRCodes is added success fully." });
 });
 module.exports = router;

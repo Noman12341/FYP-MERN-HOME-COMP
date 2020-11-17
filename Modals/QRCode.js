@@ -8,6 +8,8 @@ const codeSchema = new mongoose.Schema({
     }, disPrice: {
         type: Number,
         required: true
+    }, qrCodeImg: {
+        type: String
     }, isReserved: {
         type: Boolean,
         default: false
