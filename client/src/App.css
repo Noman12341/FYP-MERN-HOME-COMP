@@ -157,7 +157,7 @@ a:hover {
   font-weight: bold;
   color: #fff;
   padding: 15px 0;
-  margin-top: 10px;
+  margin-top: 24px;
   transition: background-color 0.4s;
 }
 .card-buy-btn:hover {
@@ -200,41 +200,6 @@ a:hover {
 }
 .cart-dropdown-content:hover {
   display:block;
-}
-
-/*  */
-.items-list {
-  list-style-type: none;
-  padding-left:0;
-  height: 310px;
-  overflow-y:scroll;
-}
-.items-list li img {
-  float: left;
-}
-.item-delete-btn {
-  position: absolute;
-  top: 0;
-  right: 0px;
-  height: 45px;
-  width: 45px;
-  border: none;
-  border-radius: 50%;
-  background-color: #1b1a20;
-  color: #fff;
-  font-weight: bold;
-  font-size: 17px;
-}.item-delete-btn:hover {
-  background-color:#ffd613;
-}
-.item-price {
-  font-size: 16px;
-  font-family: sans-serif;
-  font-weight: bold;
-}
-.items-quantity {
-  font-size:16px;
-  margin-left: 20px;
 }
 /* new cart css */
 #main-cart p {
@@ -295,6 +260,8 @@ a:hover {
   line-height: 1.52632;
   font-weight: 600;
   margin-top: 6px;
+  height: 27px;
+  overflow-y: hidden;
 }
 .card-product-name a {
   color: #191919;
@@ -513,9 +480,6 @@ a:hover {
 .product-detail-add-btn:hover {
   background-color:white;
   color: #ffd613;
-}
-.cart-product-name {
-  position: relative;
 }
 /* Authentication Screen Css */
 #auth-container .form-label {

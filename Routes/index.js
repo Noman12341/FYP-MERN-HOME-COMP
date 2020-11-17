@@ -228,7 +228,7 @@ router.post("/live-scrape", async (req, res) => {
     let CollectProducts = [];
     let loopLimit = 0;
     let lis = null;
-    const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
+    const browser = await puppeteer.launch({ headless: false });
     try {
         const page = await browser.newPage();
         // below is a search button
@@ -242,8 +242,8 @@ router.post("/live-scrape", async (req, res) => {
         await autoScroll(page);
 
         lis = await page.$$('.grid-product__content');
-        lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
-        for (let i = 0; i < lis.length; i++) {
+        lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
+        for (let i = 0; i < loopLimit; i++) {
             const detailPage = await lis[i].$eval('a', link => "https://www.almirah.com.pk" + link.getAttribute('href'));
             const name = await lis[i].$eval('.grid-product__title', name => name.innerText);
             const image = await lis[i].$eval('.grid-product__image-mask > div', el => el.getAttribute('data-bgset').trim() === "" ? "" : window.getComputedStyle(el).backgroundImage.match(/url\("(.*)"/)[1]);
@@ -261,7 +261,7 @@ router.post("/live-scrape", async (req, res) => {
             page.waitForNavigation({ waitUntil: 'networkidle2' }),
         ]);
         lis = await page.$$('ol.products > li');
-        lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
+        lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
         for (let i = 0; i < loopLimit; i++) {
             const detailPage = await lis[i].$eval(".cdz-product-top > a", link => link.getAttribute('href'));
             const name = await lis[i].$eval('strong > a', name => name.innerText.trim());
@@ -277,7 +277,7 @@ router.post("/live-scrape", async (req, res) => {
         await page.click('.button');
         await page.waitForSelector('.products-grid');
         lis = await page.$$('.products-grid > li');
-        lis.length > 12 ? loopLimit = 12 : loopLimit = lis.length;
+        lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
         for (let i = 0; i < loopLimit; i++) {
             const name = await lis[i].$eval('.product-name', name => name.innerText);
             const image = await lis[i].$eval('.product-image > img', img => img.getAttribute('src'));
@@ -328,7 +328,7 @@ async function autoScroll(page) {
                     clearInterval(timer);
                     resolve();
                 }
-            }, 140);
+            }, 100);
         });
     });
 }
