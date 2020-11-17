@@ -237,8 +237,9 @@ router.post("/live-scrape", async (req, res) => {
         await page.click('.site-nav');
         await page.keyboard.type(word);
         await page.click(".text-link");
-        await page.waitForSelector("#gf-products");
 
+        await page.waitForSelector("#gf-products");
+        // check if products are visible
         await autoScroll(page);
 
         lis = await page.$$('.grid-product__content');
@@ -310,7 +311,7 @@ router.post("/live-scrape", async (req, res) => {
         return res.status(200).json({ products: CollectProducts });
     } catch (e) {
         await browser.close();
-        return res.status(400).json({ msg: e });
+        return res.status(400).json({ msg: "Error!! : Products not found with this search or " + e });
     }
 });
 // below function used to scroll down while webscraping
@@ -328,7 +329,7 @@ async function autoScroll(page) {
                     clearInterval(timer);
                     resolve();
                 }
-            }, 100);
+            }, 80);
         });
     });
 }
