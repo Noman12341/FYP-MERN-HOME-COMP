@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const codeSchema = new mongoose.Schema({
-    disCode: {
+    userEmail: {
+        type: String,
+        trim: true
+    }, disCode: {
         type: String,
         required: true,
         trim: true
@@ -9,13 +12,8 @@ const codeSchema = new mongoose.Schema({
         type: Number,
         required: true
     }, qrCodeImg: {
-        type: String
-    }, isReserved: {
-        type: Boolean,
-        default: false
-    }, isExpired: {
-        type: Boolean,
-        default: false
+        type: String,
+        trim: true
     }
 });
 

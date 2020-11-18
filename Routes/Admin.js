@@ -190,17 +190,37 @@ router.get("/fetchqrcodes", async (req, res) => {
         } else { return res.status(400).json({ codes }); }
     })
 });
+// generate QRCodes from specific users
+router.post("/get-qrcode-users", async (req, res) => {
+    const { userEmail, disPrice } = req.body;
+    await User.findOne({ email: userEmail }, async (err, found) => {
+        if (!err) {
+            if (found) { return res.status(400).json({ msg: "This user already have discount code." }); }
+            // if not found
+            const disCode = nanoid(11);
+            await QR.toFile("Public/QRCodes/" + disCode + ".png", disCode, { width: 400 });
+            const newCode = new QRCode({
+                userEmail,
+                disCode,
+                disPrice,
+                qrCodeImg: disCode + ".png"
+            });
+            await newCode.save();
+            return res.status(200).json({ msg: "Code is saved Successfully!" });
+        } else { return res.status(400).json({ msg: "Error in finding the error." }); }
+    });
+});
 // generate qrcode 
 router.post("/gen-qrcodes", async (req, res) => {
     const { disPrice, numOfCodes } = req.body;
     try {
         for (let i = 0; i < numOfCodes; i++) {
             const disCode = nanoid(11);
-            await QR.toFile("Public/QRCodes/" + disCode + ".png", disCode, { width: 400 });
+            // await QR.toFile("Public/QRCodes/" + disCode + ".png", disCode, { width: 400 });
             const newQRCode = new QRCode({
                 disCode,
-                disPrice,
-                qrCodeImg: disCode + ".png",
+                disPrice
+                // qrCodeImg: disCode + ".png",
             });
             await newQRCode.save();
         }
