@@ -190,7 +190,38 @@ router.get("/fetchqrcodes", async (req, res) => {
         } else { return res.status(400).json({ codes }); }
     })
 });
-// generate QRCodes from specific users
+// store QRCodes on user Emails with qrcode image
+router.post("/post-qrcodes-users", async (req, res) => {
+    let { disPrice, qrcodeNo } = req.body;
+    await User.find({ isAdmin: false }, async (err, users) => {
+        if (err) return res.status(400).json({ msg: "error In finding the users" });
+        if (users) {
+            const usersEmail = users.map(i => i.email);
+            usersEmail.length < qrcodeNo ? qrcodeNo = usersEmail.length : null;
+            const newArray = getRandomSubarray(usersEmail, qrcodeNo);
+            for (let i = 0; i < newArray.length; i++) {
+                await QRCode.findOne({ userEmail: newArray[i] }, async (err, found) => {
+                    if (err) { console.log(err); }
+                    if (!found) {
+                        const disCode = nanoid(11);
+                        await QR.toFile("Public/QRCodes/" + disCode + ".png", disCode, { width: 400 });
+                        const newCode = new QRCode({
+                            userEmail: newArray[i],
+                            disCode,
+                            disPrice,
+                            qrCodeImg: disCode + ".png"
+                        });
+                        await newCode.save();
+                    }
+                });
+            }
+            // below line return response after loop ends
+            return res.status(200).json({ users });
+        } else { return res.status(400).json({ msg: "No users found." }); }
+
+    });
+});
+// generate QRCodes for specific user
 router.post("/get-qrcode-users", async (req, res) => {
     const { userEmail, disPrice } = req.body;
     await User.findOne({ email: userEmail }, async (err, found) => {
@@ -210,7 +241,7 @@ router.post("/get-qrcode-users", async (req, res) => {
         } else { return res.status(400).json({ msg: "Error in finding the error." }); }
     });
 });
-// generate qrcode 
+// generate qrcode with qr code and emails of users its free for any one to apply
 router.post("/gen-qrcodes", async (req, res) => {
     const { disPrice, numOfCodes } = req.body;
     try {
@@ -229,4 +260,16 @@ router.post("/gen-qrcodes", async (req, res) => {
     }
     return res.status(200).json({ msg: "QRCodes is added success fully." });
 });
+
+// Suffle inside array function is below
+function getRandomSubarray(arr, size) {
+    var shuffled = arr.slice(0), i = arr.length, temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
+}
 module.exports = router;

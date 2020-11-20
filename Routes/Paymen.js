@@ -4,7 +4,7 @@ const router = express.Router();
 const Stripe = require('stripe');
 const Order = require("../Modals/Order");
 const QRCode = require('../Modals/QRCode');
-
+const fs = require('fs');
 const stripe = new Stripe('sk_test_47o8MwrffpGMbg37bIhrfvQn00WuHuxISx');
 router.post("/checkout", async (req, res) => {
     const { id, amount, address, name, email, phone } = req.body;
@@ -39,14 +39,21 @@ router.post("/checkout", async (req, res) => {
 });
 
 router.post("/check-discount", async (req, res) => {
-    const { code } = req.body;
-    await QRCode.findOne({ $and: [{ disCode: code }, { isReserved: false }] }, async (err, found) => {
+    const { disCode } = req.body;
+    await QRCode.findOne({ disCode }, async (err, found) => {
         if (!err) {
             if (found) {
-                await QRCode.findOneAndUpdate({ disCode: code }, { isReserved: true }, (err) => {
+                await QRCode.deleteOne({ disCode }, async (err) => {
                     if (!err) {
-                        return res.status(200).json({ obj: found });
-                    } else { return res.status(400).json({ msg: "No match found!" }); }
+                        if (found.qrCodeImg) {
+                            fs.unlink("Public/QRCodes/" + found.qrCodeImg, err => {
+                                if (!err) {
+                                    return res.status(200).json({ obj: found });
+                                } else { return res.status(400).json({ msg: "" }); }
+                            });
+                        } else { return res.status(200).json({ obj: found }) }
+
+                    } else { return res.status(400).json({ msg: "Error in deleteing the document." }) }
                 })
             } else { return res.status(400).json({ msg: "No Code found!" }); }
         } else { return res.status(400).json({ msg: "No match found!" }); }

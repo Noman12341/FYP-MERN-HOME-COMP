@@ -29,6 +29,7 @@ function AdminQRCodes() {
                                 <tr>
                                     <th>#</th>
                                     <th>QRCode</th>
+                                    <th>User Email</th>
                                     <th>Price</th>
                                     <th>image</th>
                                     <th>Delete</th>
@@ -39,6 +40,7 @@ function AdminQRCodes() {
                                     return <tr key={i}>
                                         <td>{i + 1}</td>
                                         <td>{c.disCode}</td>
+                                        <td>{c.userEmail}</td>
                                         <td>{c.disPrice}</td>
                                         <td><Image src={"/static/QRCodes/" + c.qrCodeImg} className="table-image" /></td>
                                         <td><Button bsPrefix="delete-btn" type="button" ><i className="far fa-trash-alt"></i></Button></td>

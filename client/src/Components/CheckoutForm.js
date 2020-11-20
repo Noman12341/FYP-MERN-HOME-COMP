@@ -6,7 +6,7 @@ import Axios from 'axios';
 import { FetchOrderDetails } from '../Actions/OrderActions';
 import { ClearCart } from '../Actions/MyCartActions';
 import { useDispatch, useSelector } from 'react-redux';
-
+import QRCodeViewer from './QRCodeViewer';
 const CARD_OPTIONS = {
     style: {
         base: {
@@ -184,6 +184,9 @@ const MyCheckoutForm = () => {
             <button type="submit" className="payment-btn" disabled={!stripe}>{isLoading ? <Spinner animation="border" role="status">
                 <span className="sr-only">Loading...</span>
             </Spinner> : "pay"} </button>
+            <div>
+                <QRCodeViewer />
+            </div>
 
         </Form>
     );

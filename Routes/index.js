@@ -9,6 +9,7 @@ const auth = require("../Middlewares/auth");
 const puppeteer = require('puppeteer');
 let { v4: uuidv4 } = require('uuid');
 const e = require('express');
+const QRCode = require('../Modals/QRCode');
 router.get("/fetchproducts", async (req, res) => {
     await Product.find({}, (err, items) => {
         if (!err) {
@@ -96,6 +97,18 @@ router.post("/postComment/:ID", async (req, res) => {
                 } else return res.status(400);
             });
         } else throw err;
+    });
+});
+// fetch qrcode for user in check out page
+router.post("/fetchqrcode", async (req, res) => {
+    const { userEmail } = req.body;
+    await QRCode.findOne({ userEmail }, (err, found) => {
+        if (!err) {
+            if (found) {
+                return res.status(200).json({ img: found.qrCodeImg });
+            } else res.status(400).json({ img: "" });
+        } else return res.status(400).json({ msg: "Error In finding the Qode" });
+
     });
 });
 

@@ -8,12 +8,12 @@ import { applyDiscount } from '../Actions/MyCartActions';
 function OrderSummary() {
 
     const myCart = useSelector(state => state.MyCart);
-    const [code, setCode] = useState(null);
+    const [disCode, setCode] = useState(null);
     const [alert, setAlert] = useState("");
     const dispatch = useDispatch();
     const handleSubmit = async event => {
         event.preventDefault();
-        await axios.post("/api/payment/check-discount", { code })
+        await axios.post("/api/payment/check-discount", { disCode })
             .then(res => {
                 console.log(res.data);
                 dispatch(applyDiscount(res.data.obj.disPrice));
@@ -46,7 +46,7 @@ function OrderSummary() {
         <Form className="mt-3" onSubmit={handleSubmit}>
             <Form.Row className="mx-0">
                 <Col lg={8}>
-                    <Form.Control value={code || ""} onChange={e => setCode(e.target.value)} placeholder="Coupon code" />
+                    <Form.Control value={disCode || ""} onChange={e => setCode(e.target.value)} placeholder="Coupon code" />
                 </Col>
                 <Col lg={3}>
                     <Button type="submit">Submit</Button>
