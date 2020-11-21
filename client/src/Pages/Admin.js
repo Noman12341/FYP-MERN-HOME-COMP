@@ -5,7 +5,7 @@ import AdminProducts from '../SubPages/AdminProducts';
 import AdminUsers from '../SubPages/AdminUsers';
 import AdminOrders from '../SubPages/AdminOrder';
 import AdminQRCodes from '../SubPages/AdminQRCodes';
-
+import AdminOverView from '../SubPages/AdminOverView';
 function Admin() {
     const history = useHistory();
     const handleLogout = () => {
@@ -36,10 +36,11 @@ function Admin() {
             </Navbar>
             <div id="admin-content-box">
                 <Switch>
-                    <Route path="/admin/users" component={AdminUsers} />
-                    <Route path="/admin/products" component={AdminProducts} />
-                    <Route path="/admin/orders" component={AdminOrders} />
-                    <Route path="/admin/qrcodes" component={AdminQRCodes} />
+                    <Route path="/admin" exact component={AdminOverView} />
+                    <Route path="/admin/users" exact component={AdminUsers} />
+                    <Route path="/admin/products" exact component={AdminProducts} />
+                    <Route path="/admin/orders" exact component={AdminOrders} />
+                    <Route path="/admin/qrcodes" exact component={AdminQRCodes} />
                 </Switch>
             </div>
         </div>

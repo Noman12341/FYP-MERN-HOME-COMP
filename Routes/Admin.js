@@ -168,14 +168,14 @@ router.post("/addAuctionProduct", upload.single('image'), async (req, res) => {
 });
 
 // fetch Users for admin
-router.get("/fetchUsers", async (req, res) => {
+router.get("/fetchUsers", AdminAuth, async (req, res) => {
     await User.find({}, (err, users) => {
         if (!err) { return res.status(200).json({ users }) }
         else { return res.status(400).json({ msg: "error! Users not found" }) }
     })
 })
 // fetch Orders for admin
-router.get("/fetchOrders", async (req, res) => {
+router.get("/fetchOrders", AdminAuth, async (req, res) => {
     await Order.find({}, (err, orders) => {
         if (!err) { return res.status(200).json({ orders }) }
         else { return res.status(400).json({ msg: "Orders donot found." }) }
@@ -183,7 +183,7 @@ router.get("/fetchOrders", async (req, res) => {
 });
 
 // fetch all the qrcodes
-router.get("/fetchqrcodes", async (req, res) => {
+router.get("/fetchqrcodes", AdminAuth, async (req, res) => {
     await QRCode.find({}, (err, codes) => {
         if (!err) {
             return res.status(200).json({ codes });
@@ -216,7 +216,7 @@ router.post("/post-qrcodes-users", async (req, res) => {
                 });
             }
             // below line return response after loop ends
-            return res.status(200).json({ users });
+            return res.status(200).json({ msg: "Codes added successfully" });
         } else { return res.status(400).json({ msg: "No users found." }); }
 
     });
@@ -243,9 +243,9 @@ router.post("/get-qrcode-users", async (req, res) => {
 });
 // generate qrcode with qr code and emails of users its free for any one to apply
 router.post("/gen-qrcodes", async (req, res) => {
-    const { disPrice, numOfCodes } = req.body;
+    const { disPrice, qrcodeNo } = req.body;
     try {
-        for (let i = 0; i < numOfCodes; i++) {
+        for (let i = 0; i < qrcodeNo; i++) {
             const disCode = nanoid(11);
             // await QR.toFile("Public/QRCodes/" + disCode + ".png", disCode, { width: 400 });
             const newQRCode = new QRCode({
