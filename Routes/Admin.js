@@ -272,4 +272,16 @@ function getRandomSubarray(arr, size) {
     }
     return shuffled.slice(0, size);
 }
+// count from all the documents from database
+router.get("/admin-count-modals", AdminAuth, async (req, res) => {
+    try {
+        const users = await User.estimatedDocumentCount();
+        const auctions = await AuctionProduct.estimatedDocumentCount();
+        const orders = await Order.estimatedDocumentCount();
+        const items = await Product.estimatedDocumentCount();
+        return res.status(200).json({ users, auctions, orders, items });
+    } catch (e) {
+        return res.status(200).json({ msg: "Error !!" + e });
+    }
+});
 module.exports = router;
