@@ -18,7 +18,15 @@ function AdminUsers() {
                 });
         }
         fetchUsers();
-    }, [history])
+    }, [history]);
+    const handleDelete = async userID => {
+        await axios.delete('/api/admin/delete-user/' + userID)
+            .then(res => {
+                setUsers(users.filter(item => item._id !== userID));
+            }).catch(error => {
+                console.log(error);
+            });
+    }
     return <Container fluid>
         <Row>
             <Col lg={12}>
@@ -47,7 +55,7 @@ function AdminUsers() {
                                         <td>{user.email}</td>
                                         <td>{user.isAdmin.toString()}</td>
                                         <td>{user.date}</td>
-                                        <td><Button bsPrefix="delete-btn" type="button" ><i className="far fa-trash-alt"></i></Button></td>
+                                        <td><Button bsPrefix="delete-btn" type="button" onClick={() => handleDelete(user._id)} ><i className="far fa-trash-alt"></i></Button></td>
                                     </tr>
                                 })}
                             </tbody>

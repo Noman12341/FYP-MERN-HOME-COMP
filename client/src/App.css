@@ -980,6 +980,17 @@ fieldset label span {
   color: #9A9A9A;
   margin-bottom: 0px;
 }
+thead, tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+tbody {
+  display: block;
+  overflow-y: auto;
+  table-layout: fixed;
+  max-height: 400px;
+}
 .table-image {
   height: 70px;
   width: 70px;
@@ -990,7 +1001,7 @@ fieldset label span {
   border-radius: 50%;
   border: none;
   color: #fff;
-  background-color: #976dd8;
+  background-color: #647dee;
 }
 /* Socail Icons  */
 .social-icons-container {

@@ -12,6 +12,7 @@ const AdminAuth = require('../Middlewares/adminAuth');
 const { nanoid } = require("nanoid");
 const QR = require('qrcode');
 const { handleEmailMarketing, scrapAlmirah, scrapGulAhmed, scrapSanaSafinaz, scrapDiners } = require('../GlobalFuntions');
+const { find } = require('../Modals/Product');
 
 
 router.get("/fetchAllProducts", AdminAuth, async (req, res) => {
@@ -241,17 +242,15 @@ router.post("/get-qrcode-users", async (req, res) => {
         } else { return res.status(400).json({ msg: "Error in finding the error." }); }
     });
 });
-// generate qrcode with qr code and emails of users its free for any one to apply
+// generate qrcode without qr code and emails of users its free for any one to apply
 router.post("/gen-qrcodes", async (req, res) => {
     const { disPrice, qrcodeNo } = req.body;
     try {
         for (let i = 0; i < qrcodeNo; i++) {
             const disCode = nanoid(11);
-            // await QR.toFile("Public/QRCodes/" + disCode + ".png", disCode, { width: 400 });
             const newQRCode = new QRCode({
                 disCode,
                 disPrice
-                // qrCodeImg: disCode + ".png",
             });
             await newQRCode.save();
         }
@@ -284,4 +283,55 @@ router.get("/admin-count-modals", AdminAuth, async (req, res) => {
         return res.status(200).json({ msg: "Error !!" + e });
     }
 });
+
+// delete users form database
+router.delete("/delete-user/:userID", async (req, res) => {
+    const { userID } = req.params;
+    if (userID) {
+        await User.deleteOne({ _id: userID }, err => {
+            if (!err) { return res.status(200).json({ msg: "user Deleted!" }); }
+            else { return res.status(400).json({ msg: "User not deleted." }); }
+        });
+    } else { return res.status(400).json({ msg: "No value recieved!" }); }
+});
+
+// delete order from database
+router.delete("/delete-order/:orderID", async (req, res) => {
+    const { orderID } = req.params;
+    if (orderID) {
+        await Order.deleteOne({ _id: orderID }, err => {
+            if (!err) { return res.status(200).json({ msg: "Deleted Successfully!" }); }
+            else { return res.status(400).json({ msg: "Not Deleted !" }); }
+        });
+    } else { return res.status(400).json({ msg: "Order ID didnot found!" }); }
+});
+
+// delete QRCode without Images from database
+router.delete("/delete-qrcode-no-image/:qrcodeID", async (req, res) => {
+    const { qrcodeID } = req.params;
+    if (qrcodeID) {
+        await QRCode.deleteOne({ _id: qrcodeID }, err => {
+            if (!err) { return res.status(200).json({ msg: "Deleted Successfully!" }); }
+            else { return res.status(400).json({ msg: "Not Deleted !" }); }
+        });
+    } else { return res.status(400).json({ msg: "QRCode id donot not recived." }); }
+});
+// delete QRCodes with images from database
+router.delete("/delete-qrcode-with-image/:qrcodeID/:imgName", async (req, res) => {
+    const { qrcodeID, imgName } = req.params;
+    if (qrcodeID) {
+        await QRCode.deleteOne({ _id: qrcodeID }, err => {
+            if (!err) {
+                fs.unlink("Public/QRCodes/" + imgName, err => {
+                    if (!err) {
+                        return res.status(200).json({ msg: "Deleted Successfully!" });
+                    } else res.status(400).json({ msg: "Image is not deleted when deleting QRCode from database." });
+                });
+            }
+            else { return res.status(400).json({ msg: "Not Deleted !" }); }
+        });
+    } else { return res.status(400).json({ msg: "QRCode id donot not recived." }); }
+});
+
+
 module.exports = router;

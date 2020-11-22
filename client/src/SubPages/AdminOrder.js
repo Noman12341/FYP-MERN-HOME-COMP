@@ -18,7 +18,15 @@ function AdminOrders() {
                 });
         }
         fetchUsers();
-    }, [history])
+    }, [history]);
+    const handleDelete = async orderID => {
+        await axios.delete('/api/admin/delete-order/' + orderID)
+            .then(res => {
+                setOrders(orders.filter(order => order._id !== orderID));
+            }).catch(error => {
+                console.log(error);
+            });
+    }
     return <Container fluid>
         <Row>
             <Col lg={12}>
@@ -45,7 +53,7 @@ function AdminOrders() {
                                         <td>{order.name}</td>
                                         <td>{order.email}</td>
                                         <td>{order.amount}</td>
-                                        <td><Button bsPrefix="delete-btn" type="button" ><i className="far fa-trash-alt"></i></Button></td>
+                                        <td><Button bsPrefix="delete-btn" type="button" onClick={() => handleDelete(order._id)} ><i className="far fa-trash-alt"></i></Button></td>
                                     </tr>
                                 })}
                             </tbody>

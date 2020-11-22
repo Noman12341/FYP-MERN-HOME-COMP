@@ -45,7 +45,6 @@ function AdminProducts() {
     async function deleteScrapedProduct(productID) {
         await axios.get("/api/admin/deleteScrapedProduct/" + productID)
             .then(res => {
-                console.log("im clicked")
                 setProducts(products.filter(value => value._id !== productID));
             }).catch(error => {
                 console.log(error);

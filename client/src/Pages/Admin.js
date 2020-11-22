@@ -21,9 +21,9 @@ function Admin() {
             <ul className="admin-menu-list">
                 <li><NavLink to="/admin" exact activeClassName="selected"><i className="fas fa-user fa-2x mr-3"></i><p>Dash Board</p></NavLink></li>
                 <li><NavLink to="/admin/users" exact activeClassName="selected"><i className="fas fa-users fa-2x mr-3"></i><p>Users</p></NavLink></li>
-                <li><NavLink to="/admin/products" exact activeClassName="selected"><i className="fab fa-product-hunt fa-2x mr-2"></i><p>Products</p></NavLink></li>
-                <li><NavLink to="/admin/qrcodes" exact activeClassName="selected"><i className="fab fa-first-order-alt fa-2x mr-2"></i><p>QR Codes</p></NavLink></li>
-                <li><NavLink to="/admin/orders" exact activeClassName="selected"><i className="fab fa-first-order-alt fa-2x mr-2"></i><p>Orders</p></NavLink></li>
+                <li><NavLink to="/admin/products" exact activeClassName="selected"><i className="fas fa-boxes fa-2x mr-2"></i><p>Products</p></NavLink></li>
+                <li><NavLink to="/admin/qrcodes" exact activeClassName="selected"><i className="fas fa-qrcode fa-2x mr-2"></i><p>QR Codes</p></NavLink></li>
+                <li><NavLink to="/admin/orders" exact activeClassName="selected"><i className="fas fa-clipboard-list fa-2x mr-2"></i><p>Orders</p></NavLink></li>
             </ul>
         </div>
         {/* Main Admin Panel wrapper */}

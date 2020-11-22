@@ -49,6 +49,39 @@ function AdminQRCodes() {
                 setAlert(error.response.data.msg);
             });
     }
+
+    const onSubmitForm2 = async event => {
+        event.preventDefault();
+        setIsLoading(true);
+        await axios.post("/api/admin/gen-qrcodes", { ...form })
+            .then(res => {
+                setForm({ disPrice: "", qrcodeNo: "" });
+                setIsLoading(false);
+                setAlert(res.data.msg);
+            }).catch(error => {
+                setForm({ disPrice: "", qrcodeNo: "" });
+                setIsLoading(false);
+                setAlert(error.response.data.msg);
+            });
+    }
+    // delete code without images
+    const handleDeleteNoImage = async codeID => {
+        await axios.delete('/api/admin/delete-qrcode-no-image/' + codeID)
+            .then(res => {
+                setCodes(codes.filter(code => code._id !== codeID));
+            }).catch(error => {
+                console.log(error);
+            });
+    }
+    // delete code without images
+    const handleDeleteWithImage = async (codeID, imgName) => {
+        await axios.delete('/api/admin/delete-qrcode-with-image/' + codeID + "/" + imgName)
+            .then(res => {
+                setCodes(codes.filter(code => code._id !== codeID));
+            }).catch(error => {
+                console.log(error);
+            });
+    }
     return <Container fluid>
         <Row>
             <Col lg={12}>
@@ -74,10 +107,11 @@ function AdminQRCodes() {
                                     return <tr key={i}>
                                         <td>{i + 1}</td>
                                         <td>{c.disCode}</td>
-                                        <td>{c.userEmail}</td>
+                                        <td>{c.userEmail ? c.userEmail : null}</td>
                                         <td>{c.disPrice}</td>
-                                        <td><Image src={"/static/QRCodes/" + c.qrCodeImg} className="table-image" /></td>
-                                        <td><Button bsPrefix="delete-btn" type="button" ><i className="far fa-trash-alt"></i></Button></td>
+                                        <td>{c.qrCodeImg ? <Image src={"/static/QRCodes/" + c.qrCodeImg} className="table-image" /> : null}</td>
+                                        <td>{c.qrCodeImg ? <Button bsPrefix="delete-btn" type="button" onClick={() => handleDeleteWithImage(c._id, c.qrCodeImg)}><i className="far fa-trash-alt"></i></Button> :
+                                            <Button bsPrefix="delete-btn" type="button" onClick={() => handleDeleteNoImage(c._id)}><i className="far fa-trash-alt"></i></Button>}</td>
                                     </tr>
                                 })}
                             </tbody>
@@ -122,7 +156,7 @@ function AdminQRCodes() {
             <Modal.Header>
                 <Modal.Title>Generate QRCodes only not qrCode images</Modal.Title>
             </Modal.Header>
-            <Form onSubmit={onSubmitForm}>
+            <Form onSubmit={onSubmitForm2}>
                 <Modal.Body>
                     {alert && <Alert variant="warning">{alert}</Alert>}
                     <Form.Row>

@@ -30,10 +30,10 @@ function AdminOverView() {
     return <Container fluid>
         <Row>
             <Col lg={3}>
-                <AdminCard count={count.items} about="Items" icon="fas fa-cubes fa-3x" />
+                <AdminCard count={count.items} about="Items" icon="fas fa-boxes fa-3x" />
             </Col>
             <Col lg={3}>
-                <AdminCard count={count.auctions} about="Auctions" icon="fa fa-buysellads fa-3x" />
+                <AdminCard count={count.auctions} about="Auctions" icon="fas fa-gavel fa-3x" />
             </Col>
             <Col lg={3}>
                 <AdminCard count={count.users} about="Users" icon="fas fa-users fa-3x" />
