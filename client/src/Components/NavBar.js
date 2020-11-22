@@ -68,21 +68,21 @@ function NavBar() {
                 </Col>
                 <Col lg={9} md={8} sm={8} className="px-0">
                     <div className="brands-name">
-                        <a href="/searchProducts/SearchBrand/Gul Ahmed">
-                            Gul Ahmed.
-                         </a>
-                        <a href="/searchProducts/SearchBrand/Alkaram Studio">
-                            Alkaram Studio.
-                             </a>
-                        <a href="/searchProducts/SearchBrand/Khaadi.">
-                            Khaadi.
-                            </a>
-                        <a href="/searchProducts/SearchBrand/HSY Studio">
-                            HSY Studio.
-                            </a>
-                        <a href="/searchProducts/SearchBrand/Junaid Jamshed">
+                        <Link to="/product-brands/Almirah">
+                            Almirah
+                         </Link>
+                        <Link to="/product-brands/Sana Safinaz">
+                            Sana Safinaz
+                        </Link>
+                        <Link to="/product-brands/Gul Ahmed">
+                            Gul Ahmed
+                            </Link>
+                        <Link to="/product-brands/Diners">
+                            Diners
+                        </Link>
+                        {/* <Link to="/product-brands/">
                             Junaid Jamshed.
-                            </a>
+                        </Link> */}
                     </div>
                 </Col>
             </Row>

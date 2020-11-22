@@ -8,15 +8,14 @@ const FinishedAuction = require("../Modals/FinishedAuctions");
 const auth = require("../Middlewares/auth");
 const puppeteer = require('puppeteer');
 let { v4: uuidv4 } = require('uuid');
-const e = require('express');
 const QRCode = require('../Modals/QRCode');
-router.get("/fetchproducts", async (req, res) => {
-    await Product.find({}, (err, items) => {
+// fetch owned products
+router.get("/fetchOwnProducts", async (req, res) => {
+    await Product.find({ isMyProduct: true }, (err, items) => {
         if (!err) {
             return res.status(200).json({ products: items });
         } else return res.status(400).json({ msg: "Your cluster is empty" });
     });
-
 });
 
 router.get("/fetchAuctionProducts", async (req, res) => {
@@ -26,7 +25,16 @@ router.get("/fetchAuctionProducts", async (req, res) => {
         } else return res.status(400).json({ msg: "Your Auction products is empty" });
     });
 });
-
+// get brand products
+router.get("/fetchBrand/:brandName", async (req, res) => {
+    await Product.find({ brand: req.params.brandName }, (err, items) => {
+        if (!err) {
+            if (items.length) {
+                return res.status(200).json({ items });
+            } else { return res.status(400).json({ msg: "No product of this brand is present." }); }
+        } else { return res.status(400).json({ msg: "Error! in finding the product." }); }
+    })
+})
 router.get("/fetchAuctionDetail/:ID", async (req, res) => {
     await AuctionProduct.findOne({ _id: req.params.ID }, (err, item) => {
         if (!err) {

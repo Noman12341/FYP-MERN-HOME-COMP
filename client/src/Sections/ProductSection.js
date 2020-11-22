@@ -6,7 +6,7 @@ function ProductSection() {
     const [products, setProducts] = useState([]);
     useEffect(() => {
         async function fetchProducts() {
-            await axios.get("/api/products/fetchProducts")
+            await axios.get("/api/products/fetchOwnProducts")
                 .then(res => {
                     setProducts(res.data.products);
                 }).catch(error => {

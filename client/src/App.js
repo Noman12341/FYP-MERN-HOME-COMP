@@ -18,7 +18,7 @@ import AdminAuth from './Pages/AdminAuth';
 import ErrorPage from './Pages/Error';
 import Search from './Pages/Search';
 import ScrapPDetail from './Pages/ScrapPDetail';
-
+import BrandProducts from './Pages/BrandProd';
 function App() {
   return <Router>
     <ScrollToTop />
@@ -26,6 +26,7 @@ function App() {
     <Switch>
       <Route path="/" exact component={Home} />
       <Route path="/product-details/:productID" exact component={ProductDetail} />
+      <Route path="/product-brands/:brand" exact component={BrandProducts} />
       <Route path="/searched-products" exact component={Search} />
       <Route path="/scrap-product-detail" exact component={ScrapPDetail} />
       <Route path="/login" exact component={AuthPage} />
