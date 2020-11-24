@@ -40,7 +40,7 @@ function NavBar() {
             </Form>
             <Nav className="ml-auto">
                 <Link to="/" className="nav-link"><AiFillHome /></Link>
-                <div to="#" className="nav-link brand-dropdown" style={{ position: "relative" }}><SiBrandfolder /><BrandDropDown /></div>
+                <div className="nav-link brand-dropdown" style={{ position: "relative" }}><SiBrandfolder /><BrandDropDown /></div>
                 <Link to="#" className="nav-link cart-dropdown" style={{ position: "relative" }}><FaShoppingBasket />
                     <Badge className="cart-badge">{countItems}</Badge>
                     <Cart />
