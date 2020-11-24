@@ -34,6 +34,7 @@ function WinsAuction() {
         if (userID && Object.keys(auctionProduct).length === 0) {
             FetchWin();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return Object.keys(auctionProduct).length === 0 ? null : <Alert variant="success" className="mb-0">U wins the auction Now pay the price.</Alert>
 }

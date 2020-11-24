@@ -26,6 +26,7 @@ function Search() {
                 });
         }
         searchObj.search && liveScrap();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchObj.search]);
     return <section className="section-top-shadow padding-70">
         <Container>

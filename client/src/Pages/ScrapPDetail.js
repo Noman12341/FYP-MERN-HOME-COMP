@@ -23,6 +23,7 @@ function ProductDetail() {
                 })
         }
         fetchScrapDetail();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [scraperLink]);
     return <section id="product-detail">
         <Container fluid style={{ backgroundColor: "white" }}>

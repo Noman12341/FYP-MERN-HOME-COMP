@@ -25,6 +25,7 @@ function AdminOverView() {
                 });
         }
         fetchCounts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return <Container fluid>

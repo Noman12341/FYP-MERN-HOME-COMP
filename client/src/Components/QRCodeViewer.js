@@ -13,6 +13,7 @@ function QRCodeView() {
                 });
         }
         fetchCodeImg();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return imgSrc && <div className="text-center mt-4">
         <img src={"/static/QRCodes/" + imgSrc} alt="" height="200" width="200" />

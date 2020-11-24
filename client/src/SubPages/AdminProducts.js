@@ -140,7 +140,7 @@ function AdminProducts() {
         newForm.append("date", form.date);
         await axios.post("/api/admin/addAuctionProduct", newForm)
             .then(res => {
-                setIsLoading(true);
+                setIsLoading(false);
                 setModal2(false);
                 setForm({
                     name: "",
@@ -203,7 +203,7 @@ function AdminProducts() {
                     link: "",
                     searchingBrand: "Almirah"
                 })
-            })
+            });
     }
 
     let onHideModal1 = () => {

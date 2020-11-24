@@ -10,7 +10,7 @@ function ProductCard(props) {
 
     return <Card>
         <Link to={"/product-details/" + product._id}>
-            <Card.Img variant="top" src={product.isMyProduct ? "/static/images/" + product.image : product.image} width="200" height="217" />
+            <Card.Img variant="top" src={product.isMyProduct ? "/static/images/" + product.image : product.image} height="300" />
         </Link>
         <Card.Body className="p-0 pt-2">
             <div>

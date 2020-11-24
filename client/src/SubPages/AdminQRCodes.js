@@ -28,6 +28,7 @@ function AdminQRCodes() {
                 });
         }
         getCodes();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     // below 4 lines handle modals show and close
     const closeModal1 = () => setModal({ ...showModal, modal1: false });
