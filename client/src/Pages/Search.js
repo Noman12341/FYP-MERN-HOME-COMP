@@ -28,7 +28,7 @@ function Search() {
         searchObj.search && liveScrap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchObj.search]);
-    return <section className="section-top-shadow padding-70">
+    return <section className="padding-70">
         <Container>
             {isLoading ? <PageSpinner containerHeight="50vh" /> : alert ? <Alert variant="danger" onClose={() => setAlert("")} dismissible>
                 <Alert.Heading > Oh snap! You got an error!</Alert.Heading>
@@ -42,6 +42,7 @@ function Search() {
                             </Col>
                         })}
                     </Row>
+                    <hr></hr>
                     <h2 className="text-left my-5">Gul Ahmed Products</h2>
                     <Row>
                         {searchObj.scrapedProducts.map((product, index) => {
@@ -50,6 +51,7 @@ function Search() {
                             </Col>
                         })}
                     </Row>
+                    <hr></hr>
                     {/* <h2 className="text-left my-5">Alkaram Products</h2>
                     <Row>
                         {searchObj.scrapedProducts.map((product, index) => {

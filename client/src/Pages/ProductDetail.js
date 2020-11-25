@@ -30,7 +30,7 @@ function ProductDetail() {
         <Container fluid style={{ backgroundColor: "white" }}>
             <Row>
                 <Col lg={4}>
-                    <Image src={product.image && product.isMyProduct ? "/static/images/" + product.image : product.image} fluid />
+                    <Image className="mt-3" src={product.image && product.isMyProduct ? "/static/images/" + product.image : product.image} fluid />
                 </Col>
                 <Col lg={8}>
                     <div className="ml-4">

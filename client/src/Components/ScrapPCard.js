@@ -15,7 +15,7 @@ function ScrapPCard({ product }) {
     }
     return <Card>
         <Link to="#" onClick={handleClick}>
-            <Card.Img variant="top" src={product.image} width="200" height="217" />
+            <Card.Img variant="top" src={product.image} height="320" />
         </Link>
         <Card.Body className="p-0 pt-2">
             <div>

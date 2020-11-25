@@ -29,7 +29,7 @@ function ProductDetail() {
         <Container fluid style={{ backgroundColor: "white" }}>
             {isLoading ? <PageSpinner containerHeight="70vh" /> : <Row>
                 <Col lg={4}>
-                    <Image src={product.image} fluid />
+                    <Image className="mt-3" src={product.image} fluid />
                 </Col>
                 <Col lg={8}>
                     <div className="ml-4">
