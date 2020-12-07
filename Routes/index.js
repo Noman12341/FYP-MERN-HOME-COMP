@@ -276,7 +276,7 @@ router.post("/live-scrape", async (req, res) => {
     let CollectProducts = [];
     let loopLimit = 0;
     let lis = null;
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
     try {
         const page = await browser.newPage();
         // below is a search button
