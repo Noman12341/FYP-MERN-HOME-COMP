@@ -1,11 +1,11 @@
 import React from 'react';
 import { FacebookShareButton, FacebookIcon, WhatsappShareButton, TwitterShareButton, RedditShareButton, LinkedinShareButton, RedditIcon, TwitterIcon, WhatsappIcon, LinkedinIcon } from "react-share";
-function SocialShare() {
+function SocialShare(props) {
     return <div className="social-icons-container">
         <FacebookShareButton url={window.location.href}>
             <FacebookIcon size={36} borderRadius={36} />
         </FacebookShareButton>
-        <WhatsappShareButton url={window.location.href}>
+        <WhatsappShareButton url={window.location.href} >
             <WhatsappIcon size={36} borderRadius={36} />
         </WhatsappShareButton>
         <TwitterShareButton url={window.location.href}>

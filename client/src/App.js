@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
-import 'react-notifications/lib/notifications.css';
-import { NotificationContainer } from 'react-notifications';
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 import ScrollToTop from './Components/ScollToTop';
 import NavBar from './Components/NavBar';
 import Footer from './Components/Footer';
@@ -19,8 +19,10 @@ import ErrorPage from './Pages/Error';
 import Search from './Pages/Search';
 import ScrapPDetail from './Pages/ScrapPDetail';
 import BrandProducts from './Pages/BrandProd';
+
 function App() {
   return <Router>
+    <ReactNotification />
     <ScrollToTop />
     <NavBar />
     <Switch>
@@ -39,7 +41,6 @@ function App() {
       <Route path="*" exact component={ErrorPage} />
     </Switch>
     <Footer />
-    <NotificationContainer />
   </Router>
 }
 

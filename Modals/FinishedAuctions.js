@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const FinishedAuctionSchema = new mongoose.Schema({
     userName: { type: String, requrired: true, trim: true },
     userID: { type: Object, required: true, trim: true },
-    isMyProduct: { type: Boolean, default: false },
+    isMyProduct: { type: Boolean, default: true },
     productID: { type: Object, required: true, trim: true },
     productName: { type: String, requrired: true, trim: true },
     productBrand: { type: String, requrired: true, trim: true },

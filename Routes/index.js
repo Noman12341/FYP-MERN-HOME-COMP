@@ -9,6 +9,7 @@ const auth = require("../Middlewares/auth");
 const puppeteer = require('puppeteer');
 let { v4: uuidv4 } = require('uuid');
 const QRCode = require('../Modals/QRCode');
+
 // fetch owned products
 router.get("/fetchOwnProducts", async (req, res) => {
     await Product.find({ isMyProduct: true }, (err, items) => {
@@ -121,8 +122,8 @@ router.post("/fetchqrcode", async (req, res) => {
 });
 
 // set Action ending routes
-router.post("/fetchFinishedAuction", async (req, res) => {
-    await FinishedAuction.findOne({ userID: req.body.userID }, (err, obj) => {
+router.get("/fetchFinishedAuction/:userID", async (req, res) => {
+    await FinishedAuction.find({ userID: req.params.userID }, (err, obj) => {
         if (!err) {
             if (obj) {
                 return res.status(200).json({ finishedAuction: obj });
@@ -130,6 +131,32 @@ router.post("/fetchFinishedAuction", async (req, res) => {
         } else return res.sendStatus(400);
     });
 });
+// fetch Auction Products
+router.get("/fetchFinishedAuctions", async (req, res) => {
+    await FinishedAuction.find({}, (err, products) => {
+        if (!err) {
+            return res.status(200).json({ products });
+        } else return res.status(400).json({ msg: "No Product Found" });
+    });
+})
+
+// router.get('/addDumyAuction', (req, res) => {
+//     const newFinisedAuction = new FinishedAuction({
+//         userName: "Noman Faisal",
+//         userID: "5f7eb8096fa6d217ac65150a",
+//         productID: "5fbcb37e2076512c6816beeb",
+//         productName: "Nintendo Switch",
+//         productBrand: "Nintendo",
+//         productCatagory: "Electronincs",
+//         productImg: "1606202237910-nintendo-switch.png",
+//         productPrice: 124000,
+//         auctionEndingdate: "2020-12-31",
+//     });
+//     newFinisedAuction.save(err => {
+//         if (!err) return res.status(200).json({ msg: "Saved" });
+//         else return res.status(400).json({ msg: "Product not save" });
+//     });
+// });
 
 router.post("/scrap-product-detail", async (req, res) => {
     const { link } = req.body;

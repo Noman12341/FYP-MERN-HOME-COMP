@@ -5,6 +5,7 @@ import { Container, Row, Col, Image, Button, Form, Alert } from 'react-bootstrap
 import CountDown from '../Components/CountDown';
 import { useHistory, Link } from 'react-router-dom';
 import SocialShare from '../Components/SocialShare';
+import { store } from 'react-notifications-component';
 
 function ProductDetail() {
     const { auctionProductID } = useParams();
@@ -49,11 +50,36 @@ function ProductDetail() {
         }).then(res => {
             if (res.status === 200) {
                 setAlertMsg("");
-                history.push("/");
+                store.addNotification({
+                    title: "Wonderful!",
+                    message: "your Bid is submited.",
+                    type: "success",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
+                setBid(0);
             }
         }).catch(error => {
             if (error.response.status === 406) {
-                setAlertMsg(error.response.data.msg);
+                store.addNotification({
+                    title: "Wops",
+                    message: error.response.data.msg,
+                    type: "danger",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__BounceIn"],
+                    animationOut: ["animate__animated", "animate__BounceOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
             }
             if (error.response.status === 400) {
                 history.push("/login");

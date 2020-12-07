@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Alert, Table, Card, Image, Button, Modal, Form, Spinner } from 'react-bootstrap';
 import axios from 'axios';
-import { NotificationManager } from 'react-notifications';
+import { store } from 'react-notifications-component';
 import { useHistory } from 'react-router-dom';
 
 function AdminProducts() {
@@ -48,7 +48,20 @@ function AdminProducts() {
                 setProducts(products.filter(value => value._id !== productID));
             }).catch(error => {
                 console.log(error);
-                NotificationManager.error("Product Is not deleted", "Error");
+                store.addNotification({
+                    title: "Error!",
+                    message: "Product is not deleted Successfully.",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true,
+                        pauseOnHover: true
+                    }
+                });
             });
     }
 
@@ -58,7 +71,20 @@ function AdminProducts() {
                 setProducts(products.filter(value => value._id !== productID));
             }).catch(error => {
                 console.log(error.response);
-                NotificationManager.error("Product Is not deleted", "Error");
+                store.addNotification({
+                    title: "Error!",
+                    message: "Product is not deleted Successfully.",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true,
+                        pauseOnHover: true
+                    }
+                });
             });
     }
 
@@ -67,7 +93,20 @@ function AdminProducts() {
             .then(res => {
                 setAuctionProducts(auctionProducts.filter(value => value._id !== itemID));
             }).catch(error => {
-                NotificationManager.error(error.response.data.msg);
+                store.addNotification({
+                    title: "Error!",
+                    message: error.response.data.msg,
+                    type: "danger",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true,
+                        pauseOnHover: true
+                    }
+                });
             });
     }
     // Handle Form 

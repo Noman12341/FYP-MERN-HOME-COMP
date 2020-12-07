@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 body {
   font-family: 'Raleway';
 }
@@ -1151,4 +1152,36 @@ tbody {
 }
 .admin-card-box i {
   margin-top: 14px;
+}
+/* finished AUction Card */
+.card-bandage {
+  position: absolute;
+  top:0;
+  right: 0;
+  height: 142px;
+  width: 140px;
+  margin-top: 16px;
+  padding-top: 32px;
+  background-image: url(./Images/badge.png);
+  z-index: 1;
+  font-weight: 500;
+  font-size: 17px;
+  font-family: 'Montserrat', sans-serif;
+  color: #000;
+  letter-spacing: -.04em;
+  text-align: center;
+}
+.final-value::before{
+  content: 'Rs';
+  font-size: 24px;
+  line-height: 1;
+  vertical-align: top;
+  display: inline-block;
+  margin-top: 3px;
+}
+.final-value {
+  font-size: 32px;
+  line-height: 1;
+  display: block;
+  margin-right: 12px;
 }

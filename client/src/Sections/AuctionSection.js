@@ -25,7 +25,7 @@ function CurrentAuctions() {
 
     return <section className="section-top-shadow padding-70">
         <Container>
-            <h2 className="text-left mb-5">Auction Products</h2>
+            <h2 className="text-left mb-5" style={{ fontSize: "42px", fontWeight: "800" }}>Auction <span style={{ fontWeight: "300", color: "#777777" }}>Products</span></h2>
             <Row>
                 {auctionProducts.map(product => {
                     return <Col key={product._id} className="my-4" lg={3} md={4} sm={6}>

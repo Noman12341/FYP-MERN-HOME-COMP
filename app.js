@@ -21,8 +21,8 @@ mongoose.connect("mongodb+srv://Noman12341:" + process.env.DB_PASS + "@fyp-mern-
         throw err;
     });
 
-app.use("/api/products/", require("./Routes"));
-app.use("/api/auth/", require("./Routes/Authentication"));
+app.use("/api/products", require("./Routes"));
+app.use("/api/auth", require("./Routes/Authentication"));
 app.use("/api/payment", require("./Routes/Paymen"));
 app.use("/api/admin", require("./Routes/Admin"));
 app.use("/static", express.static(path.join(__dirname + '/Public')));

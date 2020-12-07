@@ -4,13 +4,14 @@ import ProductSection from '../Sections/ProductSection';
 import AuctionSection from '../Sections/AuctionSection';
 import WorkSection from '../Sections/HowItWorkSection';
 import AboutUs from '../Sections/AboutUs';
-import WinsAuction from '../Components/WinsAuction';
+import FinishedAuctionSec from '../Sections/FinishedAuctionSec';
+
 function Home() {
     return <div>
-        {localStorage.getItem('token') && <WinsAuction />}
         <Banner />
         <ProductSection />
         <AuctionSection />
+        <FinishedAuctionSec />
         <WorkSection />
         <AboutUs />
     </div>

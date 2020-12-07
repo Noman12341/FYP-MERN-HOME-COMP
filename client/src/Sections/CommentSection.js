@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import Comment from '../Components/Comment';
 import StarRating from '../Components/StartRating';
 import axios from 'axios';
-import { NotificationManager } from 'react-notifications';
+import { store } from 'react-notifications-component';
 
 function CommentSection({ productID }) {
     const userName = localStorage.getItem("userName");
@@ -37,14 +37,39 @@ function CommentSection({ productID }) {
         await axios.post("/api/products/postComment/" + productID, { userName: localStorage.getItem("userName"), comment: msg, rating })
             .then(res => {
                 if (res.status === 200) {
-                    NotificationManager.success('Message Successfully added', 'Message');
+                    store.addNotification({
+                        title: "Wonderfull!",
+                        message: "Message Successfully added.",
+                        type: "success",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animate__animated", "animate__fadeIn"],
+                        animationOut: ["animate__animated", "animate__fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true,
+                            pauseOnHover: true
+                        }
+                    });
                     setRating(0);
                     setMsg("");
                 }
             }).catch(error => {
-                NotificationManager.warning('Warning', 'Your massage is not added', 3000);
+                store.addNotification({
+                    title: "Wonderfull!",
+                    message: "Your massage is not added.",
+                    type: "danger",
+                    insert: "top",
+                    container: "center",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true,
+                        pauseOnHover: true
+                    }
+                });
             });
-
     }
     return <Container fluid id="comment-section">
         <Row>

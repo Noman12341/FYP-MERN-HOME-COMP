@@ -6,6 +6,7 @@ const router = express.Router();
 const User = require("../Modals/User");
 const auth = require("../Middlewares/auth");
 
+// check Authentication
 router.get("/checkauth", auth, (req, res) => res.sendStatus(200));
 
 router.post("/login", (req, res) => {
@@ -105,5 +106,4 @@ router.post("/login-admin", (req, res) => {
         });
     });
 });
-
 module.exports = router;
