@@ -276,7 +276,7 @@ router.post("/live-scrape", async (req, res) => {
     let CollectProducts = [];
     let loopLimit = 0;
     let lis = null;
-    const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
+    const browser = await puppeteer.launch({ headless: false });
     try {
         const page = await browser.newPage();
         // below is a search button
@@ -299,6 +299,7 @@ router.post("/live-scrape", async (req, res) => {
             const price = await lis[i].$eval('span.money', pric => Number(pric.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
             CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Almirah", detailPage, isMyProduct: false });
         }
+
         // Scraping Gul ahmed products
         await page.goto("https://www.gulahmedshop.com");
         await page.waitForSelector('.minisearch');
@@ -335,13 +336,15 @@ router.post("/live-scrape", async (req, res) => {
         //     CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Alkaram", detailPage, isMyProduct: false });
         // }
         // loop ends here diners below brand code
+
+        // scrap diners
         await page.goto('https://diners.com.pk/');
         await page.waitForSelector('.search-form');
         await page.click('.icon-search');
         await page.waitForSelector('.header-search__input');
         // fill the input
         await page.focus('.header-search__input');
-        await page.keyboard.type('men');
+        await page.keyboard.type(word);
         await page.click('button.icon-search');
         await page.waitForSelector('.products-grid');
         lis = await page.$$('.products-grid > .grid-item');
@@ -359,6 +362,7 @@ router.post("/live-scrape", async (req, res) => {
         return res.status(200).json({ products: CollectProducts });
     } catch (e) {
         await browser.close();
+        console.log(e);
         return res.status(400).json({ msg: "Error!! : Products not found with this search or " + e });
     }
 });

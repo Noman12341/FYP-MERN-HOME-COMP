@@ -309,7 +309,7 @@ let scrapDiners = async (url) => {
                 if (!found) {
                     const newProduct = new Product({
                         name: productObj.pName,
-                        brand: "Sana Safinaz",
+                        brand: "Diners",
                         catagory: "Women",
                         description: productObj.description,
                         image: productObj.image,
