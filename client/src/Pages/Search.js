@@ -60,8 +60,8 @@ function Search() {
                             </Col>
                         })}
                     </Row> */}
-                    <h2 className="text-left my-5">Diners Products</h2>
-                    {/* <Row>
+                    {/* <h2 className="text-left my-5">Diners Products</h2>
+                    <Row>
                         {searchObj.scrapedProducts.map((product, index) => {
                             return product.brand === "Diners" && <Col className="my-4" key={index} lg={3} md={4} sm={6}>
                                 <ScrapPCard product={product} />
