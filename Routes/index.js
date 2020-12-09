@@ -55,7 +55,7 @@ router.get("/fetchProductDetails/:id", async (req, res) => {
 // Biding Routes
 router.post("/postBid", auth, async (req, res) => {
     const { userName, userID, productID, bidPrice, currentPrice } = req.body;
-    if (currentPrice > bidPrice) {
+    if (currentPrice + 400 > bidPrice) {
         return res.status(406).json({ msg: "Bid price must me larger than currentPrice." })
     }
     await AuctionProduct.findOneAndUpdate({ _id: productID }, { currentPrice: bidPrice, userName: userName, userID: userID }, (err, obj) => {
@@ -335,9 +335,9 @@ router.post("/live-scrape", async (req, res) => {
         //     const detailPage = await lis[i].$eval('.item-img > a', link => link.getAttribute('href'));
         //     CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Alkaram", detailPage, isMyProduct: false });
         // }
-        // loop ends here diners below brand code
+        // // loop ends here diners below brand code
 
-        // scrap diners
+        // // scrap diners
         // await page.goto('https://diners.com.pk/');
         // await page.waitForSelector('.search-form');
         // await page.click('.icon-search');

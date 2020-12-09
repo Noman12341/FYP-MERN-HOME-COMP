@@ -11,7 +11,7 @@ function AuthPage() {
     const dispatch = useDispatch();
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false);
-    const [alertMsg, setAlertMsg] = useState("");
+    const [alertMsg, setAlertMsg] = useState([]);
 
     const [formData, setFormData] = useState({
         name: "",
@@ -52,6 +52,7 @@ function AuthPage() {
     }
     async function onSubmitRegisterForm(event) {
         event.preventDefault();
+        setIsLoading(true);
         await axios.post("/api/auth//registration", { ...formData })
             .then(async res => {
                 if (res.status === 200) {
@@ -60,11 +61,13 @@ function AuthPage() {
                     localStorage.setItem("userID", user.userID);
                     localStorage.setItem("userName", user.name);
                     localStorage.setItem("userEmail", user.email);
+                    setIsLoading(false);
                     history.push("/");
                 }
             }).catch(error => {
                 if (error.response.status === 400 || error.response.status === 500) {
                     setAlertMsg(error.response.data.msg);
+                    setIsLoading(false);
                 }
             });
     }
@@ -110,15 +113,17 @@ function AuthPage() {
                 <Card>
                     <Card.Body>
                         <Card.Title className="text-left">{currPath === "/login" ? "Sign In" : "Registration"}</Card.Title>
-                        {alertMsg && <Alert variant="danger" dismissible>{alertMsg}</Alert>}
+                        {alertMsg.length > 0 && <Alert variant="danger"><ul className="mb-0">{alertMsg.map((msg, i) => {
+                            return <li key={i}>{msg}</li>
+                        })}</ul></Alert>}
                         <Form onSubmit={currPath === "/login" ? onSubmitLoginForm : onSubmitRegisterForm}>
                             {currPath === "/register" && <Form.Group controlId="formBasicUserName">
                                 <Form.Label>User Name</Form.Label>
-                                <Form.Control type="text" name="name" onChange={handleChange} value={formData.name} />
+                                <Form.Control type="text" name="name" onChange={handleChange} value={formData.name} required />
                             </Form.Group>}
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Email address</Form.Label>
-                                <Form.Control type="email" name="email" onChange={handleChange} value={formData.email} />
+                                <Form.Control type="email" name="email" onChange={handleChange} value={formData.email} required />
                                 <Form.Text className="text-muted">
                                     We'll never share your email with anyone else.
                                 </Form.Text>
@@ -126,14 +131,14 @@ function AuthPage() {
 
                             <Form.Group controlId="formBasicPassword">
                                 <Form.Label>Password</Form.Label>
-                                <Form.Control type="password" name="password" onChange={handleChange} value={formData.password} />
+                                <Form.Control type="password" name="password" onChange={handleChange} value={formData.password} required />
                             </Form.Group>
                             {currPath === "/register" && <Form.Group controlId="formBasicConformPassword">
                                 <Form.Label>Confrim Password</Form.Label>
-                                <Form.Control type="password" name="password2" onChange={handleChange} value={formData.password2} />
+                                <Form.Control type="password" name="password2" onChange={handleChange} value={formData.password2} required />
                             </Form.Group>}
                             <Button bsPrefix="auth-button-submit" type="submit" >
-                                {isLoading ? <Spinner animation="border" /> : "Submit"}
+                                {isLoading ? <Spinner className="mb-1" animation="border" /> : "Submit"}
                             </Button>
                             <div className="text-center my-3"><span>or</span></div>
                             <Button bsPrefix="auth-button-google" type="submit">

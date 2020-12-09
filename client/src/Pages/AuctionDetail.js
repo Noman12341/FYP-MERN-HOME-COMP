@@ -10,7 +10,7 @@ import { store } from 'react-notifications-component';
 function ProductDetail() {
     const { auctionProductID } = useParams();
     const [auctionProduct, setAuctionProduct] = useState({});
-    const [bid, setBid] = useState(0);
+    const [bid, setBid] = useState(null);
     const [alertMsg, setAlertMsg] = useState("");
     const history = useHistory();
     useEffect(() => {
@@ -63,7 +63,7 @@ function ProductDetail() {
                         onScreen: true
                     }
                 });
-                setBid(0);
+                setBid(null);
             }
         }).catch(error => {
             if (error.response.status === 406) {
@@ -112,7 +112,7 @@ function ProductDetail() {
                         {localStorage.getItem("token") ? <Form onSubmit={handleOnSubmitBid} style={{ backgroundColor: "#e4e4e4", padding: "20px", marginBottom: "10px", textAlign: "center" }}>
                             {alertMsg && <Alert variant="danger">{alertMsg}</Alert>}
                             <div className="mt-3"><span className="font-weight-bold">Current Price : </span><span className="product-detail-price">{auctionProduct.currentPrice}</span><CountDown countDown={auctionProduct.auctionEndingDate} /></div>
-                            <Form.Control type="number" style={{ width: "60%", margin: "17px auto" }} placeholder="Enter the price" name="bid" onChange={handleChange} value={bid} />
+                            <Form.Control type="number" style={{ width: "60%", margin: "17px auto" }} placeholder="Enter the price" name="bid" onChange={handleChange} value={bid} required />
                             <Button bsPrefix="product-detail-add-btn" type="submit" >Place a Bid</Button>
                         </Form> : <div> <div><span className="font-weight-bold">Price : </span><span className="product-detail-price">{auctionProduct.currentPrice}</span></div>
                                 <div className="my-4">

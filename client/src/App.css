@@ -503,7 +503,7 @@ box-shadow: 0px 1px 10px 2px #888888 inset;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
   border-radius: 3px;
   background-color: #fff;
-  width: 400px;
+  width: 470px;
   padding: 10px;
   margin: 50px auto;
 }
@@ -538,7 +538,7 @@ box-shadow: 0px 1px 10px 2px #888888 inset;
     border-radius: 3px;
     color: #fff;
     background-color: #f26b3a;
-    height: 40px;
+    height: 50px;
     width: 100%;
 }
 .auth-button-google {
