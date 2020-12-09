@@ -138,7 +138,7 @@ function AuthPage() {
                                 <Form.Control type="password" name="password2" onChange={handleChange} value={formData.password2} required />
                             </Form.Group>}
                             <Button bsPrefix="auth-button-submit" type="submit" >
-                                {isLoading ? <Spinner className="mb-1" animation="border" /> : "Submit"}
+                                {isLoading ? <Spinner animation="border" /> : "Submit"}
                             </Button>
                             <div className="text-center my-3"><span>or</span></div>
                             <Button bsPrefix="auth-button-google" type="submit">

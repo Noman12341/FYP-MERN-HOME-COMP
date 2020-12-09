@@ -28,7 +28,7 @@ function NavBar() {
         localStorage.clear();
         history.push("/");
     }
-    if (currLocation.includes("/login") || currLocation.includes("/register") || currLocation.includes("/admin")) return null;
+    if (currLocation.includes("/login") || currLocation.includes("/register") || currLocation.includes("/admin") || currLocation.includes("/forgot")) return null;
 
     return <Navbar id="Nav" sticky="top" expand="lg" bg="light" className="px-5" >
         <Link to="/" className="navbar-brand"><Image src={logo} alt="" height="70" width="135" /></Link>
