@@ -6,6 +6,8 @@ const router = express.Router();
 const User = require("../Modals/User");
 const auth = require("../Middlewares/auth");
 const owasp = require('owasp-password-strength-test');
+const nodemailer = require('nodemailer');
+
 // check Authentication
 router.get("/checkauth", auth, (req, res) => res.sendStatus(200));
 
@@ -118,5 +120,65 @@ router.post("/login-admin", (req, res) => {
                 });
         });
     });
+});
+
+// Forgot password
+router.put("/forgot-password", async (req, res) => {
+    const { email } = req.body;
+    await User.findOne({ email }, async (err, user) => {
+        if (err || !user) return res.status(400).json({ msg: "Email dose not exist" });
+
+        const token = jwt.sign({ _id: user._id }, process.env.PASS_RESECT_SECRET, { expiresIn: '30m' });
+        // now ready to send getEmails
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'mytestingemail12341@gmail.com',
+                pass: 'Arise123$'
+            }
+        });
+
+        const mailOptions = {
+            from: 'mytestingemail12341@gmail.com',
+            to: email,
+            subject: 'Sending Email for password reset.',
+            text: 'Link' + token
+        };
+
+        await user.updateOne({ resetToken: token }, (err, success) => {
+            if (err) return res.status(400).json({ msg: "Error in Updating token in database" });
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    return res.status(400).json({ msg: "Error in Sending email process!" })
+                } else {
+                    return res.status(200).json({ msg: "Email has been send now follow the instructions" });
+                }
+            });
+        });
+
+
+    });
+});
+
+// update forgot password
+router.put("/reset-password", (req, res) => {
+    const { token, password1, password2 } = req.body;
+    if (token) {
+        jwt.verify(token, process.env.PASS_RESECT_SECRET, async (err, decode) => {
+            if (err) return res.status(400).json({ msg: "Token is expired go back and try again." });
+
+            await User.findOne({ resetToken: token }, async (err, user) => {
+                if (err || !user) return res.status(400).json({ msg: "User with this token dose not exist" });
+
+                await user.updateOne({ password: password1 }, (err, success) => {
+                    if (err) return res.status(400).json({ msg: "Error in updating password!" });
+
+                    return res.status(200).json({ msg: "Your password have been changed!" });
+
+                });
+            });
+        });
+    } else { return res.status(400).json({ msg: "Authentication error!!" }); }
 });
 module.exports = router;

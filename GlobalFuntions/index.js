@@ -54,7 +54,7 @@ let handleEmailMarketing = async (image, name, brand, description, price) => {
         else throw err;
     });
 
-    const userEmails = await users.map(obj => {
+    const userEmails = users.map(obj => {
         return obj.email;
     })
 
@@ -77,7 +77,7 @@ let handleEmailMarketing = async (image, name, brand, description, price) => {
                 html: data
             };
 
-            await transporter.sendMail(mailOptions, function (error, info) {
+            transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     throw error;
                 } else {

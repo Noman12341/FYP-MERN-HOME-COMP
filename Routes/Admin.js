@@ -12,8 +12,6 @@ const AdminAuth = require('../Middlewares/adminAuth');
 const { nanoid } = require("nanoid");
 const QR = require('qrcode');
 const { handleEmailMarketing, scrapAlmirah, scrapGulAhmed, scrapSanaSafinaz, scrapDiners } = require('../GlobalFuntions');
-const { find } = require('../Modals/Product');
-
 
 router.get("/fetchAllProducts", AdminAuth, async (req, res) => {
     await Product.find({}, async (err, productsArr) => {
