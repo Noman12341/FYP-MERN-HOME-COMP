@@ -7,8 +7,8 @@ function ForGotEmail() {
 
     const [alert, setAlert] = useState({
         show: false,
-        success: "",
-        warning: ""
+        success: false,
+        msg: ""
     });
     const [hideForm, setHideForm] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -16,8 +16,16 @@ function ForGotEmail() {
 
     const handleSubmit = async event => {
         event.preventDefault();
-
-        console.log(email);
+        setIsLoading(true);
+        await axios.put('/api/auth/forgot-password', { email, url: window.location.href })
+            .then(res => {
+                setAlert({ show: true, success: true, msg: res.data.msg });
+                setHideForm(true);
+                setIsLoading(false);
+            }).catch(error => {
+                setAlert({ show: true, success: false, msg: error.response.data.msg });
+                setIsLoading(false);
+            });
     }
 
     return <Container id="auth-container" style={{ height: "100vh", backgroundColor: "#f4f4f4" }} fluid>
@@ -27,7 +35,7 @@ function ForGotEmail() {
                 <Card>
                     <Card.Body>
                         <Card.Title className="text-center my-3">Password reset</Card.Title>
-                        {alert.show && <Alert variant={alert.success ? "success" : "warning"}>This is a alert</Alert>}
+                        {alert.show && <Alert variant={alert.success ? "success" : "warning"}>{alert.msg}</Alert>}
                         {!hideForm && <Form onSubmit={handleSubmit}>
                             <Form.Group>
                                 <Form.Label>Enter Email Address</Form.Label>

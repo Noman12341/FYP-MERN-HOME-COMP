@@ -137,6 +137,7 @@ function AuthPage() {
                                 <Form.Label>Confrim Password</Form.Label>
                                 <Form.Control type="password" name="password2" onChange={handleChange} value={formData.password2} required />
                             </Form.Group>}
+                            <h6 className="text-right my-4"><Link to="/forgot-password">Forgot Password ?</Link></h6>
                             <Button bsPrefix="auth-button-submit" type="submit" >
                                 {isLoading ? <Spinner animation="border" /> : "Submit"}
                             </Button>

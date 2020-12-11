@@ -35,8 +35,8 @@ function App() {
       <Route path="/scrap-product-detail" exact component={ScrapPDetail} />
       <Route path="/login" exact component={AuthPage} />
       <Route path="/register" exact component={AuthPage} />
-      <Route path="/forgot-email" exact component={ForgotEmail} />
-      <Route path="/forgot-password/:userID/:token" exact component={ForgotPass} />
+      <Route path="/forgot-password" exact component={ForgotEmail} />
+      <Route path="/forgot-password/:token" exact component={ForgotPass} />
       <Route path="/product-auction-detail/:auctionProductID" exact component={AuctionDetail} />
       <ProtectedRoute path="/checkout" exact component={CheckoutForm} />
       <Route path="/order-success" exact component={OrderSuccess} />

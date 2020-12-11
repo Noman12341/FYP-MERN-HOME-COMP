@@ -124,7 +124,7 @@ router.post("/login-admin", (req, res) => {
 
 // Forgot password
 router.put("/forgot-password", async (req, res) => {
-    const { email } = req.body;
+    const { email, url } = req.body;
     await User.findOne({ email }, async (err, user) => {
         if (err || !user) return res.status(400).json({ msg: "Email dose not exist" });
 
@@ -137,15 +137,16 @@ router.put("/forgot-password", async (req, res) => {
                 pass: 'Arise123$'
             }
         });
-
+        const path = url + "/" + token;
         const mailOptions = {
             from: 'mytestingemail12341@gmail.com',
             to: email,
             subject: 'Sending Email for password reset.',
-            text: 'Link' + token
+            text: 'Click below link to reset the password',
+            html: '<p>Click <a href="' + path + '">here</a> to reset your password</p>'
         };
 
-        await user.updateOne({ resetToken: token }, (err, success) => {
+        await user.updateOne({ token }, (err, success) => {
             if (err) return res.status(400).json({ msg: "Error in Updating token in database" });
 
             transporter.sendMail(mailOptions, function (error, info) {
@@ -164,21 +165,40 @@ router.put("/forgot-password", async (req, res) => {
 // update forgot password
 router.put("/reset-password", (req, res) => {
     const { token, password1, password2 } = req.body;
+
     if (token) {
+        if (password1 !== password2) {
+            return res.status(400).json({ msg: ["Password Fields are mismatched"] });
+        }
+
+        // check remaining validations in 
+        const result = owasp.test(password1);
+        if (result.errors.length > 0) {
+            return res.status(400).json({ msg: result.errors });
+        }
+
         jwt.verify(token, process.env.PASS_RESECT_SECRET, async (err, decode) => {
-            if (err) return res.status(400).json({ msg: "Token is expired go back and try again." });
+            if (err) return res.status(400).json({ msg: ["Token is expired go back and try again."] });
 
-            await User.findOne({ resetToken: token }, async (err, user) => {
-                if (err || !user) return res.status(400).json({ msg: "User with this token dose not exist" });
+            await User.findOne({ token }, async (err, user) => {
+                if (err || !user) return res.status(400).json({ msg: ["User with this token dose not exist"] });
 
-                await user.updateOne({ password: password1 }, (err, success) => {
-                    if (err) return res.status(400).json({ msg: "Error in updating password!" });
+                // Hast and Salt password Process
+                bcrypt.genSalt(10, (err, Salt) => {
+                    if (err) throw err;
+                    bcrypt.hash(password1, Salt, async (err, hash) => {
+                        if (err) throw err;
+                        await user.updateOne({ password: hash, token: "" }, (err, success) => {
+                            if (err) return res.status(400).json({ msg: ["Error in updating password!"] });
 
-                    return res.status(200).json({ msg: "Your password have been changed!" });
+                            return res.status(200).json({ msg: ["Your password have been changed!"] });
 
+                        });
+                    });
                 });
+
             });
         });
-    } else { return res.status(400).json({ msg: "Authentication error!!" }); }
+    } else { return res.status(400).json({ msg: ["Authentication error!!"] }); }
 });
 module.exports = router;
