@@ -53,16 +53,19 @@ function AuthPage() {
     async function onSubmitRegisterForm(event) {
         event.preventDefault();
         setIsLoading(true);
-        await axios.post("/api/auth//registration", { ...formData })
+        console.log(window.location.origin)
+        await axios.post("/api/auth//registration", { ...formData, url: window.location.origin })
             .then(async res => {
                 if (res.status === 200) {
-                    const { token, user } = res.data;
-                    localStorage.setItem("token", token);
-                    localStorage.setItem("userID", user.userID);
-                    localStorage.setItem("userName", user.name);
-                    localStorage.setItem("userEmail", user.email);
+                    setAlertMsg(res.data.msg);
                     setIsLoading(false);
-                    history.push("/");
+                    // const { token, user } = res.data;
+                    // localStorage.setItem("token", token);
+                    // localStorage.setItem("userID", user.userID);
+                    // localStorage.setItem("userName", user.name);
+                    // localStorage.setItem("userEmail", user.email);
+                    // setIsLoading(false);
+                    // history.push("/");
                 }
             }).catch(error => {
                 if (error.response.status === 400 || error.response.status === 500) {
@@ -137,7 +140,7 @@ function AuthPage() {
                                 <Form.Label>Confrim Password</Form.Label>
                                 <Form.Control type="password" name="password2" onChange={handleChange} value={formData.password2} required />
                             </Form.Group>}
-                            <h6 className="text-right my-4"><Link to="/forgot-password">Forgot Password ?</Link></h6>
+                            {currPath === "/login" && <h6 className="text-right my-4"><Link to="/forgot-password">Forgot Password ?</Link></h6>}
                             <Button bsPrefix="auth-button-submit" type="submit" >
                                 {isLoading ? <Spinner animation="border" /> : "Submit"}
                             </Button>

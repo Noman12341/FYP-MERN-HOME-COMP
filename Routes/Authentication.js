@@ -7,6 +7,7 @@ const User = require("../Modals/User");
 const auth = require("../Middlewares/auth");
 const owasp = require('owasp-password-strength-test');
 const nodemailer = require('nodemailer');
+const { nanoid } = require("nanoid");
 
 // check Authentication
 router.get("/checkauth", auth, (req, res) => res.sendStatus(200));
@@ -17,7 +18,7 @@ router.post("/login", (req, res) => {
     // check if user Exists
     User.findOne({ email }).then(user => {
         if (!user) return res.status(400).json({ msg: ["User does not exists."] });
-
+        if (!user.isActive) return res.status(400).json({ msg: ["Email is not active yet"] });
         // Validate user password
         bcrypt.compare(password, user.password).then(isMatch => {
             if (!isMatch) return res.status(400).json({ msg: ["Invalid Credentials."] });
@@ -36,7 +37,7 @@ router.post("/login", (req, res) => {
 
 // User Registration Route 
 router.post("/registration", (req, res) => {
-    const { name, email, password, password2 } = req.body;
+    const { name, email, password, password2, url } = req.body;
 
     // Simple Validation
     if (password !== password2) {
@@ -64,7 +65,8 @@ router.post("/registration", (req, res) => {
         const newUser = new User({
             name,
             email,
-            password
+            password,
+            token: nanoid(11)
         });
 
         // Hast and Salt password Process
@@ -76,28 +78,68 @@ router.post("/registration", (req, res) => {
                 newUser.password = hash;
                 newUser.save().then(user => {
 
-                    // sigining JWT token here
-                    jwt.sign({ id: user._id },
-                        process.env.JWT_SECRET,
-                        { expiresIn: 3600 },
-                        (err, token) => {
-                            if (err) throw err;
+                    const transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: 'mytestingemail12341@gmail.com',
+                            pass: 'Arise123$'
+                        }
+                    });
+                    const path = url + "/forgot-active-email/" + newUser.token;
+                    const mailOptions = {
+                        from: 'mytestingemail12341@gmail.com',
+                        to: email,
+                        subject: 'Sending Email for password reset.',
+                        text: 'Click below link to reset the password',
+                        html: '<p>Click <a href="' + path + '">here</a> to Activate your email</p>'
+                    };
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            return res.status(400).json({ msg: ["Error in Sending email process!"] })
+                        } else {
+                            return res.status(200).json({ msg: ["Now Activate you email."] });
+                        }
+                    });
 
-                            return res.status(200).json({
-                                token,
-                                user: {
-                                    userID: user._id,
-                                    name: user.name,
-                                    email: user.email
-                                }
-                            });
-                        });
+                    // sigining JWT token here
+                    // jwt.sign({ id: user._id },
+                    //     process.env.JWT_SECRET,
+                    //     { expiresIn: 3600 },
+                    //     (err, token) => {
+                    //         if (err) throw err;
+
+                    //         return res.status(200).json({
+                    //             token,
+                    //             user: {
+                    //                 userID: user._id,
+                    //                 name: user.name,
+                    //                 email: user.email
+                    //             }
+                    //         });
+                    //     });
                 });
             });
         });
 
     });
 });
+
+// Activate email Address
+router.put("/active-email", async (req, res) => {
+    const { token } = req.body;
+
+    await User.findOne({ token: token }, (err, user) => {
+        if (err) return res.status(400).json({ msg: "Error in finding the token!" });
+
+        if (user) {
+            user.updateOne({ isActive: true, token: "" }, (err, success) => {
+                if (err) return res.status(400).json({ msg: "Error in updating the user" });
+
+                return res.status(200).json({ msg: "Your email is activated now" });
+            })
+        } else { return res.status(400).json({ msg: "User with this token not found!" }); }
+    })
+})
 
 router.post("/login-admin", (req, res) => {
     const { email, password } = req.body;

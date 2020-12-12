@@ -5,18 +5,18 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
-    },
-    email: {
+    }, email: {
         type: String,
         required: true,
         trim: true
-    },
-    password: {
+    }, password: {
         type: String,
         required: true,
         trim: true
-    },
-    isAdmin: {
+    }, isActive: {
+        type: Boolean,
+        default: false
+    }, isAdmin: {
         type: Boolean,
         default: false
     }, token: {

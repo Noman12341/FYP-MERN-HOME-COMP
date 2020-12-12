@@ -21,6 +21,7 @@ import ScrapPDetail from './Pages/ScrapPDetail';
 import BrandProducts from './Pages/BrandProd';
 import ForgotEmail from './Pages/ForgotEmail';
 import ForgotPass from './Pages/ForgotPassword';
+import ActiveEmail from './Pages/ActiveEmail';
 
 function App() {
   return <Router>
@@ -37,6 +38,7 @@ function App() {
       <Route path="/register" exact component={AuthPage} />
       <Route path="/forgot-password" exact component={ForgotEmail} />
       <Route path="/forgot-password/:token" exact component={ForgotPass} />
+      <Route path="/forgot-active-email/:token" exact component={ActiveEmail} />
       <Route path="/product-auction-detail/:auctionProductID" exact component={AuctionDetail} />
       <ProtectedRoute path="/checkout" exact component={CheckoutForm} />
       <Route path="/order-success" exact component={OrderSuccess} />
