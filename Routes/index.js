@@ -108,6 +108,32 @@ router.post("/postComment/:ID", async (req, res) => {
         } else throw err;
     });
 });
+// Post Comment for Auction products
+router.post("/postComment-auction-product/:ID", async (req, res) => {
+    const { userName, comment, rating } = req.body;
+    const productID = req.params.ID;
+    const newComment = new Comment({
+        productID,
+        userName,
+        comment,
+        rating
+    });
+    await newComment.save();
+
+    await Comment.find({ productID }, async (err, comments) => {
+        if (!err) {
+            const sumOfRating = comments.reduce((a, c) => a + c.rating, 0);
+            const totalRating = sumOfRating / comments.length;
+            const newRating = Math.round(totalRating);
+            await AuctionProduct.findOneAndUpdate({ _id: productID }, { rating: newRating, totalReviews: comments.length }, (err, updatedDoc) => {
+                if (!err) {
+                    return res.sendStatus(200);
+                } else return res.status(400);
+            });
+        } else throw err;
+    });
+});
+
 // fetch qrcode for user in check out page
 router.post("/fetchqrcode", async (req, res) => {
     const { userEmail } = req.body;

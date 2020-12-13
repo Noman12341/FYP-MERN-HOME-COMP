@@ -5,12 +5,13 @@ import StarRating from '../Components/StartRating';
 import axios from 'axios';
 import { store } from 'react-notifications-component';
 
-function CommentSection({ productID }) {
+function CommentSection({ productID, isAuctionPro }) {
     const userName = localStorage.getItem("userName");
     const [comments, setComments] = useState([]);
     const [rating, setRating] = useState(0);
     const [msg, setMsg] = useState("");
-
+    const [run, setRun] = useState(false);
+    const url = isAuctionPro === "true" ? "/api/products/postComment-auction-product/" + productID : "/api/products/postComment/" + productID;
     useEffect(() => {
         const fetchComments = async () => {
             await axios.get("/api/products/fetchComments/" + productID)
@@ -21,7 +22,7 @@ function CommentSection({ productID }) {
                 });
         }
         fetchComments();
-    }, [productID]);
+    }, [productID, run]);
 
 
     const handleChange = (value) => {
@@ -33,8 +34,7 @@ function CommentSection({ productID }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(productID);
-        await axios.post("/api/products/postComment/" + productID, { userName: localStorage.getItem("userName"), comment: msg, rating })
+        await axios.post(url, { userName: localStorage.getItem("userName"), comment: msg, rating })
             .then(res => {
                 if (res.status === 200) {
                     store.addNotification({
@@ -53,6 +53,7 @@ function CommentSection({ productID }) {
                     });
                     setRating(0);
                     setMsg("");
+                    setRun(!run);
                 }
             }).catch(error => {
                 store.addNotification({
@@ -73,7 +74,7 @@ function CommentSection({ productID }) {
     }
     return <Container fluid id="comment-section">
         <Row>
-            <Col lg={6}>
+            <Col lg={6} className="my-2 pl-4">
                 {comments.map((comment, index) => {
                     return <Comment key={index} userName={comment.userName} time={comment.date} msg={comment.comment} rating={comment.rating} />
                 })}

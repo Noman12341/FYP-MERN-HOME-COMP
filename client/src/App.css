@@ -836,6 +836,12 @@ fieldset label span {
 .comment-time {
   font-size: small;
 }
+.comment-boxes {
+  padding: 2px;
+  margin: 7px 0 12px 7px;
+  border-radius: 4px;
+  box-shadow: 0 0 6px 0 rgba(0,0,0,.2);
+}
 /* CSS Star Inactive */
 .star {
   display: inline-block;  

@@ -57,7 +57,7 @@ function ProductDetail() {
                 </Col>
             </Row>
         </Container>
-        <CommentSection productID={productID} />
+        <CommentSection productID={productID} isAuctionPro="false" />
         <SocialShare />
     </section>
 }

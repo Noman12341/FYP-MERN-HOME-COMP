@@ -6,6 +6,7 @@ import CountDown from '../Components/CountDown';
 import { useHistory, Link } from 'react-router-dom';
 import SocialShare from '../Components/SocialShare';
 import { store } from 'react-notifications-component';
+import CommentSection from '../Sections/CommentSection';
 
 function ProductDetail() {
     const { auctionProductID } = useParams();
@@ -13,6 +14,7 @@ function ProductDetail() {
     const [bid, setBid] = useState(null);
     const [alertMsg, setAlertMsg] = useState("");
     const history = useHistory();
+    const [run, setRun] = useState(false);
     useEffect(() => {
         async function fetchProduct() {
             await axios.get("/api/products/fetchAuctionDetail/" + auctionProductID)
@@ -27,7 +29,7 @@ function ProductDetail() {
                 });
         }
         fetchProduct();
-    }, [auctionProductID]);
+    }, [auctionProductID, run]);
     function handleChange(event) {
         setBid(event.target.value);
     }
@@ -49,7 +51,7 @@ function ProductDetail() {
             }
         }).then(res => {
             if (res.status === 200) {
-                setAlertMsg("");
+                // setAlertMsg("");
                 store.addNotification({
                     title: "Wonderful!",
                     message: "your Bid is submited.",
@@ -63,7 +65,8 @@ function ProductDetail() {
                         onScreen: true
                     }
                 });
-                setBid(null);
+                // setBid(null);
+                setRun(!run);
             }
         }).catch(error => {
             if (error.response.status === 406) {
@@ -123,6 +126,7 @@ function ProductDetail() {
                 </Col>
             </Row>
         </Container>
+        <CommentSection productID={auctionProductID} isAuctionPro="true" />
         <SocialShare />
     </section>
 }
