@@ -423,7 +423,7 @@ function AdminProducts() {
                         </Form.Group>
                         <Form.Group as={Col}>
                             <Form.Label>Date</Form.Label>
-                            <Form.Control className="mr-sm-2" type="date" name="date" onChange={handleChange} required />
+                            <Form.Control className="mr-sm-2" type="datetime-local" name="date" onChange={handleChange} required />
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>

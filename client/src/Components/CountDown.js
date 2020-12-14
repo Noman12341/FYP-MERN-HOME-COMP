@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
-
-function CountDown({ countDown }) {
+import axios from 'axios';
+function CountDown({ countDown, pID }) {
 
     // Youtube link for Count Down
     // https://www.youtube.com/watch?v=ZVOGPvo08zM
@@ -9,13 +9,13 @@ function CountDown({ countDown }) {
     const [timerHours, setTimerHours] = useState("00");
     const [timerMinutes, setTimerMinutes] = useState("00");
     const [timerSeconds, setTimerSeconds] = useState("00");
-
+    const [isChecked, setIsChecked] = useState(false);
     let intervel = useRef();
 
     const startTimer = () => {
         const countDownDate = new Date(countDown).getTime();
 
-        intervel = setInterval(() => {
+        intervel = setInterval(async () => {
             const now = new Date().getTime();
             const distance = countDownDate - now;
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -25,6 +25,17 @@ function CountDown({ countDown }) {
             if (distance < 0) {
                 // stop timer
                 clearInterval(intervel.current);
+                // run the finished auction once if it already runs then donot run again
+                if (isChecked === false) {
+                    setIsChecked(true);
+                    await axios.put('/api/admin/check-is-auction-finish', { pID })
+                        .then(res => {
+                            console.log("Auction Finished successfully" + res.data.msg);
+                        }).catch(error => {
+                            console.log("Error! while finihing the auction" + error.response.data.msg);
+                        });
+                }
+
             } else {
                 setTimerDays(days);
                 setTimerHours(hours);

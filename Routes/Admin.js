@@ -12,6 +12,7 @@ const AdminAuth = require('../Middlewares/adminAuth');
 const { nanoid } = require("nanoid");
 const QR = require('qrcode');
 const { handleEmailMarketing, scrapAlmirah, scrapGulAhmed, scrapSanaSafinaz, scrapDiners } = require('../GlobalFuntions');
+const FinishedAuction = require("../Modals/FinishedAuctions");
 
 router.get("/fetchAllProducts", AdminAuth, async (req, res) => {
     await Product.find({}, async (err, productsArr) => {
@@ -165,7 +166,44 @@ router.post("/addAuctionProduct", upload.single('image'), async (req, res) => {
         } else return res.status(400).json({ msg: "Error in Finding the Product." })
     });
 });
+// route for check if auction ends than put the auction product in finished auction table
+router.put("/check-is-auction-finish", async (req, res) => {
+    const { pID } = req.body;
+    await AuctionProduct.findOne({ _id: pID }, async (err, obj) => {
+        if (err) return res.status(400).json({ msg: "Error! in finding the auction product." });
+        if (obj) {
+            if (obj.userID) {
+                const newFinishedAuction = new FinishedAuction({
+                    userName: obj.userName,
+                    userID: obj.userID,
+                    productID: obj._id,
+                    productName: obj.name,
+                    productBrand: obj.brand,
+                    productCatagory: obj.catagory,
+                    productImg: obj.image,
+                    productPrice: obj.currentPrice,
+                    auctionEndingdate: obj.auctionEndingDate
+                });
+                await newFinishedAuction.save();
+                await AuctionProduct.findOneAndDelete({ _id: pID }, (err) => {
+                    if (err) return res.status(400).json({ msg: "Error! in deleteing the auction product" });
 
+                    return res.status(200).json({ msg: "Product is Deleted and Auction is Finished" });
+                });
+            } else {
+                await AuctionProduct.findOneAndDelete({ _id: pID }, (err) => {
+                    if (err) return res.status(400).json({ msg: "Error! in deleteing the auction product" });
+                    fs.unlink("Public/images/" + obj.image, err => {
+                        if (!err) {
+                            return res.status(200).json({ msg: "Product is Deleted and Auction is Finished" });
+                        } else res.status(400).json({ msg: "Image is not deleted when deleting QRCode from database." });
+                    });
+                });
+            }
+        } else return res.status(400).json({ msg: "No product is found with this Auction p id" });
+
+    });
+});
 // fetch Users for admin
 router.get("/fetchUsers", AdminAuth, async (req, res) => {
     await User.find({}, (err, users) => {

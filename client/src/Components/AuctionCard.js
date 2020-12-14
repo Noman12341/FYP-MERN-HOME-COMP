@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 function AuctionCard(props) {
     const { _id, name, image, initialPrice, currentPrice, auctionEndingDate } = props.auctionProduct;
     return <Card>
-        <CountDown countDown={auctionEndingDate} />
+        <CountDown countDown={auctionEndingDate} pID={_id} />
         <Link to={"/product-auction-detail/" + _id}>
             <Card.Img variant="top" src={"/static/images/" + image} height="320" />
         </Link>

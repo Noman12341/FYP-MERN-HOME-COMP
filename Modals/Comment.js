@@ -19,7 +19,7 @@ const CommentSchema = mongoose.Schema({
         required: true
     }, date: {
         type: String,
-        default: ISODate()
+        default: ISODate
     }
 });
 const Comment = mongoose.model('Comment', CommentSchema);
