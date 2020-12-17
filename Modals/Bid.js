@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ISODate } = require('../GlobalFuntions');
 
 const BidSchema = new mongoose.Schema({
 
@@ -17,7 +18,7 @@ const BidSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        default: Date.now
+        default: ISODate
     },
     bidPrice: {
         type: Number,

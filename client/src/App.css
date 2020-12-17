@@ -494,6 +494,20 @@ box-shadow: 0px 1px 10px 2px #888888 inset;
   background-color:white;
   color: #ffd613;
 }
+.view-bid {
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  font-weight: 600;
+  color: #000;
+}
+.view-bid:hover{color: orange}
+
+.view-bid-card {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
 /* Authentication Screen Css */
 #auth-container .form-label {
   font-size:small;

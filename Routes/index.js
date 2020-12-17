@@ -411,4 +411,18 @@ async function autoScroll(page) {
         });
     });
 }
+
+// fetch Bids for user to see
+router.get("/view-bids/:id", async (req, res) => {
+    const { id } = req.params;
+    await Bid.find({ productID: id }, async (err, bids) => {
+        if (!err) {
+            await AuctionProduct.findOne({ _id: id }, (err, product) => {
+                if (!err) {
+                    return res.status(200).json({ product, bids });
+                } else { return res.status(400).json({ msg: "Error in finding Auction Product!" }); }
+            })
+        } else { return res.status(400).json({ msg: "Error in finding bids!" }); }
+    });
+})
 module.exports = router;

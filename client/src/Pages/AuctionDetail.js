@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom'
-import { Container, Row, Col, Image, Button, Form, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Image, Button, Form } from 'react-bootstrap';
 import CountDown from '../Components/CountDown';
 import { useHistory, Link } from 'react-router-dom';
 import SocialShare from '../Components/SocialShare';
@@ -11,8 +11,7 @@ import CommentSection from '../Sections/CommentSection';
 function ProductDetail() {
     const { auctionProductID } = useParams();
     const [auctionProduct, setAuctionProduct] = useState({});
-    const [bid, setBid] = useState(null);
-    const [alertMsg, setAlertMsg] = useState("");
+    const [bid, setBid] = useState("");
     const history = useHistory();
     const [run, setRun] = useState(false);
     useEffect(() => {
@@ -113,8 +112,7 @@ function ProductDetail() {
                         <p className="product-details-description"><span className="font-weight-bold">Description : </span>{auctionProduct.description}</p>
                         <hr />
                         {localStorage.getItem("token") ? <Form onSubmit={handleOnSubmitBid} style={{ backgroundColor: "#e4e4e4", padding: "20px", marginBottom: "10px", textAlign: "center" }}>
-                            {alertMsg && <Alert variant="danger">{alertMsg}</Alert>}
-                            <div className="mt-3"><span className="font-weight-bold">Current Price : </span><span className="product-detail-price">{auctionProduct.currentPrice}</span><CountDown countDown={auctionProduct.auctionEndingDate} /></div>
+                            <div className="mt-3 position-relative"><Link to={"/view-bids/" + auctionProductID} className="view-bid">View Bids</Link><span className="font-weight-bold">Current Price : </span><span className="product-detail-price">{auctionProduct.currentPrice}</span><CountDown countDown={auctionProduct.auctionEndingDate} /></div>
                             <Form.Control type="number" style={{ width: "60%", margin: "17px auto" }} placeholder="Enter the price" name="bid" onChange={handleChange} value={bid} required />
                             <Button bsPrefix="product-detail-add-btn" type="submit" >Place a Bid</Button>
                         </Form> : <div> <div><span className="font-weight-bold">Price : </span><span className="product-detail-price">{auctionProduct.currentPrice}</span></div>

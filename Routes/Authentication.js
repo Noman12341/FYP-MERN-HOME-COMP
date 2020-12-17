@@ -89,13 +89,14 @@ router.post("/registration", (req, res) => {
                     const mailOptions = {
                         from: 'mytestingemail12341@gmail.com',
                         to: email,
-                        subject: 'Sending Email for password reset.',
+                        subject: 'Sending Email for Activate your email.',
                         text: 'Click below link to reset the password',
                         html: '<p>Click <a href="' + path + '">here</a> to Activate your email</p>'
                     };
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
-                            return res.status(400).json({ msg: ["Error in Sending email process!"] })
+                            console.log(error);
+                            return res.status(400).json({ msg: ["Error in Sending email process!" + error] })
                         } else {
                             return res.status(200).json({ msg: ["Now Activate you email."] });
                         }
@@ -193,7 +194,7 @@ router.put("/forgot-password", async (req, res) => {
 
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
-                    return res.status(400).json({ msg: "Error in Sending email process!" })
+                    return res.status(400).json({ msg: "Error in Sending email process!" + error })
                 } else {
                     return res.status(200).json({ msg: "Email has been send now follow the instructions" });
                 }
