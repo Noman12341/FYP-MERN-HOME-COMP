@@ -8,6 +8,7 @@ const auth = require("../Middlewares/auth");
 const owasp = require('owasp-password-strength-test');
 const nodemailer = require('nodemailer');
 const { nanoid } = require("nanoid");
+var smtpTransport = require('nodemailer-smtp-transport');
 
 // check Authentication
 router.get("/checkauth", auth, (req, res) => res.sendStatus(200));
@@ -78,13 +79,13 @@ router.post("/registration", (req, res) => {
                 newUser.password = hash;
                 newUser.save().then(user => {
 
-                    const transporter = nodemailer.createTransport({
-                        host: "smtp.gmail.com",
+                    const transporter = nodemailer.createTransport(smtpTransport({
+                        service: 'gmail',
                         auth: {
                             user: 'mytestingemail12341@gmail.com',
                             pass: 'Arise123$'
                         }
-                    });
+                    }));
                     const path = url + "/forgot-active-email/" + newUser.token;
                     const mailOptions = {
                         from: 'mytestingemail12341@gmail.com',
