@@ -79,7 +79,7 @@ router.post("/registration", (req, res) => {
                 newUser.save().then(user => {
 
                     const transporter = nodemailer.createTransport({
-                        service: 'gmail',
+                        host: "smtp.gmail.com",
                         auth: {
                             user: 'mytestingemail12341@gmail.com',
                             pass: 'Arise123$'
