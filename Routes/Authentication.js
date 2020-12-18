@@ -82,7 +82,7 @@ router.post("/registration", (req, res) => {
                         service: 'gmail',
                         auth: {
                             user: 'mytestingemail12341@gmail.com',
-                            pass: 'Arise123$'
+                            pass: 'hkzrrzlublcbhclj'
                         }
                     });
                     const path = url + "/forgot-active-email/" + newUser.token;
