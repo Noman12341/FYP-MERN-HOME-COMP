@@ -177,7 +177,7 @@ router.put("/forgot-password", async (req, res) => {
             service: 'gmail',
             auth: {
                 user: 'mytestingemail12341@gmail.com',
-                pass: 'Arise123$'
+                pass: 'hkzrrzlublcbhclj'
             }
         });
         const path = url + "/" + token;

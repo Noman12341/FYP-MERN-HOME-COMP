@@ -13,15 +13,26 @@ function CommentSection({ productID, isAuctionPro }) {
     const [run, setRun] = useState(false);
     const url = isAuctionPro === "true" ? "/api/products/postComment-auction-product/" + productID : "/api/products/postComment/" + productID;
     useEffect(() => {
+        const source = axios.CancelToken.source();
+
         const fetchComments = async () => {
-            await axios.get("/api/products/fetchComments/" + productID)
-                .then(res => {
-                    setComments(res.data.comments);
-                }).catch(error => {
-                    console.log(error);
-                });
+            try {
+                await axios.get("/api/products/fetchComments/" + productID, { cancelToken: source.token })
+                    .then(res => {
+                        setComments(res.data.comments);
+                    });
+            } catch (error) {
+                if (axios.isCancel(error)) {
+                    console.log("Axios request Canceled.");
+                } else { throw error; }
+            }
+
         }
         fetchComments();
+
+        return () => {
+            source.cancel();
+        }
     }, [productID, run]);
 
 

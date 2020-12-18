@@ -11,18 +11,29 @@ function ViewBids() {
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
         setIsLoading(true);
+        let source = axios.CancelToken.source();
         const fetchDetails = async () => {
-            await axios.get("/api/products/view-bids/" + pID)
-                .then(res => {
-                    setProduct(res.data.product);
-                    setBids(res.data.bids);
+            try {
+                await axios.get("/api/products/view-bids/" + pID, { cancelToken: source.token })
+                    .then(res => {
+                        setProduct(res.data.product);
+                        setBids(res.data.bids);
+                        setIsLoading(false);
+                    });
+            } catch (error) {
+                if (axios.isCancel(error)) {
+                    console.log("Axios request Canceled.");
+                } else {
                     setIsLoading(false);
-                }).catch(error => {
-                    console.log(error);
-                    setIsLoading(false);
-                });
+                    throw error;
+                }
+            }
         }
         fetchDetails();
+        return () => {
+            source.cancel();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return isLoading ? <Spinner containerHeight="70vh" /> : <Container id="viewbid-container" className="p-5" fluid>
         <Row>

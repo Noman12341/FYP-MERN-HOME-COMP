@@ -15,20 +15,26 @@ function ProductDetail() {
     const history = useHistory();
     const [run, setRun] = useState(false);
     useEffect(() => {
+        let source = axios.CancelToken.source();
         async function fetchProduct() {
-            await axios.get("/api/products/fetchAuctionDetail/" + auctionProductID)
-                .then(res => {
-                    if (res.status === 200) {
+            try {
+                await axios.get("/api/products/fetchAuctionDetail/" + auctionProductID, { cancelToken: source.token })
+                    .then(res => {
                         setAuctionProduct(res.data.auctionProduct);
-                    }
-                }).catch(error => {
-                    if (error.response.status === 400) {
-                        throw error;
-                    }
-                });
+                    });
+            } catch (error) {
+                if (axios.isCancel(error)) {
+                    console.log("Axios request Canceled.");
+                } else { throw error; }
+            }
         }
         fetchProduct();
-    }, [auctionProductID, run]);
+        // below function is a cleanup function
+        return () => {
+            source.cancel();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [run]);
     function handleChange(event) {
         setBid(event.target.value);
     }

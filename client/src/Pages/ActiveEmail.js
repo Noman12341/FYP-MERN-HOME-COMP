@@ -1,4 +1,3 @@
-import Axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Alert, Card } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
@@ -28,6 +27,7 @@ function ActiveEmailSuccess() {
                 });
         }
         activeEmail();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return <Container id="auth-container" style={{ height: "100vh", backgroundColor: "#f4f4f4" }} fluid>
         <div className="account-chose-link"><Link to="/">Back to Main Page</Link></div>

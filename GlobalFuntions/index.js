@@ -63,7 +63,7 @@ let handleEmailMarketing = async (image, name, brand, description, price) => {
         service: 'gmail',
         auth: {
             user: 'mytestingemail12341@gmail.com',
-            pass: 'Arise123$'
+            pass: 'hkzrrzlublcbhclj'
         }
     });
 

@@ -13,7 +13,7 @@ function FinishedAuctionCard(props) {
             <div className="final-value">{pPrice}</div>
         </div>
         <Card.Body className="p-0 mt-2">
-            <h5 className="card-product-name"><Link to="#">{pName}</Link></h5>
+            <h5 className="card-product-name"><Link to={"/" + pID}>{pName}</Link></h5>
         </Card.Body>
     </Card>;
 }
