@@ -25,6 +25,7 @@ a:hover {
   margin-left: 4%;
 }
 .search-field {
+  position: relative;
   margin-left: 18%;
 }
 .search-field input[type="search"] {
@@ -47,6 +48,46 @@ a:hover {
   .search-field input[type="search"] {
     width: 80%;
   }
+}
+/* css for search field with different tags */
+.search-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 45px;
+  left: 0;
+  height: 400px;
+  width: 400px;
+  padding: 10px;
+  text-align: left;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  background-color: white;
+  z-index: 1;
+}
+input[type="search"]:focus + .search-dropdown-content {
+  display: block;
+}
+.search-dropdown-content h6 {
+  font-weight: 700;
+  margin: 10px ;
+}
+.search-dropdown-content:hover {
+  display: block;
+}
+.search-dropdown-content .search-sm-btns {
+  background-color: #ddd;
+  border: none;
+  color: black;
+  padding: 4px 14px;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 8px;
+  cursor: pointer;
+  border-radius: 16px;
+}
+.search-dropdown-content .search-sm-btns:hover {
+  background-color: #f1f1f1;
 }
 .search-btn {
   height: 45px;

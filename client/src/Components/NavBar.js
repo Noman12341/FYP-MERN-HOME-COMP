@@ -35,7 +35,35 @@ function NavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="text-right">
             <Form onSubmit={handleSubmit} inline className="search-field">
-                <FormControl type="search" placeholder="Search" onChange={(event) => setSearchWord(event.target.value)} value={searchWord} />
+                <FormControl type="search" className="main-search-field" placeholder="Search" onChange={(event) => setSearchWord(event.target.value)} value={searchWord} />
+                {/* Below div is the search inpute dropdown */}
+                <div className="search-dropdown-content">
+                    <div>
+                        <h6>Men</h6>
+                        <div>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Kurta")}>Kurta</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Suit")}>Suit</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Dress Shirt")}>Dress Shirt</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Jackets")}>JAckets</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Jeans")}>Jeans</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Westren")}>Westren</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Eastren")}>Eastren</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Unstitched")}>Unstitched</Button>
+                        </div>
+                    </div>
+                    <div>
+                        <h6>Women</h6>
+                        <div>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Solid")}>Solid</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Digital")}>Digital</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Suits")}>Suits</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Formal")}>Formal</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Semi Formal")}>Semi formal</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Unstitched")}>Unstitched</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Trousers")}>Trousers</Button>
+                        </div>
+                    </div>
+                </div>
                 <Button bsPrefix="search-btn" type="submit"><i className="fas fa-search"></i></Button>
             </Form>
             <Nav className="ml-auto">
