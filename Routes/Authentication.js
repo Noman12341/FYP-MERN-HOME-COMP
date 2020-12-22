@@ -8,7 +8,7 @@ const auth = require("../Middlewares/auth");
 const owasp = require('owasp-password-strength-test');
 const nodemailer = require('nodemailer');
 const { nanoid } = require("nanoid");
-const messagebird = require('messagebird')('QfsiXCk9bm52sRkEvny6fRf9v');
+const messagebird = require('messagebird')('RRNdrp5k2Q4Js1yKTitrqEUhf');
 
 // check Authentication
 router.get("/checkauth", auth, (req, res) => res.sendStatus(200));
