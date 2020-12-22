@@ -8,6 +8,7 @@ const auth = require("../Middlewares/auth");
 const owasp = require('owasp-password-strength-test');
 const nodemailer = require('nodemailer');
 const { nanoid } = require("nanoid");
+const messagebird = require('messagebird')('QfsiXCk9bm52sRkEvny6fRf9v');
 
 // check Authentication
 router.get("/checkauth", auth, (req, res) => res.sendStatus(200));
@@ -243,5 +244,34 @@ router.put("/reset-password", (req, res) => {
             });
         });
     } else { return res.status(400).json({ msg: ["Authentication error!!"] }); }
+});
+
+// verify Phone number for Cash on deliver 
+router.post("/send-number", async (req, res) => {
+    const { number } = req.body;
+    messagebird.verify.create(number, {
+        originator: 'Code',
+        template: 'Your verification code is %token.'
+    }, (err, response) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).json({ msg: "Unable to send msg" });
+        } else {
+            console.log(response);
+            return res.status(200).json({ id: response.id, msg: "Code has been send." });
+        }
+    });
+});
+
+// posting the verification code
+router.post("/verify-code-number", (req, res) => {
+    const { id, token } = req.body;
+    messagebird.verify.verify(id, token, (err, response) => {
+        if (err) {
+            return res.status(400).json({ msg: "error in verifying token" });
+        } else {
+            return res.status(200).json({ msg: "Your number is varified." });
+        }
+    });
 });
 module.exports = router;

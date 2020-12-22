@@ -28,7 +28,7 @@ function NavBar() {
         localStorage.clear();
         history.push("/");
     }
-    if (currLocation.includes("/login") || currLocation.includes("/register") || currLocation.includes("/admin") || currLocation.includes("/forgot")) return null;
+    if (currLocation.includes("/login") || currLocation.includes("/register") || currLocation.includes("/admin") || currLocation.includes("/forgot") || currLocation.includes("/verify")) return null;
 
     return <Navbar id="Nav" sticky="top" expand="lg" bg="light" className="px-5" >
         <Link to="/" className="navbar-brand"><Image src={logo} alt="" height="70" width="135" /></Link>
@@ -41,26 +41,35 @@ function NavBar() {
                     <div>
                         <h6>Men</h6>
                         <div>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Kurta")}>Kurta</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Suit")}>Suit</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Dress Shirt")}>Dress Shirt</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Jackets")}>JAckets</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Jeans")}>Jeans</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Westren")}>Westren</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Eastren")}>Eastren</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Unstitched")}>Unstitched</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Kurta ")}>Kurta</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Suit ")}>Suit</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Dress Shirt ")}>Dress Shirt</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Jackets ")}>Jackets</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Jeans ")}>Jeans</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Westren ")}>Westren</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Eastren ")}>Eastren</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Unstitched ")}>Unstitched</Button>
                         </div>
                     </div>
                     <div>
                         <h6>Women</h6>
                         <div>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Solid")}>Solid</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Digital")}>Digital</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Suits")}>Suits</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Formal")}>Formal</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Semi Formal")}>Semi formal</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Unstitched")}>Unstitched</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord("Trousers")}>Trousers</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Solid ")}>Solid</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Digital ")}>Digital</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Suits ")}>Suits</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Formal ")}>Formal</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Semi Formal ")}>Semi formal</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Unstitched ")}>Unstitched</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Trousers ")}>Trousers</Button>
+                        </div>
+                    </div>
+                    <div>
+                        <h6>Colors</h6>
+                        <div>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Red ")}>Red</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Blue ")}>Blue</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Yellow ")}>Yellow</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Green ")}>Green</Button>
                         </div>
                     </div>
                 </div>

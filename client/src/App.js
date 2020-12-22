@@ -23,6 +23,7 @@ import ForgotEmail from './Pages/ForgotEmail';
 import ForgotPass from './Pages/ForgotPassword';
 import ActiveEmail from './Pages/ActiveEmail';
 import ViewBids from './Pages/ViewBids';
+import VerifyPhone from './Pages/VerifyPhone';
 
 function App() {
   return <Router>
@@ -43,6 +44,7 @@ function App() {
       <Route path="/product-auction-detail/:auctionProductID" exact component={AuctionDetail} />
       <Route path="/view-bids/:pID" exact component={ViewBids} />
       <ProtectedRoute path="/checkout" exact component={CheckoutForm} />
+      <Route path="/verify-number" exact component={VerifyPhone} />
       <Route path="/order-success" exact component={OrderSuccess} />
       <Route path="/adminAuth" exact component={AdminAuth} />
       <Route path="/admin" component={Admin} />

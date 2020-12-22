@@ -3,7 +3,7 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { Form, Spinner } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Axios from 'axios';
-import { FetchOrderDetails } from '../Actions/OrderActions';
+import { FetchOrderDetails, SaveCustomerInfo } from '../Actions/OrderActions';
 import { ClearCart } from '../Actions/MyCartActions';
 import { useDispatch, useSelector } from 'react-redux';
 import QRCodeViewer from './QRCodeViewer';
@@ -90,7 +90,11 @@ const MyCheckoutForm = () => {
             }
         });
     }
-
+    // Cash on Deliver fucntion Below
+    const handleCashOnDelivery = () => {
+        dispatch(SaveCustomerInfo(billingData));
+        history.push("/verify-number");
+    }
 
     const handleSubmit = async (event) => {
         // Block native form submission.
@@ -155,7 +159,7 @@ const MyCheckoutForm = () => {
                 </label>
                 <label>
                     <span>Phone No.</span>
-                    <input name="phone" type="number" className="field" placeholder="@gmail.com" onChange={handleChange} value={billingData.phone} required={true} />
+                    <input name="phone" type="number" className="field" placeholder="Phone" onChange={handleChange} value={billingData.phone} required={true} />
                 </label>
                 <label>
                     <span>Address</span>
@@ -184,6 +188,10 @@ const MyCheckoutForm = () => {
             <button type="submit" className="payment-btn" disabled={!stripe}>{isLoading ? <Spinner animation="border" role="status">
                 <span className="sr-only">Loading...</span>
             </Spinner> : "pay"} </button>
+            <div>
+                <h2 className="text-center">or</h2>
+                <button type="button" className="payment-btn" onClick={handleCashOnDelivery}>Cash on Delivery</button>
+            </div>
             <div>
                 <QRCodeViewer />
             </div>
