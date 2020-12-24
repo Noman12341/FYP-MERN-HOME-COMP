@@ -8,7 +8,7 @@ const auth = require("../Middlewares/auth");
 const owasp = require('owasp-password-strength-test');
 const nodemailer = require('nodemailer');
 const { nanoid } = require("nanoid");
-const messagebird = require('messagebird')('RRNdrp5k2Q4Js1yKTitrqEUhf');
+const messagebird = require('messagebird')('kKpfRr7CkRrZYDrzbpejECrEH');
 
 // check Authentication
 router.get("/checkauth", auth, (req, res) => res.sendStatus(200));
@@ -268,8 +268,10 @@ router.post("/verify-code-number", (req, res) => {
     const { id, token } = req.body;
     messagebird.verify.verify(id, token, (err, response) => {
         if (err) {
+            console.log(err);
             return res.status(400).json({ msg: "error in verifying token" });
         } else {
+            console.log(response);
             return res.status(200).json({ msg: "Your number is varified." });
         }
     });

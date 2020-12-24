@@ -20,7 +20,7 @@ const OrderSchema = new mongoose.Schema({
     }, amount: {
         type: Number,
         required: true
-    }
+    }, items: [],
 }, { timestamps: true });
 const Order = mongoose.model('Order', OrderSchema);
 

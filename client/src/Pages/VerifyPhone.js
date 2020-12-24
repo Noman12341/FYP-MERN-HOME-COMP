@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Alert, Form, Button, Spinner } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { ClearCart } from '../Actions/MyCartActions';
+import { FetchOrderDetails } from '../Actions/OrderActions';
+
 
 function VerifyPhone() {
-
+    const dispatch = useDispatch();
+    const history = useHistory();
     const [alert, setAlert] = useState({
         show: false,
         success: false,
@@ -15,6 +20,9 @@ function VerifyPhone() {
     const [num, setNum] = useState("");
     const [token, setToken] = useState("");
     const [showCodeForm, setCode] = useState(true);
+    const wholeCart = useSelector(state => state.MyCart);
+    const billingData = useSelector(state => state.Order.customerInfo);
+
     const submitNumber = async event => {
         event.preventDefault();
         setIsLoading(true);
@@ -31,17 +39,31 @@ function VerifyPhone() {
             });
     }
 
+    const SubmitOrder = async () => {
+        await axios.post("/api/payment/payment-cash-on-delivery", { ...billingData, items: wholeCart.cartItems, amount: wholeCart.totalAmount })
+            .then(res => {
+                const { orderID, name, email, phone, amountPayed } = res.data;
+                dispatch(FetchOrderDetails(orderID, name, email, phone, amountPayed));
+                dispatch(ClearCart());
+                return;
+            }).catch(error => {
+                console.log(error);
+                return;
+            });
+    }
+
     const submitToken = async e => {
         e.preventDefault();
         setIsLoading(true);
         await axios.post("/api/auth/verify-code-number", { id: localStorage.getItem("codeID"), token })
-            .then(res => {
+            .then(async res => {
                 setAlert({ show: true, success: true, msg: res.data.msg });
                 setToken("");
+                await SubmitOrder();
                 setIsLoading(false);
+                history.push("/order-success");
             }).catch(error => {
                 setAlert({ show: true, success: false, msg: error.response.data.msg });
-                localStorage.removeItem("codeID");
                 setIsLoading(false);
             });
     }
