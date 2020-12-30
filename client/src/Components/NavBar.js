@@ -15,11 +15,15 @@ function NavBar() {
     const location = useLocation();
     const currLocation = location.pathname;
     const countItems = useSelector(state => state.MyCart.totalItems);
-    const [searchWord, setSearchWord] = useState("");
+    // const [searchWord, setSearchWord] = useState("");
+    const [gender, setGender] = useState("");
+    const [color, setColor] = useState("");
     const dispatch = useDispatch();
     const handleSubmit = async (event) => {
         event.preventDefault();
-        dispatch(storeSearchedWord(searchWord));
+        const saveWord = gender + "" + color;
+        // dispatch(storeSearchedWord(searchWord));
+        dispatch(storeSearchedWord(saveWord));
         dispatch(searchOn());
         history.push("/searched-products");
     }
@@ -35,41 +39,41 @@ function NavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="text-right">
             <Form onSubmit={handleSubmit} inline className="search-field">
-                <FormControl type="search" className="main-search-field" placeholder="Search" onChange={(event) => setSearchWord(event.target.value)} value={searchWord} />
+                <FormControl type="search" className="main-search-field" placeholder="Search" value={gender + "" + color} required />
                 {/* Below div is the search inpute dropdown */}
                 <div className="search-dropdown-content">
                     <div>
                         <h6>Men</h6>
                         <div>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Kurta ")}>Kurta</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Suit ")}>Suit</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Dress Shirt ")}>Dress Shirt</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Jackets ")}>Jackets</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Jeans ")}>Jeans</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Westren ")}>Westren</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Eastren ")}>Eastren</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Unstitched ")}>Unstitched</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Kurta ")}>Kurta</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Suit ")}>Suit</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Dress Shirt ")}>Dress Shirt</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Jackets ")}>Jackets</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Jeans ")}>Jeans</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Westren ")}>Westren</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Eastren ")}>Eastren</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Unstitched ")}>Unstitched</Button>
                         </div>
                     </div>
                     <div>
                         <h6>Women</h6>
                         <div>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Solid ")}>Solid</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Digital ")}>Digital</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Suits ")}>Suits</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Formal ")}>Formal</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Semi Formal ")}>Semi formal</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Unstitched ")}>Unstitched</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Trousers ")}>Trousers</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Solid ")}>Solid</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Digital ")}>Digital</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Suits ")}>Suits</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Formal ")}>Formal</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Semi Formal ")}>Semi formal</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Unstitched ")}>Unstitched</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setGender("Trousers ")}>Trousers</Button>
                         </div>
                     </div>
                     <div>
                         <h6>Colors</h6>
                         <div>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Red ")}>Red</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Blue ")}>Blue</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Yellow ")}>Yellow</Button>
-                            <Button bsPrefix="search-sm-btns" onClick={() => setSearchWord(searchWord + "Green ")}>Green</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setColor("Red ")}>Red</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setColor("Blue ")}>Blue</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setColor("Yellow ")}>Yellow</Button>
+                            <Button bsPrefix="search-sm-btns" onClick={() => setColor("Green ")}>Green</Button>
                         </div>
                     </div>
                 </div>

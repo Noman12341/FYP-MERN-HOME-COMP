@@ -49,6 +49,26 @@ a:hover {
     width: 80%;
   }
 }
+.filter-search {
+  width: 80%;
+    height: 45px;
+    padding: 13px 19px;
+    font-family: 'Roboto', sans-serif;
+    font-size: large;
+    line-height: 1;
+    letter-spacing: 0;
+    color: #212121;
+    outline: none;
+    background-color: #f4f4f4;
+    border: 2px solid #f4f4f4;
+    box-shadow: none;
+    border-radius: 2px;
+}
+/* .filter-search:focus {
+  color: #212121;
+  background-color: #f4f4f4;
+  outline: none;
+} */
 /* css for search field with different tags */
 .search-dropdown-content {
   display: none;
@@ -131,7 +151,6 @@ box-shadow: 0px 1px 10px 2px #888888 inset;
   min-width: 180px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
-  transition: 0.5s;
 }
 .brands-drop-down a {
   color: #666;
@@ -383,6 +402,7 @@ box-shadow: 0px 1px 10px 2px #888888 inset;
   color:rgba(0,0,0,0.2);
   font-size:55px;
 }
+
 .box-icon {
   height: 167px;
   width:167px;
