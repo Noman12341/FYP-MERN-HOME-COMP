@@ -28,7 +28,7 @@ a:hover {
   position: relative;
   margin-left: 18%;
 }
-.search-field input[type="search"] {
+.search-field input[type="text"] {
   width: 400px;
   height: 45px;
   padding: 13px 19px;
@@ -83,7 +83,7 @@ a:hover {
   background-color: white;
   z-index: 1;
 }
-input[type="search"]:focus + .search-dropdown-content {
+input[type="text"]:focus + .search-dropdown-content {
   display: block;
 }
 .search-dropdown-content h6 {
@@ -108,6 +108,10 @@ input[type="search"]:focus + .search-dropdown-content {
 }
 .search-dropdown-content .search-sm-btns:hover {
   background-color: #f1f1f1;
+}
+.active-class {
+  background-color:orange!important;
+  color: #fff!important;
 }
 .search-btn {
   height: 45px;
@@ -995,6 +999,10 @@ fieldset label span {
   margin-top: 20px;
   float: none;
   display: block;
+}
+.p-detail-scroll {
+  height: 400px;
+  overflow-y: scroll;
 }
 /* its a selected link using inside navlink of react router dom */
 .selected {

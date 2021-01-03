@@ -4,7 +4,9 @@ import { useLocation } from 'react-router-dom';
 function Footer() {
     const location = useLocation();
     const currLocation = location.pathname;
-    if (currLocation.includes("/login") || currLocation.includes("/register") || currLocation.includes("/admin") || currLocation.includes("/forgot") || currLocation.includes("/verify")) return null;
+    // hide footer for the following routes in anyother case
+    // currLocation.includes("/login") || currLocation.includes("/register") ||  || currLocation.includes("/forgot") || currLocation.includes("/verify")
+    if (currLocation.includes("/admin")) return null;
     const currentYear = new Date().getFullYear();
     return <footer id="footer">
         <div style={{ padding: "75px 0 105px" }}>

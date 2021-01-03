@@ -42,6 +42,7 @@ const MyCheckoutForm = () => {
     });
     const dispatch = useDispatch();
     const totalAmount = useSelector(state => state.MyCart.totalAmount);
+    const cartItems = useSelector(state => state.MyCart.cartItems);
     function handleChange(e) {
         const { name, value } = e.target;
         setBillingData(preValue => {
@@ -125,7 +126,7 @@ const MyCheckoutForm = () => {
             console.log('[PaymentMethod]', paymentMethod);
             // now posting payment token to backend for confirm payment
             const { id } = paymentMethod;
-            await Axios.post("/api/payment/checkout", { id, amount: totalAmount * 100, ...billingData })
+            await Axios.post("/api/payment/checkout", { id, amount: totalAmount * 100, items: cartItems, ...billingData })
                 .then(res => {
                     if (res.status === 200) {
                         elements.getElement(CardElement).clear();

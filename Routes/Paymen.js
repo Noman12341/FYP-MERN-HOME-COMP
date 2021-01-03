@@ -6,7 +6,7 @@ const QRCode = require('../Modals/QRCode');
 const fs = require('fs');
 const stripe = new Stripe('sk_test_47o8MwrffpGMbg37bIhrfvQn00WuHuxISx');
 router.post("/checkout", async (req, res) => {
-    const { id, amount, address, name, email, phone } = req.body;
+    const { id, amount, address, name, email, phone, items } = req.body;
 
     try {
         const session = await stripe.paymentIntents.create({
@@ -22,9 +22,10 @@ router.post("/checkout", async (req, res) => {
             email,
             phone,
             address,
-            amount: amount / 100
+            amount: amount / 100,
+            items
         });
-        newOrder.save((err, obj) => {
+        await newOrder.save((err, obj) => {
             if (!err) {
                 return res.status(200).json({ orderID: obj._id, name: obj.name, email: obj.email, phone: obj.phone, amountPayed: obj.amount });
             } else {

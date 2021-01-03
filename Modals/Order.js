@@ -21,6 +21,10 @@ const OrderSchema = new mongoose.Schema({
         type: Number,
         required: true
     }, items: [],
+    isCompleted: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true });
 const Order = mongoose.model('Order', OrderSchema);
 
