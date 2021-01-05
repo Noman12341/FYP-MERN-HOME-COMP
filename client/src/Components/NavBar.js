@@ -15,7 +15,7 @@ function NavBar() {
     const location = useLocation();
     const currLocation = location.pathname;
     const countItems = useSelector(state => state.MyCart.totalItems);
-    let [searchWord, setSearchWord] = useState("");
+    // let [searchWord, setSearchWord] = useState("");
     const [gender, setGender] = useState("");
     const [color, setColor] = useState("");
     const dispatch = useDispatch();
@@ -56,7 +56,7 @@ function NavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="text-right">
             <Form onSubmit={handleSubmit} inline className="search-field">
-                <FormControl type="text" className="main-search-field" placeholder="Search" name="typeWord" value={gender + " " + color + " " + searchWord || ""} onChange={handleChange} required />
+                <FormControl type="text" className="main-search-field" placeholder="Search" name="typeWord" value={gender + "" + color || ""} onChange={handleChange} required />
                 {/* Below div is the search inpute dropdown */}
                 <div className="search-dropdown-content">
                     <div>
@@ -87,10 +87,10 @@ function NavBar() {
                     <div>
                         <h6>Colors</h6>
                         <div>
-                            <Button bsPrefix="search-sm-btns" className={color === "Red" && "active-class"} name="color" value="Red" onClick={handleChange}>Red</Button>
-                            <Button bsPrefix="search-sm-btns" className={color === "Blue" && "active-class"} name="color" value="Blue" onClick={handleChange}>Blue</Button>
-                            <Button bsPrefix="search-sm-btns" className={color === "Yellow" && "active-class"} name="color" value="Yellow" onClick={handleChange}>Yellow</Button>
-                            <Button bsPrefix="search-sm-btns" className={color === "Green" && "active-class"} name="color" value="Green" onClick={handleChange}>Green</Button>
+                            <Button bsPrefix="search-sm-btns" className={color === "Red" && "active-class"} name="color" value=" Red" onClick={handleChange}>Red</Button>
+                            <Button bsPrefix="search-sm-btns" className={color === "Blue" && "active-class"} name="color" value=" Blue" onClick={handleChange}>Blue</Button>
+                            <Button bsPrefix="search-sm-btns" className={color === "Yellow" && "active-class"} name="color" value=" Yellow" onClick={handleChange}>Yellow</Button>
+                            <Button bsPrefix="search-sm-btns" className={color === "Green" && "active-class"} name="color" value=" Green" onClick={handleChange}>Green</Button>
                         </div>
                     </div>
                 </div>

@@ -11,6 +11,8 @@ const QRCode = require('../Modals/QRCode');
 const AdminAuth = require('../Middlewares/adminAuth');
 const { nanoid } = require("nanoid");
 const QR = require('qrcode');
+const nodemailer = require("nodemailer");
+const ejs = require("ejs");
 const { handleEmailMarketing, scrapAlmirah, scrapGulAhmed, scrapSanaSafinaz, scrapDiners } = require('../GlobalFuntions');
 const FinishedAuction = require("../Modals/FinishedAuctions");
 
@@ -164,6 +166,50 @@ router.post("/addAuctionProduct", upload.single('image'), async (req, res) => {
                 else { return res.status(200).json({ msg: "Product is not added." }); }
             });
         } else return res.status(400).json({ msg: "Error in Finding the Product." })
+    });
+});
+// Send multiple items in email marketing
+router.post("/email-marketing", async (req, res) => {
+    const { items } = req.body;
+    // spliting items array into 2 halfs
+    const half = Math.ceil(items.length / 2);
+    const leSiItems = items.splice(0, half)
+    const riSiItems = items.splice(-half)
+    const users = await User.find({}, (err, array) => {
+        if (!err) return array;
+        else throw err;
+    });
+    // userEmails from users overall data
+    const userEmails = users.map(obj => {
+        return obj.email;
+    });
+    // now ready to send getEmails
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'mytestingemail12341@gmail.com',
+            pass: 'hkzrrzlublcbhclj'
+        }
+    });
+    // now render email Template using EJS template engine
+    await ejs.renderFile(`${__dirname}/../Public/html/sendEmail.ejs`, { imgLogo: req.hostname + "/static/images/logo.png", baseUrl: req.hostname + "/static/images/", leSiItems, riSiItems }, async (err, data) => {
+        if (!err) {
+            var mailOptions = {
+                from: 'mytestingemail12341@gmail.com',
+                to: userEmails,
+                subject: 'Just i need to send email with template remaining.',
+                text: 'We just need to send a template inside the  email!',
+                html: data
+            };
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    throw error;
+                } else {
+                    return res.status(200).json({ msg: "Product is added." });
+                }
+            });
+        } else { throw err }
     });
 });
 // route for check if auction ends than put the auction product in finished auction table

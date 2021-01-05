@@ -3,11 +3,14 @@ import { Container, Row, Col, Alert, Table, Card, Image, Button, Modal, Form, Sp
 import axios from 'axios';
 import { store } from 'react-notifications-component';
 import { useHistory } from 'react-router-dom';
+import { FaPlus } from 'react-icons/fa';
 
 function AdminProducts() {
     const history = useHistory();
     const [products, setProducts] = useState([]);
     const [auctionProducts, setAuctionProducts] = useState([]);
+    const [emailMar, setEmailMar] = useState([]);
+
     const [form, setForm] = useState({
         name: "",
         brand: "",
@@ -24,6 +27,7 @@ function AdminProducts() {
     const [showModal1, setModal1] = useState(false);
     const [showModal2, setModal2] = useState(false);
     const [showModal3, setModal3] = useState(false);
+    const [showModal4, setModal4] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -244,7 +248,23 @@ function AdminProducts() {
                 })
             });
     }
-
+    //  function to add product in array for email marketing
+    const AddItemForEmail = p => {
+        const isExist = emailMar.find(v => v._id === p._id);
+        isExist ? setAlert("item Already Added for email Marketing") : setEmailMar([...emailMar, p]);
+    }
+    // function for send products arr for email marketing to node js
+    const handleEmailMarSubmit = async e => {
+        e.preventDefault();
+        await axios.post('/api/admin/email-marketing', { items: emailMar })
+            .then(res => {
+                setAlert("");
+                setModal4(false);
+            }).catch(error => {
+                setAlert("Error, check console for more detail.");
+                console.log(error);
+            });
+    }
     let onHideModal1 = () => {
         setAlert("");
         setModal1(false);
@@ -256,6 +276,10 @@ function AdminProducts() {
     let onHideModal3 = () => {
         setAlert("");
         setModal3(false);
+    }
+    let onHideModal4 = () => {
+        setAlert("");
+        setModal4(false);
     }
     return <Container fluid>
         <Row>
@@ -300,6 +324,7 @@ function AdminProducts() {
                         <Button type="button" onClick={() => setModal1(true)}>Add Product</Button>
                         <Button className="mx-4" type="button" onClick={() => setModal2(true)}>Add Auction Product</Button>
                         <Button type="button" onClick={() => setModal3(true)}>Do webscrapping</Button>
+                        <Button type="button" className="ml-4" onClick={() => setModal4(true)}>Email Marketing</Button>
                     </Card.Body>
                 </Card>
 
@@ -482,6 +507,49 @@ function AdminProducts() {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onHideModal3}>Close</Button>
                     <Button variant="primary" type="submit">{isLoading ? <Spinner animation="border" role="status"></Spinner> : "Save Changes"}</Button>
+                </Modal.Footer>
+            </Form>
+        </Modal>
+        {/* Email Marketing */}
+        <Modal size="lg" show={showModal4} onHide={onHideModal4} animation={false}>
+            <Modal.Header>
+                <Modal.Title>Email Marketing</Modal.Title>
+            </Modal.Header>
+            <Form onSubmit={handleEmailMarSubmit}>
+                <Modal.Body>
+                    {alert && <Alert variant="warning" onClose={() => setAlert("")} dismissible>{alert}</Alert>}
+                    <Card>
+                        <Card.Body>
+                            <Table striped bordered hover responsive>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Brand</th>
+                                        <th>Image</th>
+                                        <th>Price</th>
+                                        <th>Options</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {products.map((product, index) => {
+                                        return <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>{product.name}</td>
+                                            <td>{product.brand}</td>
+                                            <td><Image src={product.isMyProduct ? "/static/images/" + product.image : product.image} className="table-image" /></td>
+                                            <td>{product.price}</td>
+                                            <td><Button bsPrefix="delete-btn" type="button" onClick={() => AddItemForEmail(product)}><FaPlus /></Button></td>
+                                        </tr>
+                                    })}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                    </Card>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={onHideModal4}>Close</Button>
+                    <Button variant="primary" type="submit">{isLoading ? <Spinner animation="border" role="status"></Spinner> : "Save"}</Button>
                 </Modal.Footer>
             </Form>
         </Modal>

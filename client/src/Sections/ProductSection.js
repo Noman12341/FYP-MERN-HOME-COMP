@@ -9,6 +9,7 @@ function ProductSection() {
             await axios.get("/api/products/fetchOwnProducts")
                 .then(res => {
                     setProducts(res.data.products);
+                    console.log(res.data.products)
                 }).catch(error => {
                     if (error.response.status === 400 || error.response.status === 500) {
                         // do anything redirect to error page
