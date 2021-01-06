@@ -171,6 +171,11 @@ router.post("/addAuctionProduct", upload.single('image'), async (req, res) => {
 // Send multiple items in email marketing
 router.post("/email-marketing", async (req, res) => {
     const { items } = req.body;
+    items.forEach(i => {
+        if (i.isMyProduct === true) {
+            i.image = req.hostname + "/static/images/" + i.image;
+        }
+    });
     // spliting items array into 2 halfs
     const half = Math.ceil(items.length / 2);
     const leSiItems = items.splice(0, half)
