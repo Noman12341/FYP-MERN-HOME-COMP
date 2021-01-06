@@ -9,6 +9,7 @@ function AdminProducts() {
     const history = useHistory();
     const [products, setProducts] = useState([]);
     const [auctionProducts, setAuctionProducts] = useState([]);
+    const [filterPEmail, setFilterP] = useState([]);
     const [emailMar, setEmailMar] = useState([]);
 
     const [form, setForm] = useState({
@@ -261,10 +262,12 @@ function AdminProducts() {
             .then(res => {
                 setAlert("");
                 setModal4(false);
+                setEmailMar([]);
                 setIsLoading(false);
             }).catch(error => {
                 setAlert("Error, check console for more detail.");
                 console.log(error);
+                setEmailMar([]);
                 setIsLoading(false);
             });
     }
@@ -282,7 +285,17 @@ function AdminProducts() {
     }
     let onHideModal4 = () => {
         setAlert("");
+        setEmailMar([]);
         setModal4(false);
+    }
+    const showEmailMarModal = () => {
+        const newItems = products.filter(it => it.isMyProduct === true);
+        console.log(newItems);
+        setFilterP(newItems);
+        if (auctionProducts.length > 0) {
+            setFilterP([...filterPEmail, ...auctionProducts])
+        }
+        setModal4(true);
     }
     return <Container fluid>
         <Row>
@@ -327,7 +340,7 @@ function AdminProducts() {
                         <Button type="button" onClick={() => setModal1(true)}>Add Product</Button>
                         <Button className="mx-4" type="button" onClick={() => setModal2(true)}>Add Auction Product</Button>
                         <Button type="button" onClick={() => setModal3(true)}>Do webscrapping</Button>
-                        <Button type="button" className="ml-4" onClick={() => setModal4(true)}>Email Marketing</Button>
+                        <Button type="button" className="ml-4" onClick={showEmailMarModal}>Email Marketing</Button>
                     </Card.Body>
                 </Card>
 
@@ -535,7 +548,7 @@ function AdminProducts() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {products.map((product, index) => {
+                                    {filterPEmail.map((product, index) => {
                                         return <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{product.name}</td>
