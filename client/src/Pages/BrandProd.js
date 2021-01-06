@@ -37,7 +37,7 @@ function BrandProducts() {
     }
     return <section className="section-top-shadow padding-70">
         <Container>
-            <div className="d-flex"><h2 className="text-left mb-5" style={{ flex: "2" }}>Products</h2><div style={{ flex: "1" }}><Form onSubmit={handleFilter} inline><Form.Control type="search" bsPrefix="filter-search" placeholder="filter" onChange={e => setWord(e.target.value)} value={word} required /><Button type="submit" bsPrefix="search-btn"><FaSearch /></Button></Form></div></div>
+            <div className="d-flex"><h2 className="text-left mb-5" style={{ flex: "2" }}>Products</h2><div style={{ flex: "1" }}><Form onSubmit={handleFilter} inline><Form.Control type="search" bsPrefix="filter-search" placeholder="Search" onChange={e => setWord(e.target.value)} value={word} required /><Button type="submit" bsPrefix="search-btn"><FaSearch /></Button></Form></div></div>
             {isLoading ? <PageSpinner containerHeight="50vh" /> : alert ? <Alert variant="dark" onClose={() => setAlert("")} dismissible>
                 <Alert.Heading > Oh snap! You got an error!</Alert.Heading>
                 <p>{alert}</p>

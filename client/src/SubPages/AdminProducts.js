@@ -256,13 +256,16 @@ function AdminProducts() {
     // function for send products arr for email marketing to node js
     const handleEmailMarSubmit = async e => {
         e.preventDefault();
+        setIsLoading(true);
         await axios.post('/api/admin/email-marketing', { items: emailMar })
             .then(res => {
                 setAlert("");
                 setModal4(false);
+                setIsLoading(false);
             }).catch(error => {
                 setAlert("Error, check console for more detail.");
                 console.log(error);
+                setIsLoading(false);
             });
     }
     let onHideModal1 = () => {
