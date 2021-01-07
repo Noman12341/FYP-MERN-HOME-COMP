@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Image } from 'react-bootstrap';
 import CountDown from './CountDown';
 import { Link } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ function AuctionCard(props) {
     return <Card>
         <CountDown countDown={auctionEndingDate} pID={_id} />
         <Link to={"/product-auction-detail/" + _id}>
-            {image && <Card.Img variant="top" src={"/static/images/" + image} height="320" />}
+            {image && <Image className="card-img-top" src={"/static/images/" + image} height="290" />}
         </Link>
         <Card.Body className="p-0 pt-2">
             <div>

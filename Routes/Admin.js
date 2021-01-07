@@ -370,9 +370,18 @@ router.get("/admin-count-modals", AdminAuth, async (req, res) => {
 router.delete("/delete-user/:userID", async (req, res) => {
     const { userID } = req.params;
     if (userID) {
-        await User.deleteOne({ _id: userID }, err => {
-            if (!err) { return res.status(200).json({ msg: "user Deleted!" }); }
-            else { return res.status(400).json({ msg: "User not deleted." }); }
+        await User.findOneAndDelete({ _id: userID }, async (err, obj) => {
+            if (!err) {
+                await QRCode.findOneAndDelete({ userEmail: obj.email }, async (err, codeData) => {
+                    if (!err) {
+                        fs.unlink("Public/QRCodes/" + codeData.qrCodeImg, err => {
+                            if (!err) {
+                                return res.status(200).json({ msg: "Deleted Successfully!" });
+                            } else res.status(400).json({ msg: "Image is not deleted when deleting QRCode from database." });
+                        });
+                    } else { return res.status(400).json({ msg: "Error in finding and deleting the QRCode." }) }
+                });
+            } else { return res.status(400).json({ msg: "Error in finding and delteing the User" }); }
         });
     } else { return res.status(400).json({ msg: "No value recieved!" }); }
 });

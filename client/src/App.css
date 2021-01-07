@@ -203,6 +203,74 @@ box-shadow: 0px 1px 10px 2px #888888 inset;
   color: black;
   background-color: white;
 }
+/* carousel Banner Css below */
+#carousel-banner {
+   padding: 24px 60px;
+   color: #333;
+   background-color: #f2f3f7;
+}
+#carousel-banner > div {
+  border: 1px solid #DCDEE3;
+  background-color: #fff;
+  padding: 20px;
+}
+.heading-bands {
+  padding: 10px;
+  line-height: 19px;
+  font-size: 14px;
+  color: #333333;
+  margin: 0 10px 10px;
+  border-bottom: 2px solid #F4F4F4;
+  display: flex;
+  justify-content: space-between;
+}
+.banner-bands > ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.banner-bands > ul > li > a {
+  display: block;
+  padding: 10px;
+  transition: .3s;
+  color: #333;
+  border: 2px solid #fff;
+  font-weight: 600;
+}
+.banner-bands > ul > li > a:hover {
+  color: orange;
+  border: 2px solid #F4F4F4;
+}
+.carousel {
+  height: 500px;
+}
+.carousel img {
+  height: 500px;
+}
+.carousel-indicators li{
+  height: 11px;
+  width: 11px;
+  background-color: #f4f4f4;
+  border: 2px solid #f4f4f4;
+  border-radius: 50%;
+}
+.carousel-indicators .active {
+  border-color: orange;
+}
+.carousel-control-prev {
+  height: 70px;
+  width: 40px;
+  background-color: #000;
+  color: #fff;
+  margin: auto 0;
+}
+.carousel-control-next {
+  height: 70px;
+  width: 40px;
+  background-color: #000;
+  color: #fff;
+  margin: auto 0;
+}
 .section-top-shadow::before {
   content: '';
   position: absolute;

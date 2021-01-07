@@ -1,5 +1,6 @@
 import React from 'react';
-import Banner from '../Components/Banner';
+// import Banner from '../Components/Banner';
+import CarouselBanner from '../Components/CarouselBanner';
 import ProductSection from '../Sections/ProductSection';
 import AuctionSection from '../Sections/AuctionSection';
 import WorkSection from '../Sections/HowItWorkSection';
@@ -8,7 +9,8 @@ import FinishedAuctionSec from '../Sections/FinishedAuctionSec';
 
 function Home() {
     return <div>
-        <Banner />
+        {/* <Banner /> */}
+        <CarouselBanner />
         <ProductSection />
         <AuctionSection />
         <FinishedAuctionSec />

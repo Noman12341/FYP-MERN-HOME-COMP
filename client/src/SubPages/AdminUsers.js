@@ -24,7 +24,7 @@ function AdminUsers() {
             .then(res => {
                 setUsers(users.filter(item => item._id !== userID));
             }).catch(error => {
-                console.log(error);
+                console.log(error.response.data.msg);
             });
     }
     return <Container fluid>
