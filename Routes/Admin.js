@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require('../Modals/Product');
 const AuctionProduct = require('../Modals/AuctionProduct');
 const Bid = require('../Modals/Bid');
+const Comment = require('../Modals/Comment');
 const upload = require("../Middlewares/multer");
 const fs = require('fs');
 const User = require('../Modals/User');
@@ -58,46 +59,47 @@ router.post("/ScrapProducts", async (req, res) => {
 });
 // delete Simple Product which are not scraped
 router.get("/deleteProduct/:ID/:imageName", async (req, res) => {
-    await Product.deleteOne({ _id: req.params.ID }, err => {
+    await Product.deleteOne({ _id: req.params.ID }, async err => {
         if (!err) {
-            fs.unlink("Public/images/" + req.params.imageName, (err) => {
-                if (!err) return res.sendStatus(200);
-                else return res.sendStatus(400);
+            await Comment.deleteMany({ productID: req.params.ID }, err => {
+                if (err) return res.status(400).json({ msg: "Error, in deleting Comments." });
+                // if not error
+                fs.unlink("Public/images/" + req.params.imageName, (err) => {
+                    if (!err) return res.sendStatus(200);
+                    else return res.sendStatus(400);
+                });
             });
         } else return res.sendStatus(400);
     });
 });
 // delete Scraped products
 router.get("/deleteScrapedProduct/:id", async (req, res) => {
-    await Product.deleteOne({ _id: req.params.id }, err => {
-        if (!err) return res.status(200).json({ msg: "product is delted" })
-        else return res.status(400).json({ msg: "Product is not delted" })
-    })
-})
+    await Product.deleteOne({ _id: req.params.id }, async err => {
+        if (err) return res.status(400).json({ msg: "Error in deleting the scrap Product" });
+        await Comment.deleteMany({ productID: req.params.id }, err => {
+            if (err) return res.status(400).json({ msg: "Error in deleting the comments." });
+            return res.status(200).json({ msg: "Product is deleted" });
+        });
+    });
+});
 
 // delete auction product
 router.get("/deleteAuctionProduct/:ID/:imageName", async (req, res) => {
     const { ID, imageName } = req.params;
-    await AuctionProduct.findByIdAndDelete(ID, async err => {
+    await AuctionProduct.deleteOne({ _id: ID }, async err => {
         if (!err) {
-            await Bid.findOne({ productID: ID }, async (err, bid) => {
+            await Comment.deleteMany({ productID: ID }, async err => {
                 if (!err) {
-                    if (bid) {
-                        await Bid.deleteMany({ productID: ID }, (err) => {
-                            if (!err) {
-                                fs.unlink("Public/images/" + imageName, (err) => {
-                                    if (!err) res.status(200).json({ msg: "Image also delted" });
-                                    else res.status(400).json({ msg: "Image is not deleted err" });
-                                });
-                            } else res.status(400).json({ msg: "err in deleting the bid" });
-                        })
-                    } else {
-                        fs.unlink("Public/images/" + imageName, (err) => {
-                            if (!err) res.status(200).json({ msg: "Image also delted" });
-                            else res.status(400).json({ msg: "Image is not deleted err" });
-                        });
-                    }
-                } else res.status(400).json({ msg: "error in finding the Bid" });
+                    await Bid.deleteMany({ productID: ID }, err => {
+                        if (!err) {
+                            fs.unlink("Public/images/" + imageName, (err) => {
+                                if (!err) {
+                                    return res.status(200).json({ msg: "Image also delted" });
+                                } else { return res.status(400).json({ msg: "Image is not deleted err" }); }
+                            });
+                        } else return res.status(400).json({ msg: "Error in deleteing the bids." });
+                    });
+                } else return res.status(400).json({ msg: "Error, in deleteing the comments" });
             });
         } else res.status(400).json({ msg: "Error in deleteing the Auction Product." })
     });
