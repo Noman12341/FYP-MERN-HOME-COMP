@@ -109,7 +109,6 @@ function AuthPage() {
             });
     }
     return <Container id="auth-container" fluid style={{ backgroundColor: "#f4f4f4", height: currPath === "/login" ? "110vh" : "130vh" }}>
-        <div className="account-chose-link"><Link to="/">Back to Main Page</Link></div>
         <div className="account-chose-link-left"><Link to={currPath === "/login" ? "/register" : "/login"}>{currPath === "/login" ? "Register Now" : "Sign In Now"}</Link></div>
         <Row>
             <Col md={6} className="m-auto">

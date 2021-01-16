@@ -289,11 +289,9 @@ function AdminProducts() {
         setModal4(false);
     }
     const showEmailMarModal = () => {
-        const newItems = products.filter(it => it.isMyProduct === true);
-        console.log(newItems);
-        setFilterP(newItems);
+        const newItems = products.filter(p => p.isMyProduct === true);
         if (auctionProducts.length > 0) {
-            setFilterP([...filterPEmail, ...auctionProducts])
+            setFilterP([...newItems, ...auctionProducts])
         }
         setModal4(true);
     }
@@ -318,15 +316,14 @@ function AdminProducts() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {products.map((product, index) => {
-                                    return <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td>{product.name}</td>
-                                        <td>{product.brand}</td>
-                                        <td><Image src={product.isMyProduct ? "/static/images/" + product.image : product.image} className="table-image" /></td>
-                                        <td>{product.price}</td>
-                                        {product.isMyProduct.toString() === "true" ? <td><Button bsPrefix="delete-btn" type="button" onClick={() => deleteProduct(product._id, product.image)}><i className="far fa-trash-alt"></i></Button></td> :
-                                            <td><Button bsPrefix="delete-btn" type="button" onClick={() => deleteScrapedProduct(product._id)}><i className="far fa-trash-alt"></i></Button></td>}
+                                {products.filter(p => p.isMyProduct).map((p, i) => {
+                                    return <tr key={i}>
+                                        <td>{i + 1}</td>
+                                        <td>{p.name}</td>
+                                        <td>{p.brand}</td>
+                                        <td><Image src={"/static/images/" + p.image} className="table-image" /></td>
+                                        <td>{p.price}</td>
+                                        <td><Button bsPrefix="delete-btn" type="button" onClick={() => deleteProduct(p._id, p.image)}><i className="far fa-trash-alt"></i></Button></td>
                                     </tr>
                                 })}
                             </tbody>
@@ -345,7 +342,7 @@ function AdminProducts() {
                 </Card>
 
             </Col>
-            <Col lg={12} className="">
+            <Col lg={12}>
                 <Card>
                     <Card.Header>
                         <h4 className="card-title">Auction Products table</h4>
@@ -374,6 +371,40 @@ function AdminProducts() {
                                         <td>{product.initialPrice}</td>
                                         <td>{product.currentPrice}</td>
                                         <td> <Button bsPrefix="delete-btn" type="button" onClick={() => deleteAuctionProduct(product._id, product.image)}><i className="far fa-trash-alt"></i></Button></td>
+                                    </tr>
+                                })}
+                            </tbody>
+                        </Table>
+                    </Card.Body>
+                </Card>
+            </Col>
+            <Col lg={12} className="mt-5">
+                <Card>
+                    <Card.Header>
+                        <h4 className="card-title">Brands Products table</h4>
+                        <p className="card-para">It contains all the other Brands Products that u scraped on the website.</p>
+                    </Card.Header>
+                    <Card.Body>
+                        <Table striped bordered hover responsive>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Brand</th>
+                                    <th>Image</th>
+                                    <th>Price</th>
+                                    <th>Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {products.filter(p => p.isMyProduct === false).map((p, i) => {
+                                    return <tr key={i}>
+                                        <td>{i + 1}</td>
+                                        <td>{p.name}</td>
+                                        <td>{p.brand}</td>
+                                        <td><Image src={p.image} className="table-image" /></td>
+                                        <td>{p.price}</td>
+                                        <td><Button bsPrefix="delete-btn" type="button" onClick={() => deleteScrapedProduct(p._id)}><i className="far fa-trash-alt"></i></Button></td>
                                     </tr>
                                 })}
                             </tbody>
@@ -554,7 +585,7 @@ function AdminProducts() {
                                             <td>{product.name}</td>
                                             <td>{product.brand}</td>
                                             <td><Image src={product.isMyProduct ? "/static/images/" + product.image : product.image} className="table-image" /></td>
-                                            <td>{product.price}</td>
+                                            <td>{product.price || product.initialPrice}</td>
                                             <td><Button bsPrefix="delete-btn" type="button" onClick={() => AddItemForEmail(product)}><FaPlus /></Button></td>
                                         </tr>
                                     })}

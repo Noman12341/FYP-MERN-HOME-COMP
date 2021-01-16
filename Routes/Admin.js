@@ -266,7 +266,15 @@ router.get("/fetchOrders", AdminAuth, async (req, res) => {
         else { return res.status(400).json({ msg: "Orders donot found." }) }
     });
 });
-
+// put required to compelete the orders
+router.put('/deliver-order/:id', async (req, res) => {
+    const { id } = req.params;
+    await Order.updateOne({ _id: id }, { isDelivered: true }, (err) => {
+        if (err) return res.status(400).json({ msg: "Error, error in updating process" + err });
+        // if not error
+        return res.sendStatus(200);
+    });
+});
 // fetch all the qrcodes
 router.get("/fetchqrcodes", AdminAuth, async (req, res) => {
     await QRCode.find({}, (err, codes) => {

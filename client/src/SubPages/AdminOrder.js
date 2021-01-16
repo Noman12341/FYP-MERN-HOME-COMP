@@ -7,6 +7,7 @@ function AdminOrders() {
     const history = useHistory();
     const [orders, setOrders] = useState([]);
     const [pd, setPD] = useState({});
+    const [run, setRun] = useState(false);
     useEffect(() => {
         const fetchUsers = async () => {
             await axios.get("/api/admin/fetchOrders", { headers: { "x-admin-token": localStorage.getItem('adminToken') } })
@@ -19,7 +20,15 @@ function AdminOrders() {
                 });
         }
         fetchUsers();
-    }, [history]);
+    }, [history, run]);
+    const handleOrderComplete = async id => {
+        await axios.put("/api/admin/deliver-order/" + id)
+            .then(res => {
+                setRun(!run);
+            }).catch(error => {
+                console.log(error.response.data.msg);
+            });
+    }
     const handleDelete = async orderID => {
         await axios.delete('/api/admin/delete-order/' + orderID)
             .then(res => {
@@ -43,9 +52,10 @@ function AdminOrders() {
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Total Items</th>
-                                    <th>IsCompleted</th>
+                                    <th>IsDelivered</th>
+                                    <th>isPayCompleted</th>
                                     <th>Show Detail</th>
-                                    <th>Complete</th>
+                                    <th>Delivered</th>
                                     <th>Remove</th>
                                 </tr>
                             </thead>
@@ -55,9 +65,10 @@ function AdminOrders() {
                                         <td>{index + 1}</td>
                                         <td>{order.name}</td>
                                         <td>{order.items.length}</td>
-                                        <td>False</td>
+                                        <td>{String(order.isDelivered)}</td>
+                                        <td>{String(order.isPayCompleted)}</td>
                                         <td><Button variant="primary" onClick={() => setPD(order)}>detail</Button></td>
-                                        <td><Button variant="primary">Complete</Button></td>
+                                        <td>{order.isDelivered ? "Delivered" : <Button variant="primary" onClick={() => handleOrderComplete(order._id)}>Deliver</Button>}</td>
                                         <td><Button bsPrefix="delete-btn" type="button" onClick={() => handleDelete(order._id)} ><i className="far fa-trash-alt"></i></Button></td>
                                     </tr>
                                 })}

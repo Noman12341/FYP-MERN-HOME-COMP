@@ -9,7 +9,11 @@ function QRCodeView() {
                 .then(res => {
                     setImgSrc(res.data.img);
                 }).catch(error => {
-                    setImgSrc(error.response.data.img);
+                    if (error.response.status === 400) {
+                        console.log(error.response.data.msg);
+                    } else {
+                        console.log(error);
+                    }
                 });
         }
         fetchCodeImg();

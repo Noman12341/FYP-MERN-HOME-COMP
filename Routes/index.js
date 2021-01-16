@@ -141,15 +141,14 @@ router.post("/fetchqrcode", async (req, res) => {
         if (!err) {
             if (found) {
                 return res.status(200).json({ img: found.qrCodeImg });
-            } else res.status(400).json({ img: "" });
+            } else return res.status(400).json({ msg: "No QRCode found on this user" });
         } else return res.status(400).json({ msg: "Error In finding the Qode" });
-
     });
 });
 
-// set Action ending routes
+// fetch auction products when user loged in
 router.get("/fetchFinishedAuction/:userID", async (req, res) => {
-    await FinishedAuction.find({ userID: req.params.userID }, (err, obj) => {
+    await FinishedAuction.find({ $and: [{ userID: req.params.userID }, { isPaid: false }] }, (err, obj) => {
         if (!err) {
             if (obj) {
                 return res.status(200).json({ finishedAuction: obj });

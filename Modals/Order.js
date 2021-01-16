@@ -21,7 +21,10 @@ const OrderSchema = new mongoose.Schema({
         type: Number,
         required: true
     }, items: [],
-    isCompleted: {
+    isDelivered: {
+        type: Boolean,
+        default: false
+    }, isPayCompleted: {
         type: Boolean,
         default: false
     }

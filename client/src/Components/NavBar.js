@@ -87,10 +87,10 @@ function NavBar() {
                     <div>
                         <h6>Colors</h6>
                         <div>
-                            <Button bsPrefix="search-sm-btns" className={color === "Red" && "active-class"} name="color" value=" Red" onClick={handleChange}>Red</Button>
-                            <Button bsPrefix="search-sm-btns" className={color === "Blue" && "active-class"} name="color" value=" Blue" onClick={handleChange}>Blue</Button>
-                            <Button bsPrefix="search-sm-btns" className={color === "Yellow" && "active-class"} name="color" value=" Yellow" onClick={handleChange}>Yellow</Button>
-                            <Button bsPrefix="search-sm-btns" className={color === "Green" && "active-class"} name="color" value=" Green" onClick={handleChange}>Green</Button>
+                            <Button bsPrefix="search-sm-btns" className={color === " Red" && "active-class"} name="color" value=" Red" onClick={handleChange}>Red</Button>
+                            <Button bsPrefix="search-sm-btns" className={color === " Blue" && "active-class"} name="color" value=" Blue" onClick={handleChange}>Blue</Button>
+                            <Button bsPrefix="search-sm-btns" className={color === " Yellow" && "active-class"} name="color" value=" Yellow" onClick={handleChange}>Yellow</Button>
+                            <Button bsPrefix="search-sm-btns" className={color === " Green" && "active-class"} name="color" value=" Green" onClick={handleChange}>Green</Button>
                         </div>
                     </div>
                 </div>
