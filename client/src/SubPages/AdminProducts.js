@@ -3,14 +3,12 @@ import { Container, Row, Col, Alert, Table, Card, Image, Button, Modal, Form, Sp
 import axios from 'axios';
 import { store } from 'react-notifications-component';
 import { useHistory } from 'react-router-dom';
-import { FaPlus } from 'react-icons/fa';
 
 function AdminProducts() {
     const history = useHistory();
     const [products, setProducts] = useState([]);
     const [auctionProducts, setAuctionProducts] = useState([]);
     const [filterPEmail, setFilterP] = useState([]);
-    const [emailMar, setEmailMar] = useState([]);
 
     const [form, setForm] = useState({
         name: "",
@@ -249,25 +247,20 @@ function AdminProducts() {
                 })
             });
     }
-    //  function to add product in array for email marketing
-    const AddItemForEmail = p => {
-        const isExist = emailMar.find(v => v._id === p._id);
-        isExist ? setAlert("item Already Added for email Marketing") : setEmailMar([...emailMar, p]);
-    }
+
     // function for send products arr for email marketing to node js
     const handleEmailMarSubmit = async e => {
         e.preventDefault();
         setIsLoading(true);
-        await axios.post('/api/admin/email-marketing', { items: emailMar })
+        const tempArr = filterPEmail.filter(p => p.isChecked === true);
+        await axios.post('/api/admin/email-marketing', { items: tempArr })
             .then(res => {
                 setAlert("");
                 setModal4(false);
-                setEmailMar([]);
                 setIsLoading(false);
             }).catch(error => {
                 setAlert("Error, check console for more detail.");
                 console.log(error);
-                setEmailMar([]);
                 setIsLoading(false);
             });
     }
@@ -285,13 +278,18 @@ function AdminProducts() {
     }
     let onHideModal4 = () => {
         setAlert("");
-        setEmailMar([]);
         setModal4(false);
     }
     const showEmailMarModal = () => {
         const newItems = products.filter(p => p.isMyProduct === true);
+        const checkItems = newItems.map(i => {
+            return { isChecked: false, ...i }
+        });
         if (auctionProducts.length > 0) {
-            setFilterP([...newItems, ...auctionProducts])
+            const checkedAuc = auctionProducts.map(i => {
+                return { isChecked: false, ...i }
+            })
+            setFilterP([...checkItems, ...checkedAuc]);
         }
         setModal4(true);
     }
@@ -378,7 +376,7 @@ function AdminProducts() {
                     </Card.Body>
                 </Card>
             </Col>
-            <Col lg={12} className="mt-5">
+            {/* <Col lg={12} className="mt-5">
                 <Card>
                     <Card.Header>
                         <h4 className="card-title">Brands Products table</h4>
@@ -411,7 +409,7 @@ function AdminProducts() {
                         </Table>
                     </Card.Body>
                 </Card>
-            </Col>
+            </Col> */}
         </Row>
         {/* Modals for adding Simple Products */}
         <Modal size="lg" show={showModal1} onHide={onHideModal1} animation={false}>
@@ -576,6 +574,7 @@ function AdminProducts() {
                                         <th>Image</th>
                                         <th>Price</th>
                                         <th>Options</th>
+                                        <th>Check</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -586,7 +585,16 @@ function AdminProducts() {
                                             <td>{product.brand}</td>
                                             <td><Image src={product.isMyProduct ? "/static/images/" + product.image : product.image} className="table-image" /></td>
                                             <td>{product.price || product.initialPrice}</td>
-                                            <td><Button bsPrefix="delete-btn" type="button" onClick={() => AddItemForEmail(product)}><FaPlus /></Button></td>
+                                            <td><input type="checkbox" onChange={e => {
+                                                let check = e.target.checked;
+                                                setFilterP(filterPEmail.map(p => {
+                                                    if (p._id === product._id) {
+                                                        p.isChecked = check;
+                                                    }
+                                                    return p;
+                                                }));
+                                            }
+                                            } checked={product.isChecked} /></td>
                                         </tr>
                                     })}
                                 </tbody>
