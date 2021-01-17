@@ -93,6 +93,12 @@ function NavBar() {
                             <Button bsPrefix="search-sm-btns" className={color === " Green" && "active-class"} name="color" value=" Green" onClick={handleChange}>Green</Button>
                         </div>
                     </div>
+                    <div className="my-2 text-center">
+                        <Button bsPrefix="clear-btn" onClick={() => {
+                            setGender("");
+                            setColor("");
+                        }}><h6>Clear Input Field</h6></Button>
+                    </div>
                 </div>
                 <Button bsPrefix="search-btn" type="submit"><i className="fas fa-search"></i></Button>
             </Form>

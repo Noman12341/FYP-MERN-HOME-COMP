@@ -24,6 +24,14 @@ a:hover {
   font-size:30px;
   margin-left: 4%;
 }
+.clear-btn {
+  border: 2px solid #f3f3f3;
+  background: none;
+  transition: background-color .3s;
+}
+.clear-btn:hover {
+  background-color: #ffd613;
+}
 .search-field {
   position: relative;
   margin-left: 18%;
@@ -75,7 +83,7 @@ a:hover {
   position: absolute;
   top: 45px;
   left: 0;
-  height: 400px;
+  min-height: 420px;
   width: 400px;
   padding: 10px;
   text-align: left;
