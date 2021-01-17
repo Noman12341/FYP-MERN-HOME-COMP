@@ -156,6 +156,19 @@ router.get("/fetchFinishedAuction/:userID", async (req, res) => {
         } else return res.sendStatus(400);
     });
 });
+// fetch catagories product page items
+router.get("/catagory-items/:catagory", async (req, res) => {
+    const { catagory } = req.params;
+    await Product.find({ catagory }, async (err, products) => {
+        if (err) return res.status(400).json({ msg: "Error in finding the products using catagory param." });
+
+        await AuctionProduct.find({ catagory }, (err, auctionP) => {
+            if (err) return res.status(400).json({ msg: "Error in finding the auction products using catagory param." });
+
+            return res.status(200).json({ products, auctionP });
+        });
+    });
+});
 // fetch Auction Products
 router.get("/fetchFinishedAuctions", async (req, res) => {
     await FinishedAuction.find({}, (err, products) => {

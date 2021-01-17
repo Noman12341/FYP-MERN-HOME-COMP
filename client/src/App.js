@@ -24,7 +24,7 @@ import ForgotPass from './Pages/ForgotPassword';
 import ActiveEmail from './Pages/ActiveEmail';
 import ViewBids from './Pages/ViewBids';
 import VerifyPhone from './Pages/VerifyPhone';
-
+import CatagoriesPage from './Pages/CatagoriesPage';
 function App() {
   return <Router>
     <ReactNotification />
@@ -35,6 +35,7 @@ function App() {
       <Route path="/product-details/:productID" exact component={ProductDetail} />
       <Route path="/product-brands/:brand" exact component={BrandProducts} />
       <Route path="/searched-products" exact component={Search} />
+      <Route path="/catagories/:catagory" exact component={CatagoriesPage} />
       <Route path="/scrap-product-detail" exact component={ScrapPDetail} />
       <Route path="/login" exact component={AuthPage} />
       <Route path="/register" exact component={AuthPage} />

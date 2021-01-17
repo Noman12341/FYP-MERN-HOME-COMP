@@ -32,9 +32,9 @@ function CarouselBanner() {
                     <div className="heading-bands"><strong style={{ color: "orange" }}>Catagories</strong></div>
                     <div className="banner-bands">
                         <ul>
-                            <li><Link to="/">Men</Link></li>
-                            <li><Link to="/">Women</Link></li>
-                            <li><Link to="/">Electronics</Link></li>
+                            <li><Link to="/catagories/Men">Men</Link></li>
+                            <li><Link to="/catagories/Women">Women</Link></li>
+                            <li><Link to="/catagories/Electronics">Electronics</Link></li>
                         </ul>
                     </div>
                 </Col>
