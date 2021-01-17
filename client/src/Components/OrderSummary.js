@@ -4,7 +4,7 @@ import { Form, Col, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { applyDiscount } from '../Actions/MyCartActions';
-
+import { store } from 'react-notifications-component';
 function OrderSummary() {
 
     const myCart = useSelector(state => state.MyCart);
@@ -15,11 +15,22 @@ function OrderSummary() {
         event.preventDefault();
         await axios.post("/api/payment/check-discount", { disCode })
             .then(res => {
-                console.log(res.data);
+                store.addNotification({
+                    title: "Success!",
+                    message: "Discount Code Applyied.",
+                    type: "success",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
                 dispatch(applyDiscount(res.data.obj.disPrice));
                 setCode(null);
             }).catch(error => {
-                console.log(error);
                 setAlert(error.response.data.msg);
             });
     }

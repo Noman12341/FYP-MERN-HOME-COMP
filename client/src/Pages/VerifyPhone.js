@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Alert, Form, Button, Spinner } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { ClearCart } from '../Actions/MyCartActions';
 import { FetchOrderDetails } from '../Actions/OrderActions';
-
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 function VerifyPhone() {
     const dispatch = useDispatch();
@@ -25,8 +26,9 @@ function VerifyPhone() {
 
     const submitNumber = async event => {
         event.preventDefault();
+        console.log(num);
         setIsLoading(true);
-        await axios.post('/api/auth/send-number', { number: num })
+        await axios.post('/api/auth/send-number', { number: "+" + num })
             .then(res => {
                 localStorage.setItem("codeID", res.data.id)
                 setAlert({ show: true, success: true, msg: res.data.msg });
@@ -69,7 +71,6 @@ function VerifyPhone() {
     }
 
     return <Container id="auth-container" style={{ height: "100vh", backgroundColor: "#f4f4f4" }} fluid>
-        <div className="account-chose-link"><Link to="/">Back to Main Page</Link></div>
         <Row>
             <Col md={6} className="mx-auto">
                 <Card>
@@ -79,7 +80,8 @@ function VerifyPhone() {
                         {!hideForm && <Form onSubmit={submitNumber}>
                             <Form.Group>
                                 <Form.Label>Enter Phone No to verify</Form.Label>
-                                <Form.Control type="tel" onChange={e => setNum(e.target.value)} value={num} required />
+                                <PhoneInput country={'pk'} value={num} onChange={phone => setNum(phone)} />
+                                {/* <Form.Control type="tel" onChange={e => setNum(e.target.value)} value={num} required /> */}
                             </Form.Group>
                             <Button type="submit" bsPrefix="auth-button-submit">{isLoading ? <Spinner animation="border" /> : "Verify"}</Button>
                         </Form>}
