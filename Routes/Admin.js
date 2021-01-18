@@ -275,6 +275,15 @@ router.put('/deliver-order/:id', async (req, res) => {
         return res.sendStatus(200);
     });
 });
+// update Auction Product Data
+router.post("/update-auction", async (req, res) => {
+    const { _id, name, brand, catagory, price, description, date } = req.body;
+    await AuctionProduct.updateOne({ _id }, { name, brand, catagory, initialPrice: price, description, auctionEndingDate: date }, err => {
+        if (err) return res.status(400).json({ msg: "Error in updating." });
+
+        return res.sendStatus(200);
+    });
+});
 // fetch all the qrcodes
 router.get("/fetchqrcodes", AdminAuth, async (req, res) => {
     await QRCode.find({}, (err, codes) => {

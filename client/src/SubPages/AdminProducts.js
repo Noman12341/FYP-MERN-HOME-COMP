@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Alert, Table, Card, Image, Button, Modal, Form, Spinner } from 'react-bootstrap';
+import { GrDocumentUpdate } from 'react-icons/gr';
 import axios from 'axios';
 import { store } from 'react-notifications-component';
 import { useHistory } from 'react-router-dom';
@@ -9,7 +10,15 @@ function AdminProducts() {
     const [products, setProducts] = useState([]);
     const [auctionProducts, setAuctionProducts] = useState([]);
     const [filterPEmail, setFilterP] = useState([]);
-
+    const [update, setUpDate] = useState({
+        _id: "",
+        name: "",
+        brand: "",
+        catagory: "Men",
+        price: "",
+        description: "",
+        date: "",
+    });
     const [form, setForm] = useState({
         name: "",
         brand: "",
@@ -27,6 +36,7 @@ function AdminProducts() {
     const [showModal2, setModal2] = useState(false);
     const [showModal3, setModal3] = useState(false);
     const [showModal4, setModal4] = useState(false);
+    const [showModal5, setModal5] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -280,6 +290,10 @@ function AdminProducts() {
         setAlert("");
         setModal4(false);
     }
+    let onHideModal5 = () => {
+        setAlert("");
+        setModal5(false);
+    }
     const showEmailMarModal = () => {
         const newItems = products.filter(p => p.isMyProduct === true);
         const checkItems = newItems.map(i => {
@@ -292,6 +306,26 @@ function AdminProducts() {
             setFilterP([...checkItems, ...checkedAuc]);
         }
         setModal4(true);
+    }
+    const handleChangeUpdate = e => {
+        setUpDate({ ...update, [e.target.name]: e.target.value });
+    }
+    const showUpdateModal = (p) => {
+        const { _id, name, brand, catagory, description, initialPrice, auctionEndingDate } = p;
+        setUpDate({ _id, name, brand, catagory, description, price: initialPrice, date: auctionEndingDate });
+        setModal5(true);
+    }
+    const handleSubmitUpdate = async e => {
+        e.preventDefault();
+        setIsLoading(true);
+        await axios.post("/api/admin/update-auction", { ...update })
+            .then(res => {
+                setIsLoading(false);
+                setModal5(false);
+            }).catch(error => {
+                setAlert(error.response.data.msg);
+                setIsLoading(false);
+            });
     }
     return <Container fluid>
         <Row>
@@ -368,7 +402,9 @@ function AdminProducts() {
                                         <td><Image src={"/static/images/" + product.image} className="table-image" /></td>
                                         <td>{product.initialPrice}</td>
                                         <td>{product.currentPrice}</td>
-                                        <td> <Button bsPrefix="delete-btn" type="button" onClick={() => deleteAuctionProduct(product._id, product.image)}><i className="far fa-trash-alt"></i></Button></td>
+                                        <td> <Button bsPrefix="delete-btn" type="button" onClick={() => deleteAuctionProduct(product._id, product.image)}><i className="far fa-trash-alt"></i></Button>
+                                            <Button bsPrefix="delete-btn" className="ml-1" type="button" onClick={() => showUpdateModal(product)}><GrDocumentUpdate /></Button>
+                                        </td>
                                     </tr>
                                 })}
                             </tbody>
@@ -376,7 +412,7 @@ function AdminProducts() {
                     </Card.Body>
                 </Card>
             </Col>
-            {/* <Col lg={12} className="mt-5">
+            <Col lg={12} className="mt-5">
                 <Card>
                     <Card.Header>
                         <h4 className="card-title">Brands Products table</h4>
@@ -409,7 +445,7 @@ function AdminProducts() {
                         </Table>
                     </Card.Body>
                 </Card>
-            </Col> */}
+            </Col>
         </Row>
         {/* Modals for adding Simple Products */}
         <Modal size="lg" show={showModal1} onHide={onHideModal1} animation={false}>
@@ -520,6 +556,54 @@ function AdminProducts() {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onHideModal2}>Close</Button>
+                    <Button variant="primary" type="submit">{isLoading ? <Spinner animation="border" role="status">
+                    </Spinner> : "Save Changes"}</Button>
+                </Modal.Footer>
+            </Form>
+        </Modal>
+        {/* Modal for adding updating Auction Products */}
+        <Modal size="lg" show={showModal5} onHide={onHideModal5} animation={false}>
+            <Modal.Header>
+                <Modal.Title>Update Auction Product</Modal.Title>
+            </Modal.Header>
+            <Form onSubmit={handleSubmitUpdate}>
+                <Modal.Body>
+                    {alert && <Alert variant="warning">{alert}</Alert>}
+                    <Form.Row>
+                        <Form.Group as={Col}>
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control type="text" name="name" value={update.name} onChange={handleChangeUpdate} required />
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                            <Form.Label>Brand</Form.Label>
+                            <Form.Control type="text" name="brand" value={update.brand} onChange={handleChangeUpdate} required />
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                            <Form.Label>Catagory</Form.Label>
+                            <Form.Control as="select" className="mr-sm-2" name="catagory" onChange={handleChangeUpdate} custom>
+                                <option value="Men">Men</option>
+                                <option value="Women">Women</option>
+                                <option value="Electronics">Electronics</option>
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                            <Form.Label>Date</Form.Label>
+                            <Form.Control className="mr-sm-2" type="datetime-local" name="date" value={update.date} onChange={handleChangeUpdate} required />
+                        </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                        <Form.Group as={Col}>
+                            <Form.Label>Price</Form.Label>
+                            <Form.Control type="number" name="price" value={update.price} onChange={handleChangeUpdate} required />
+                        </Form.Group>
+                    </Form.Row>
+                    <Form.Group>
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control as="textarea" rows={4} name="description" value={update.description} onChange={handleChangeUpdate} required />
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={onHideModal5}>Close</Button>
                     <Button variant="primary" type="submit">{isLoading ? <Spinner animation="border" role="status">
                     </Spinner> : "Save Changes"}</Button>
                 </Modal.Footer>

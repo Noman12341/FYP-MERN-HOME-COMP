@@ -28,6 +28,7 @@ function CatagoriesPage() {
                 });
         }
         fetchProducts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return <main>{isLoading ? <Spinner containerHeight="50vh" /> : <div>
         <section className="section-top-shadow padding-70">
