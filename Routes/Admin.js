@@ -194,7 +194,7 @@ router.post("/email-marketing", async (req, res) => {
         }
     });
     // now render email Template using EJS template engine
-    await ejs.renderFile(`${__dirname}/../Public/html/sendEmail.ejs`, { imgLogo: req.hostname + "/static/images/logo.png", baseUrl: req.hostname + "/static/images/", leSiItems, riSiItems }, async (err, data) => {
+    await ejs.renderFile(`${__dirname}/../Public/html/sendEmail.ejs`, { imgLogo: req.hostname + "/static/images/logo.png", homeUrl: req.hostname, baseUrl: req.hostname + "/static/images/", leSiItems, riSiItems }, async (err, data) => {
         if (!err) {
             var mailOptions = {
                 from: 'mytestingemail12341@gmail.com',

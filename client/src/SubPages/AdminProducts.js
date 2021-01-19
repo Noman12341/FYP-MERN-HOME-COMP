@@ -38,6 +38,7 @@ function AdminProducts() {
     const [showModal4, setModal4] = useState(false);
     const [showModal5, setModal5] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [run, setRun] = useState(false);
 
     useEffect(() => {
         async function fetchAllProducts() {
@@ -53,7 +54,7 @@ function AdminProducts() {
         }
         // initialize fetchAllProducts function
         fetchAllProducts();
-    }, [history]);
+    }, [history, run]);
 
     async function deleteScrapedProduct(productID) {
         await axios.get("/api/admin/deleteScrapedProduct/" + productID)
@@ -322,6 +323,7 @@ function AdminProducts() {
             .then(res => {
                 setIsLoading(false);
                 setModal5(false);
+                setRun(!run);
             }).catch(error => {
                 setAlert(error.response.data.msg);
                 setIsLoading(false);
