@@ -45,7 +45,7 @@ function OrderSummary() {
                         <img className="image" src={item.isMyProduct ? "/static/images/" + item.image : item.image} alt="" />
                         <div className="label">
                             <p className="product">{item.name}</p>
-                            {/* <p className="sku">Collector Set</p> */}
+                            {item.size && <p className="sku">Size: {item.size}</p>}
                         </div>
                         <p className="count">{item.units} x Rs. {item.price}</p>
                         <p className="price">Rs.  {item.total}</p>

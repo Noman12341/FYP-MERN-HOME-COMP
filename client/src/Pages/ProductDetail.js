@@ -11,12 +11,13 @@ function ProductDetail() {
     const dispatch = useDispatch();
     const { productID } = useParams();
     const [product, setProduct] = useState({});
+    const [size, setSize] = useState("M");
     useEffect(() => {
         async function fetchProduct() {
             await axios.get("/api/products/fetchProductDetails/" + productID)
                 .then(res => {
                     if (res.status === 200) {
-                        setProduct(res.data.product);
+                        setProduct({ size: "M", ...res.data.product });
                     }
                 }).catch(error => {
                     if (error.response.status === 400) {
@@ -26,6 +27,10 @@ function ProductDetail() {
         }
         fetchProduct();
     }, [productID]);
+    const addItemIncart = () => {
+        const newPro = { ...product, size };
+        dispatch(AddItemInCart(newPro));
+    }
     return <section id="product-detail">
         <Container fluid style={{ backgroundColor: "white" }}>
             <Row>
@@ -47,11 +52,13 @@ function ProductDetail() {
                         <hr />
                         <div><span className="font-weight-bold">Price : </span><span className="product-detail-price">{product.price}</span></div>
                         {/* Need to put size here */}
-                        {/* <div className="mt-2">
-                            <label className="product-quantity">Size : </label>
-                        </div> */}
+                        {product.catagory === "Men" || product.catagory === "Women" ? <div className="mt-2">
+                            <label className="product-quantity">Size : </label><Button bsPrefix={size === "XL" ? "size-btn size-btn-active" : "size-btn"} onClick={() => setSize("XL")}>XL</Button><Button bsPrefix={size === "L" ? "size-btn size-btn-active" : "size-btn"} onClick={() => setSize("L")}>L</Button><Button bsPrefix={size === "M" ? "size-btn size-btn-active" : "size-btn"} onClick={() => setSize("M")}>M</Button><Button bsPrefix={size === "S" ? "size-btn size-btn-active" : "size-btn"} onClick={() => setSize("S")}>S</Button>
+                        </div> : null}
+
+                        {/* Below Is add to cart Button */}
                         <div className="my-3">
-                            <Button bsPrefix="product-detail-add-btn" type="button" onClick={() => dispatch(AddItemInCart(product))} >Add to Cart</Button>
+                            <Button bsPrefix="product-detail-add-btn" type="button" onClick={addItemIncart} >Add to Cart</Button>
                         </div>
                     </div>
                 </Col>

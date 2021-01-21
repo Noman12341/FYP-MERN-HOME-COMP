@@ -104,13 +104,16 @@ function AdminOrders() {
                                 {pd.items.map((p, i) => {
                                     return <div key={i} className="d-flex my-4" style={{ border: "2px solid #f4f4f4" }}>
                                         <div><Image src={p.isMyProduct ? "/static/images/" + p.image : p.image} height="70" width="70" /></div>
-                                        <div className="mx-3 d-flex align-items-center">
+                                        <div className="mx-3 d-flex align-items-center" style={{ flex: "1" }}>
                                             <h6 className="">{p.name}</h6>
                                         </div>
                                         <div>
                                             <h6>{p.units} x {p.price}</h6>
                                             <span>total : {p.total}</span>
                                         </div>
+                                        {p.size && <div>
+                                            <span>Size : {p.size}</span>
+                                        </div>}
                                     </div>
                                 })}
                             </Col>

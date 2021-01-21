@@ -3,15 +3,14 @@ import { Card, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { AddItemInCart } from '../Actions/MyCartActions';
 import { Link } from 'react-router-dom';
-import mySound from '../Sounds/sound.mp3';
 
 function ProductCard(props) {
     const { product } = props;
     const dispatch = useDispatch();
-    const audio = new Audio(mySound);
     const handleClick = () => {
-        dispatch(AddItemInCart(product));
-        audio.play();
+        let newPro = {};
+        product.catagory === "Men" || product.catagory === "Women" ? newPro = { ...product, size: "M" } : newPro = product;
+        dispatch(AddItemInCart(newPro));
     }
     return <Card>
         <Link to={"/product-details/" + product._id}>
