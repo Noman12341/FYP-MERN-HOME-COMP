@@ -7,6 +7,7 @@ import PageSpinner from '../Components/Spinner';
 function ProductDetail() {
     const dispatch = useDispatch();
     const [product, setProduct] = useState({});
+    const [size, setSize] = useState("M");
     const [isLoading, setIsLoading] = useState(true);
     const scraperLink = useSelector(state => state.customizedInfo.scrapLink);
     const selectedProductID = useSelector(state => state.customizedInfo.pClickedID);
@@ -25,6 +26,11 @@ function ProductDetail() {
         fetchScrapDetail();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [scraperLink]);
+    // function for adding item in cart
+    const addItemIncart = () => {
+        const newPro = { ...product, size };
+        dispatch(AddItemInCart(newPro));
+    }
     return <section id="product-detail">
         <Container fluid style={{ backgroundColor: "white" }}>
             {isLoading ? <PageSpinner containerHeight="70vh" /> : <Row>
@@ -46,11 +52,15 @@ function ProductDetail() {
                         <hr />
                         <div><span className="font-weight-bold">Price : </span><span className="product-detail-price">{product.price}</span></div>
                         {/* Need to put size here */}
+                        <div className="mt-2">
+                            <label className="product-quantity">Size : </label><Button bsPrefix={size === "XL" ? "size-btn size-btn-active" : "size-btn"} onClick={() => setSize("XL")}>XL</Button><Button bsPrefix={size === "L" ? "size-btn size-btn-active" : "size-btn"} onClick={() => setSize("L")}>L</Button><Button bsPrefix={size === "M" ? "size-btn size-btn-active" : "size-btn"} onClick={() => setSize("M")}>M</Button><Button bsPrefix={size === "S" ? "size-btn size-btn-active" : "size-btn"} onClick={() => setSize("S")}>S</Button>
+                        </div>
+                        {/* Need to put size here */}
                         {/* <div className="mt-2">
                             <label className="product-quantity">Size : </label>
                         </div> */}
                         <div className="my-3">
-                            <Button bsPrefix="product-detail-add-btn" type="button" onClick={() => dispatch(AddItemInCart(product))} >Add to Cart</Button>
+                            <Button bsPrefix="product-detail-add-btn" type="button" onClick={addItemIncart} >Add to Cart</Button>
                         </div>
                     </div>
                 </Col>

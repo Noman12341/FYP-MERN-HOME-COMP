@@ -13,6 +13,11 @@ function ScrapPCard({ product }) {
         dispatch(storeProductID(product._id));
         history.push("/scrap-product-detail");
     }
+    // function for adding item in cart
+    const addItemIncart = () => {
+        const newPro = { ...product, size: "M", catagory: "Men" };
+        dispatch(AddItemInCart(newPro));
+    }
     return <Card>
         <Link to="#" onClick={handleClick}>
             <Card.Img variant="top" src={product.image} height="320" />
@@ -22,7 +27,7 @@ function ScrapPCard({ product }) {
                 <div className="modern-price-value">{product.price}</div>
                 <h5 className="card-product-name"><Link to={"/product-details/" + product._id}>{product.name}</Link></h5>
             </div>
-            <Button bsPrefix="card-buy-btn" type="button" onClick={() => dispatch(AddItemInCart(product))}>Add to Card</Button>
+            <Button bsPrefix="card-buy-btn" type="button" onClick={addItemIncart}>Add to Card</Button>
         </Card.Body>
     </Card>
 }

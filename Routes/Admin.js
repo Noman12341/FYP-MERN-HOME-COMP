@@ -30,25 +30,25 @@ router.get("/fetchAllProducts", AdminAuth, async (req, res) => {
 });
 
 router.post("/ScrapProducts", async (req, res) => {
-    const { searchingBrand, url } = req.body;
+    const { searchingBrand, url, catagory } = req.body;
     switch (searchingBrand) {
         case "Almirah":
             if (url.includes("almirah")) {
-                await scrapAlmirah(url);
+                await scrapAlmirah(url, catagory);
             } else { return res.status(400).json({ msg: "Url does not contains the brand name you enterd" }); }
             break;
         case "Sana Safinaz":
             if (url.includes("sanasafinaz")) {
-                await scrapSanaSafinaz(url);
+                await scrapSanaSafinaz(url, catagory);
             } else { return res.status(400).json({ msg: "Url does not contains the brand name you enterd" }); }
         case "Gul Ahmed":
             if (url.includes("gulahmed")) {
-                await scrapGulAhmed(url);
+                await scrapGulAhmed(url, catagory);
             } else { return res.status(400).json({ msg: "Url does not contains the brand name you enterd" }); }
             break;
         case "Diners":
             if (url.includes("diners")) {
-                await scrapDiners(url);
+                await scrapDiners(url, catagory);
             } else { return res.status(400).json({ msg: "Url does not contains the brand name you enterd" }); }
             break;
         default:

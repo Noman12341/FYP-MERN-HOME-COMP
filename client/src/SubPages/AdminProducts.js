@@ -227,10 +227,9 @@ function AdminProducts() {
     const startScraping = async (event) => {
         event.preventDefault();
         setIsLoading(true);
-        await axios.post("/api/admin/ScrapProducts", { searchingBrand: form.searchingBrand, url: form.link })
+        await axios.post("/api/admin/ScrapProducts", { searchingBrand: form.searchingBrand, url: form.link, catagory: form.catagory })
             .then(res => {
-                setIsLoading(false)
-                setModal3(false)
+                setIsLoading(false);
                 setForm({
                     name: "",
                     brand: "",
@@ -241,10 +240,10 @@ function AdminProducts() {
                     date: "",
                     link: "",
                     searchingBrand: "Almirah"
-                })
+                });
+                setModal3(false);
             }).catch(error => {
-                setIsLoading(false)
-                setAlert(error.response.data.msg)
+                setAlert(error.response.data.msg);
                 setForm({
                     name: "",
                     brand: "",
@@ -255,7 +254,8 @@ function AdminProducts() {
                     date: "",
                     link: "",
                     searchingBrand: "Almirah"
-                })
+                });
+                setIsLoading(false)
             });
     }
 
@@ -622,7 +622,7 @@ function AdminProducts() {
                     <Form.Row>
                         <Form.Group as={Col}>
                             <Form.Label>Choose Brand</Form.Label>
-                            <Form.Control as="select" className="mr-sm-2" name="searchingBrand" onChange={handleChange} custom>
+                            <Form.Control as="select" name="searchingBrand" onChange={handleChange} custom>
                                 <option value="Almirah">Almirah</option>
                                 <option value="Sana Safinaz">Sana Safinaz</option>
                                 <option value="Gul Ahmed">Gul Ahmed</option>
@@ -632,6 +632,13 @@ function AdminProducts() {
                         <Form.Group as={Col}>
                             <Form.Label>Enter Link plz</Form.Label>
                             <Form.Control type="text" name="link" value={form.link} onChange={handleChange} />
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                            <Form.Label>Choose Catagory</Form.Label>
+                            <Form.Control as="select" name="catagory" onChange={handleChange}>
+                                <option value="Men">Men</option>
+                                <option value="Women">Women</option>
+                            </Form.Control>
                         </Form.Group>
                     </Form.Row>
                 </Modal.Body>

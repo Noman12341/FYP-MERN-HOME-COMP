@@ -88,7 +88,7 @@ let handleEmailMarketing = async (image, name, brand, description, price) => {
     });
 }
 
-let scrapAlmirah = async (url) => {
+let scrapAlmirah = async (url, catagory) => {
     const URL = "https://www.almirah.com.pk";
     const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
     const page = await browser.newPage();
@@ -139,7 +139,7 @@ let scrapAlmirah = async (url) => {
                     const newProduct = new Product({
                         name: product.title,
                         brand: "Almirah",
-                        catagory: "Women",
+                        catagory,
                         description: product.discription,
                         image: product.imgURL,
                         price: product.acttualPrice
@@ -154,7 +154,7 @@ let scrapAlmirah = async (url) => {
     return;
 }
 
-let scrapGulAhmed = async (url) => {
+let scrapGulAhmed = async (url, catagory) => {
     const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'domcontentloaded' });
@@ -197,7 +197,7 @@ let scrapGulAhmed = async (url) => {
                     const newProduct = new Product({
                         name: productObj.itemName,
                         brand: "Gul Ahmed",
-                        catagory: "Women",
+                        catagory,
                         description: "No Description Provided",
                         image: productObj.img,
                         price: productObj.priceFixed
@@ -211,7 +211,7 @@ let scrapGulAhmed = async (url) => {
     return;
 }
 
-let scrapSanaSafinaz = async (url) => {
+let scrapSanaSafinaz = async (url, catagory) => {
     const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'domcontentloaded' });
@@ -253,7 +253,7 @@ let scrapSanaSafinaz = async (url) => {
                     const newProduct = new Product({
                         name: productObj.pName,
                         brand: "Sana Safinaz",
-                        catagory: "Women",
+                        catagory,
                         description: productObj.description,
                         image: productObj.image,
                         price: productObj.fixedPrice
@@ -267,7 +267,7 @@ let scrapSanaSafinaz = async (url) => {
 }
 
 // still need to work on this
-let scrapDiners = async (url) => {
+let scrapDiners = async (url, catagory) => {
     let baseUrl = "https://diners.com.pk"
     const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
     const page = await browser.newPage();
@@ -310,7 +310,7 @@ let scrapDiners = async (url) => {
                     const newProduct = new Product({
                         name: productObj.pName,
                         brand: "Diners",
-                        catagory: "Women",
+                        catagory,
                         description: productObj.description,
                         image: productObj.image,
                         price: productObj.fixedPrice

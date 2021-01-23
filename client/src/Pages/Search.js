@@ -20,9 +20,9 @@ function Search() {
                     dispatch(searchOn());
                     setIsLoading(false);
                 }).catch(error => {
+                    setAlert(error.response.data.msg)
                     setIsLoading(false);
                     dispatch(searchOn());
-                    setAlert(error.response.data.msg)
                 });
         }
         searchObj.search && liveScrap();
