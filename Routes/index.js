@@ -311,9 +311,13 @@ router.post("/scrap-product-detail", async (req, res) => {
 
 router.post("/live-scrape", async (req, res) => {
     const { word } = req.body;
-    let CollectProducts = [];
+    let Almirah = [];
+    let GulAhmed = [];
+    let Alkaram = [];
+    let Diners = [];
     let loopLimit = 0;
     let lis = null;
+    // Code Started From here
     const browser = await puppeteer.launch({ headless: false });
     try {
         const page = await browser.newPage();
@@ -323,86 +327,98 @@ router.post("/live-scrape", async (req, res) => {
         await page.click('.site-nav');
         await page.keyboard.type(word);
         await page.click(".text-link");
-
         await page.waitForSelector("#gf-products");
-        // check if products are visible
-        await autoScroll(page);
-
-        lis = await page.$$('.grid-product__content');
-        lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
-        for (let i = 0; i < loopLimit; i++) {
-            const detailPage = await lis[i].$eval('a', link => "https://www.almirah.com.pk" + link.getAttribute('href'));
-            const name = await lis[i].$eval('.grid-product__title', name => name.innerText);
-            const image = await lis[i].$eval('.grid-product__image-mask > div', el => el.getAttribute('data-bgset').trim() === "" ? "" : window.getComputedStyle(el).backgroundImage.match(/url\("(.*)"/)[1]);
-            const price = await lis[i].$eval('span.money', pric => Number(pric.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
-            CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Almirah", detailPage, isMyProduct: false });
+        if (await page.$(".grid-product__content")) {
+            // await page.waitForSelector("#gf-products");
+            // check if products are visible
+            await autoScroll(page);
+            lis = await page.$$('.grid-product__content');
+            lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
+            for (let i = 0; i < loopLimit; i++) {
+                const detailPage = await lis[i].$eval('a', link => "https://www.almirah.com.pk" + link.getAttribute('href'));
+                const name = await lis[i].$eval('.grid-product__title', name => name.innerText);
+                const image = await lis[i].$eval('.grid-product__image-mask > div', el => el.getAttribute('data-bgset').trim() === "" ? "" : window.getComputedStyle(el).backgroundImage.match(/url\("(.*)"/)[1]);
+                const price = await lis[i].$eval('span.money', pric => Number(pric.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
+                Almirah.push({ _id: uuidv4(), name, image, price, brand: "Almirah", detailPage, isMyProduct: false });
+            }
         }
+        // if Ends here
 
         // Scraping Gul ahmed products
-        await page.goto("https://www.gulahmedshop.com");
+        await page.goto("https://www.gulahmedshop.com/");
         await page.waitForSelector('.minisearch');
         await page.click('#search');
         await page.keyboard.type(word);
-        await page.waitForSelector('.actions > button')
-        await Promise.all([
-            page.click('.actions > button'),
-            page.waitForNavigation({ waitUntil: 'networkidle2' }),
-        ]);
-        lis = await page.$$('ol.products > li');
-        lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
-        for (let i = 0; i < loopLimit; i++) {
-            const detailPage = await lis[i].$eval(".cdz-product-top > a", link => link.getAttribute('href'));
-            const name = await lis[i].$eval('strong > a', name => name.innerText.trim());
-            const image = await lis[i].$eval('.product-image-photo', image => image.getAttribute('src'));
-            const price = await lis[i].$eval('.price-box .price', itemPrice => Number(itemPrice.innerText.replace(/[PKR,]/gi, "").trim()));
-            CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Gul Ahmed", detailPage, isMyProduct: false });
+        await page.waitForSelector('.actions > button');
+        await page.click('.actions > button');
+        await page.waitForSelector(".product-list-container")
+
+        if (await page.$('.results')) {
+            lis = await page.$$('ol.products > li');
+            lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
+            for (let i = 0; i < loopLimit; i++) {
+                const detailPage = await lis[i].$eval(".cdz-product-top > a", link => link.getAttribute('href'));
+                const name = await lis[i].$eval('strong > a', name => name.innerText.trim());
+                const image = await lis[i].$eval('.product-image-photo', image => image.getAttribute('src'));
+                const price = await lis[i].$eval('.price-box .price', itemPrice => Number(itemPrice.innerText.replace(/[PKR,]/gi, "").trim()));
+                GulAhmed.push({ _id: uuidv4(), name, image, price, brand: "Gul Ahmed", detailPage, isMyProduct: false });
+            }
         }
+        // if Ends here
+
         // below code is going to page alkarm and scrap it
-        await page.goto("https://www.alkaramstudio.com");
-        await page.click('#close_pop_up');
+        await page.goto("https://www.alkaramstudio.com/");
+        // await page.click('#close_pop_up');
         await page.waitForSelector('#search_mini_form');
         await page.focus('#search');
         await page.keyboard.type(word);
         await page.click('.button');
-        await page.waitForSelector('.products-grid');
-        lis = await page.$$('.products-grid > li');
-        lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
-        for (let i = 0; i < loopLimit; i++) {
-            const name = await lis[i].$eval('.product-name', name => name.innerText);
-            const image = await lis[i].$eval('.product-image > img', img => img.getAttribute('src'));
-            const price = await lis[i].$eval('.price-box .price', price => Number(price.innerText.replace(/[PKR,]/gi, "").trim()));
-            const detailPage = await lis[i].$eval('.item-img > a', link => link.getAttribute('href'));
-            CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Alkaram", detailPage, isMyProduct: false });
-        }
-        // loop ends here diners below brand code
+        await page.waitForSelector('.col-main');
 
-        // // scrap diners
-        // await page.goto('https://diners.com.pk/');
-        // await page.waitForSelector('.search-form');
-        // await page.click('.icon-search');
-        // await page.waitForSelector('.header-search__input');
-        // // fill the input
-        // await page.focus('.header-search__input');
-        // await page.keyboard.type(word);
-        // await page.click('button.icon-search');
-        // await page.waitForSelector('.products-grid');
-        // lis = await page.$$('.products-grid > .grid-item');
-        // lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
-        // for (let i = 0; i < loopLimit; i++) {
-        //     const name = await lis[i].$eval('.product-title > span', name => name.innerText);
-        //     const image = await lis[i].$eval('a.product-grid-image > img', img => img.getAttribute('src'));
-        //     let price = null;
-        //     await lis[i].$('.price-sale') ? price = await lis[i].$eval('.special-price > span', p => Number(p.innerText.replace(/[Rs,.]/gi, "").slice(0, 4))) :
-        //         price = await lis[i].$eval('.money', p => Number(p.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
-        //     const detailPage = await lis[i].$eval('.product-image > a', l => "https://diners.com.pk/" + l.getAttribute('href'));
-        //     CollectProducts.push({ _id: uuidv4(), name, image, price, brand: "Diners", detailPage, isMyProduct: false });
-        // }
+        if (await page.$(".note-msg") === null) {
+            lis = await page.$$('.products-grid > li');
+            lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
+            for (let i = 0; i < loopLimit; i++) {
+                const name = await lis[i].$eval('.product-name', name => name.innerText);
+                const image = await lis[i].$eval('.product-image > img', img => img.getAttribute('src'));
+                const price = await lis[i].$eval('.price-box .price', price => Number(price.innerText.replace(/[PKR,]/gi, "").trim()));
+                const detailPage = await lis[i].$eval('.item-img > a', link => link.getAttribute('href'));
+                Alkaram.push({ _id: uuidv4(), name, image, price, brand: "Alkaram", detailPage, isMyProduct: false });
+            }
+        }
+        // if Ends here
+
+        // scrap diners
+        await page.goto('https://diners.com.pk/');
+        await page.waitForSelector('.search-form');
+        await page.click('.icon-search');
+        await page.waitForSelector('.header-search__input');
+        // fill the input
+        await page.focus('.header-search__input');
+        await page.keyboard.type(word);
+        await page.click('button.icon-search');
+        await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
+        if (await page.$('.products-grid')) {
+            // await page.waitForSelector('.products-grid');
+            lis = await page.$$('.products-grid > .grid-item');
+            lis.length > 8 ? loopLimit = 8 : loopLimit = lis.length;
+            for (let i = 0; i < loopLimit; i++) {
+                const name = await lis[i].$eval('.product-title > span', name => name.innerText);
+                const image = await lis[i].$eval('a.product-grid-image > img', img => img.getAttribute('src'));
+                let price = null;
+                await lis[i].$('.price-sale') ? price = await lis[i].$eval('.special-price > span', p => Number(p.innerText.replace(/[Rs,.]/gi, "").slice(0, 4))) :
+                    price = await lis[i].$eval('.money', p => Number(p.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
+                const detailPage = await lis[i].$eval('.product-image > a', l => "https://diners.com.pk/" + l.getAttribute('href'));
+                Diners.push({ _id: uuidv4(), name, image, price, brand: "Diners", detailPage, isMyProduct: false });
+            }
+        }
+        // if ends here
         await browser.close();
-        return res.status(200).json({ products: CollectProducts });
+        return res.status(200).json({ Almirah, GulAhmed, Alkaram, Diners });
     } catch (e) {
         await browser.close();
         console.log(e);
-        return res.status(400).json({ msg: "Error!! : Products not found with this search or " + e, products: CollectProducts });
+        return res.status(400).json({ msg: "Error!! : Products not found with this search or " + e, Almirah, GulAhmed, Alkaram, Diners });
     }
 });
 // below function used to scroll down while webscraping

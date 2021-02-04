@@ -8,71 +8,91 @@ import ScrapPCard from '../Components/ScrapPCard';
 
 function Search() {
     const dispatch = useDispatch();
-    let searchObj = useSelector(state => state.customizedInfo);
-    const [isLoading, setIsLoading] = useState(false);
+    let search = useSelector(state => state.customizedInfo.search);
+    let searchedWord = useSelector(state => state.customizedInfo.searchedWord);
+    let almirah = useSelector(state => state.customizedInfo.almirah);
+    let gulAhmed = useSelector(state => state.customizedInfo.gulAhmed);
+    let alkarm = useSelector(state => state.customizedInfo.alkarm);
+    let diners = useSelector(state => state.customizedInfo.diners);
+    let [isLoading, setIsLoading] = useState(false);
     const [alert, setAlert] = useState("");
     useEffect(() => {
         let liveScrap = async () => {
             setIsLoading(true);
-            await axios.post("/api/products/live-scrape", { word: searchObj.searchedWord })
+            await axios.post("/api/products/live-scrape", { word: searchedWord })
                 .then(res => {
-                    dispatch(getScrapedProducts(res.data.products));
+                    const { Almirah, GulAhmed, Alkaram, Diners } = res.data;
+                    dispatch(getScrapedProducts(Almirah, GulAhmed, Alkaram, Diners));
                     dispatch(searchOn());
                     setIsLoading(false);
                 }).catch(error => {
+                    const { Almirah, GulAhmed, Alkaram, Diners } = error.response.data;
                     setAlert(error.response.data.msg);
-                    dispatch(getScrapedProducts(error.response.data.products));
+                    dispatch(getScrapedProducts(Almirah, GulAhmed, Alkaram, Diners));
                     dispatch(searchOn());
                     setIsLoading(false);
                 });
         }
-        searchObj.search && liveScrap();
+        search && liveScrap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchObj.search]);
+    }, [search]);
     return <section className="padding-70">
         <Container>
-            {isLoading ? <PageSpinner containerHeight="50vh" /> : searchObj.scrapedProducts && <div>
+            {isLoading ? <PageSpinner containerHeight="50vh" /> : searchedWord && <div>
                 <div>{alert && <Alert variant="danger" onClose={() => setAlert("")} dismissible>
                     <Alert.Heading > Oh snap! You got an error!</Alert.Heading>
                     <p>{alert}</p>
                 </Alert>}
                 </div>
+                {almirah.length > 0 && <div>
+                    <h2 className="text-left mb-5">Almirah Products</h2>
+                    <Row>
+                        {almirah.map((p, i) => {
+                            return <Col className="my-4" key={i} lg={3} md={4} sm={6}>
+                                <ScrapPCard product={p} />
+                            </Col>
+                        }
+                        )}
+                    </Row>
+                    <hr />
+                </div>}
 
-                <h2 className="text-left mb-5">Almirah Products</h2>
-                <Row>
-                    {searchObj.scrapedProducts.map((product, index) => {
-                        return product.brand === "Almirah" && <Col className="my-4" key={index} lg={3} md={4} sm={6}>
-                            <ScrapPCard product={product} />
-                        </Col>
-                    })}
-                </Row>
-                <hr></hr>
-                <h2 className="text-left my-5">Gul Ahmed Products</h2>
-                <Row>
-                    {searchObj.scrapedProducts.map((product, index) => {
-                        return product.brand === "Gul Ahmed" && <Col className="my-4" key={index} lg={3} md={4} sm={6}>
-                            <ScrapPCard product={product} />
-                        </Col>
-                    })}
-                </Row>
-                <hr></hr>
-                <h2 className="text-left my-5">Alkaram Products</h2>
-                <Row>
-                    {searchObj.scrapedProducts.map((product, index) => {
-                        return product.brand === "Alkaram" && <Col className="my-4" key={index} lg={3} md={4} sm={6}>
-                            <ScrapPCard product={product} />
-                        </Col>
-                    })}
-                </Row>
-                {/* <hr />
+                {gulAhmed.length > 0 && <div>
+                    <h2 className="text-left my-5">Gul Ahmed Products</h2>
+                    <Row>
+                        {gulAhmed.map((p, i) => {
+                            return <Col className="my-4" key={i} lg={3} md={4} sm={6}>
+                                <ScrapPCard product={p} />
+                            </Col>
+                        }
+                        )}
+                    </Row>
+                    <hr />
+                </div>}
+
+                {alkarm.length > 0 && <div>
+                    <h2 className="text-left my-5">Alkaram Products</h2>
+                    <Row>
+                        {alkarm.map((p, i) => {
+                            return <Col className="my-4" key={i} lg={3} md={4} sm={6}>
+                                <ScrapPCard product={p} />
+                            </Col>
+                        }
+                        )}
+                    </Row>
+                    <hr />
+                </div>}
+                {diners.length > 0 && <div>
                     <h2 className="text-left my-5">Diners Products</h2>
                     <Row>
-                        {searchObj.scrapedProducts.map((product, index) => {
-                            return product.brand === "Diners" && <Col className="my-4" key={index} lg={3} md={4} sm={6}>
-                                <ScrapPCard product={product} />
+                        {diners.map((p, i) => {
+                            return <Col className="my-4" key={i} lg={3} md={4} sm={6}>
+                                <ScrapPCard product={p} />
                             </Col>
-                        })}
-                    </Row> */}
+                        }
+                        )}
+                    </Row>
+                </div>}
             </div>
             }
         </Container>

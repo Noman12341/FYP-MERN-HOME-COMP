@@ -1,6 +1,9 @@
 const initialState = {
     searchedWord: "",
-    scrapedProducts: [],
+    almirah: [],
+    gulAhmed: [],
+    alkarm: [],
+    diners: [],
     scrapLink: "",
     productDetail: {},
     search: false,
@@ -9,7 +12,13 @@ const initialState = {
 export const scraperReducer = (state = initialState, action) => {
     switch (action.type) {
         case "ADD_SCRAPED_PRODUCTS":
-            return { ...state, scrapedProducts: action.payload }
+            return {
+                ...state,
+                almriah: action.payload.almirah,
+                gulAhmed: action.payload.gulAhmed,
+                alkarm: action.payload.alkarm,
+                diners: action.payload.diners
+            }
         case "SCRAP_LINK":
             return { ...state, scrapLink: action.payload }
         case "ADD_SCRAPED_PRODUCTS_DETAILS":

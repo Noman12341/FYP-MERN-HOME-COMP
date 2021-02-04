@@ -11,7 +11,7 @@ function ProductDetail() {
     const [isLoading, setIsLoading] = useState(true);
     const scraperLink = useSelector(state => state.customizedInfo.scrapLink);
     const selectedProductID = useSelector(state => state.customizedInfo.pClickedID);
-    console.log(scraperLink);
+
     useEffect(() => {
         let fetchScrapDetail = async () => {
             await axios.post("/api/products/scrap-product-detail", { link: scraperLink })
@@ -28,7 +28,7 @@ function ProductDetail() {
     }, [scraperLink]);
     // function for adding item in cart
     const addItemIncart = () => {
-        const newPro = { ...product, size };
+        const newPro = { ...product, size, catagory: "Men" };
         dispatch(AddItemInCart(newPro));
     }
     return <section id="product-detail">

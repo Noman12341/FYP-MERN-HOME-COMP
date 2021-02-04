@@ -1,7 +1,12 @@
-export const getScrapedProducts = (productsArr) => {
+export const getScrapedProducts = (almirah, gulAhmed, alkarm, diners) => {
     return {
         type: "ADD_SCRAPED_PRODUCTS",
-        payload: productsArr
+        payload: {
+            almirah,
+            gulAhmed,
+            alkarm,
+            diners
+        }
     }
 }
 export const getScrapItemDetail = (productObj) => {
