@@ -337,7 +337,8 @@ router.post("/live-scrape", async (req, res) => {
             for (let i = 0; i < loopLimit; i++) {
                 const detailPage = await lis[i].$eval('a', link => "https://www.almirah.com.pk" + link.getAttribute('href'));
                 const name = await lis[i].$eval('.grid-product__title', name => name.innerText);
-                const image = await lis[i].$eval('.grid-product__image-mask > div', el => el.getAttribute('data-bgset').trim() === "" ? "" : window.getComputedStyle(el).backgroundImage.match(/url\("(.*)"/)[1]);
+                // const image = await lis[i].$eval('.grid-product__image-mask > div', el => el.getAttribute('data-bgset').trim() === "" ? "" : window.getComputedStyle(el).backgroundImage.match(/url\("(.*)"/)[1]);
+                const image = await lis[i].$eval('.grid-product__image', img => img.getAttribute('data-srcset').trim());
                 const price = await lis[i].$eval('span.money', pric => Number(pric.innerText.replace(/[Rs,.]/gi, "").slice(0, 4)));
                 Almirah.push({ _id: uuidv4(), name, image, price, brand: "Almirah", detailPage, isMyProduct: false });
             }

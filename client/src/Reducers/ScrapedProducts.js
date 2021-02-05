@@ -14,7 +14,7 @@ export const scraperReducer = (state = initialState, action) => {
         case "ADD_SCRAPED_PRODUCTS":
             return {
                 ...state,
-                almriah: action.payload.almirah,
+                almirah: action.payload.almirah,
                 gulAhmed: action.payload.gulAhmed,
                 alkarm: action.payload.alkarm,
                 diners: action.payload.diners
